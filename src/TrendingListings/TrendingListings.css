@@ -1,6 +1,5 @@
 .trending {
   padding: 120px 6%;
-  background: #f9faf7;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
   margin-top: 100px;
 }
@@ -218,6 +217,11 @@
   border-top: 1px dashed #e5efe5; /* subtle separator like UI */
 }
 
+.card-divider {
+  border-top: 1px dashed #dfeede;
+  margin: 14px 0 16px;
+}
+
 .tags {
   display: flex;
   gap: 8px;
@@ -244,9 +248,10 @@
 .card-footer small {
   display: block;
   font-size: 12px;
-  color: #6b7280;
+  color: #0f2f0f;
   letter-spacing: 0.04em;
   margin-bottom: 2px;
+  font-weight: 600;
 }
 
 .card-footer strong {
@@ -285,8 +290,8 @@
   top: -35px;
   right: 18px;
 
-  background: #22c55e;
-  color: #ffffff;
+  background: #ffffff;      /* default white */
+  color: #1b1b1b;
 
   padding: 6px 10px;
   border-radius: 999px;
@@ -299,4 +304,143 @@
   gap: 4px;
 
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.listing-card:hover .rating {
+  background: #22c55e;   /* green */
+  color: black;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .trending {
+    padding: 90px 5%;
+  }
+
+  .trending-header {
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .trending-header h2 {
+    font-size: 30px;
+  }
+
+  .trending-header p {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  .listing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+
+  .image-wrap {
+    height: 240px;
+  }
+
+  .image-info h3 {
+    font-size: 18px;
+  }
+
+  .card-footer strong {
+    font-size: 22px;
+  }
+}
+@media (max-width: 767px) {
+  .trending {
+    padding: 70px 16px;
+  }
+
+  /* HEADER STACK */
+  .trending-header {
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .trending-header h2 {
+    font-size: 26px;
+  }
+
+  .trending-header p {
+    font-size: 15px;
+  }
+
+  .view-all {
+    font-size: 15px;
+  }
+
+  /* GRID stays 2 columns */
+  .listing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* CARD BODY */
+  .card-body {
+    padding: 14px 12px 16px;
+  }
+
+  /* TAGS */
+  .tags span {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  /* 🔥 FIXED FOOTER LAYOUT */
+  .card-footer {
+    flex-direction: column;      /* stack */
+    align-items: stretch;        /* full width */
+    gap: 8px;
+  }
+
+  .card-footer small {
+    font-size: 11px;
+    color: #0f2f0f;
+  }
+
+  .card-footer strong {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  /* BUTTON — FULL WIDTH */
+  .menu-btn {
+    width: 100%;
+    padding: 8px 0;
+    font-size: 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  /* IMAGE */
+  .image-wrap {
+    height: 190px;
+  }
+
+  .image-info {
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .image-info .location {
+    font-size: 8px;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .image-info h3 {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  /* RATING */
+  .rating {
+    top: -28px;
+    font-size: 11px;
+    padding: 2px 4px;
+  }
 }

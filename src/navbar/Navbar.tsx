@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
   return (
     <header className="navbar-wrapper">
       <nav className="navbar">
@@ -13,14 +16,22 @@ export default function Navbar() {
           <span className="logo-text">Kerala Mess Finder</span>
         </div>
 
-        {/* RIGHT */}
-        <div className="navbar-right">
+        {/* MOBILE TOGGLE */}
+        <button
+          className="navbar-toggler"
+          onClick={() => setIsNavbarOpen(!isNavbarOpen)}
+        >
+          ☰
+        </button>
+
+        {/* RIGHT / MENU */}
+        <div className={`navbar-right ${isNavbarOpen ? "show" : ""}`}>
           <Link to="/" className="nav-link home">Home</Link>
           <Link to="/locations" className="nav-link">Locations</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/login" className="nav-link login">Login</Link>
 
-          <Link to="/list-mess" className="cta-btn">
+          <Link to="/list-mess" className="cta-btn mobile-btn">
             List Your Mess
           </Link>
         </div>

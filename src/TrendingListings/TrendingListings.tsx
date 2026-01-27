@@ -51,7 +51,7 @@ export default function TrendingListings() {
                     <span>Monthly Plan</span>
                     <span>Lunch & Dinner</span>
                 </div>
-
+                <div className="card-divider" />
                 <div className="card-footer">
                     <div>
                     <small>STARTING AT</small>
@@ -90,7 +90,7 @@ export default function TrendingListings() {
                     <span>Biryani</span>
                     <span>Night Delivery</span>
                 </div>
-
+                 <div className="card-divider" />
                 <div className="card-footer">
                     <div>
                     <small>STARTING AT</small>
@@ -129,7 +129,7 @@ export default function TrendingListings() {
                     <span>Budget</span>
                     <span>Breakfast</span>
                 </div>
-
+                 <div className="card-divider" />
                 <div className="card-footer">
                     <div>
                     <small>STARTING AT</small>
