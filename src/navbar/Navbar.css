@@ -1,12 +1,16 @@
 /* ===== WRAPPER ===== */
+body{
+  background: #f3f4f2;
+}
 .navbar-wrapper {
   width: 100%;
   background: #f3f4f2;
-  position: fixed;
+  position:sticky;
   top: 0;
   left: 0;
   z-index: 1000;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+   border-radius: 30px;
 }
 
 /* ===== NAVBAR ===== */
@@ -68,10 +72,10 @@
 }
 
 /* HOME & LOGIN — BOLD + DARK */
-.nav-link.home,
-.nav-link.login {
+.nav-link.active {
   font-weight: 600;
   color: #1b1b1b;
+  background: none;
 }
 
 /* 🔥 HOME & LOGIN ALSO TURN GREEN ON HOVER */

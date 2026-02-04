@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="footer-brand">
           <div className="brand">
             <div className="brand-icon">🍽️</div>
-            <h3>Kerala Mess Finder</h3>
+            <h3>MESS MEALS</h3>
           </div>
 
           <p>
@@ -50,7 +50,7 @@ export default function Footer() {
 
       {/* BOTTOM */}
       <div className="footer-bottom">
-        <span>© 2023 Kerala Mess Finder. All rights reserved.</span>
+        <span>© 2026 MESS MEALS. All rights reserved.</span>
 
         <div className="socials">
           <Facebook size={20} />
