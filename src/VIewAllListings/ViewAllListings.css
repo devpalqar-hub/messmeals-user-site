@@ -1,0 +1,72 @@
+.view-all-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.listing-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.badges span {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-right: 6px;
+}
+
+.verified {
+  background: #e7fbe7;
+  color: #1c7c1c;
+}
+
+.active {
+  background: #eef2ff;
+  color: #3949ab;
+}
+.view-btn {
+  background: #1f3d1f;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.view-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  background: #8df25a;
+  color: #0f2f0f;
+}
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pagination button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #63e100;
+  font-weight: 600;
+}

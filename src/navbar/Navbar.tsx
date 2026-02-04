@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
   return (
     <header className="navbar-wrapper">
       <nav className="navbar">
@@ -10,19 +13,27 @@ export default function Navbar() {
           <div className="logo-box">
             <span className="logo-icon">🍽️</span>
           </div>
-          <span className="logo-text">Kerala Mess Finder</span>
+          <span className="logo-text">MESS MEALS</span>
         </div>
 
-        {/* RIGHT */}
-        <div className="navbar-right">
-          <Link to="/" className="nav-link home">Home</Link>
-          <Link to="/locations" className="nav-link">Locations</Link>
-          <Link to="/about" className="nav-link">About</Link>
-          <Link to="/login" className="nav-link login">Login</Link>
+        {/* MOBILE TOGGLE */}
+        <button
+          className="navbar-toggler"
+          onClick={() => setIsNavbarOpen(!isNavbarOpen)}
+        >
+          ☰
+        </button>
 
-          <Link to="/list-mess" className="cta-btn">
+        {/* RIGHT / MENU */}
+        <div className={`navbar-right ${isNavbarOpen ? "show" : ""}`}>
+          <NavLink to="/" className="nav-link home">Home</NavLink>
+          <NavLink to="/view-all-listings" className="nav-link">Listings</NavLink>
+          <NavLink to="/about" className="nav-link">About</NavLink>
+          <NavLink to="/login" className="nav-link login">Login</NavLink>
+
+          <NavLink to="/list-mess" className="cta-btn mobile-btn">
             List Your Mess
-          </Link>
+          </NavLink>
         </div>
       </nav>
     </header>

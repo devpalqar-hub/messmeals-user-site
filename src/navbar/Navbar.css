@@ -1,12 +1,16 @@
 /* ===== WRAPPER ===== */
+body{
+  background: #f3f4f2;
+}
 .navbar-wrapper {
   width: 100%;
   background: #f3f4f2;
-  position: fixed;
+  position:sticky;
   top: 0;
   left: 0;
   z-index: 1000;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+   border-radius: 30px;
 }
 
 /* ===== NAVBAR ===== */
@@ -68,10 +72,10 @@
 }
 
 /* HOME & LOGIN — BOLD + DARK */
-.nav-link.home,
-.nav-link.login {
+.nav-link.active {
   font-weight: 600;
   color: #1b1b1b;
+  background: none;
 }
 
 /* 🔥 HOME & LOGIN ALSO TURN GREEN ON HOVER */
@@ -97,4 +101,65 @@
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
   background-color: rgb(76 208 15 / 1);
   color: #1b1b1b;
+}
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  /* HAMBURGER */
+  .navbar-toggler {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #1b1b1b;
+  }
+
+  /* MENU HIDDEN BY DEFAULT */
+  .navbar-right {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  /* SHOW MENU */
+  .navbar-right.show {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .cta-btn {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+/* ================= DESKTOP ================= */
+@media (min-width: 769px) {
+  .navbar-toggler {
+    display: none;
+  }
 }
