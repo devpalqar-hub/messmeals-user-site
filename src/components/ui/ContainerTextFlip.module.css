@@ -1,0 +1,11 @@
+.wrapper {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.2em;
+}
+
+.text {
+  display: inline-block;
+  font-weight: 700;
+  color: #16a34a;
+}

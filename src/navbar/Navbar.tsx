@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -13,7 +13,7 @@ export default function Navbar() {
           <div className="logo-box">
             <span className="logo-icon">🍽️</span>
           </div>
-          <span className="logo-text">Kerala Mess Finder</span>
+          <span className="logo-text">MESS MEALS</span>
         </div>
 
         {/* MOBILE TOGGLE */}
@@ -26,14 +26,14 @@ export default function Navbar() {
 
         {/* RIGHT / MENU */}
         <div className={`navbar-right ${isNavbarOpen ? "show" : ""}`}>
-          <Link to="/" className="nav-link home">Home</Link>
-          <Link to="/locations" className="nav-link">Locations</Link>
-          <Link to="/about" className="nav-link">About</Link>
-          <Link to="/login" className="nav-link login">Login</Link>
+          <NavLink to="/" className="nav-link home">Home</NavLink>
+          <NavLink to="/view-all-listings" className="nav-link">Listings</NavLink>
+          <NavLink to="/about" className="nav-link">About</NavLink>
+          <NavLink to="/login" className="nav-link login">Login</NavLink>
 
-          <Link to="/list-mess" className="cta-btn mobile-btn">
+          <NavLink to="/list-mess" className="cta-btn mobile-btn">
             List Your Mess
-          </Link>
+          </NavLink>
         </div>
       </nav>
     </header>

@@ -1,7 +1,54 @@
 import "./TrendingListings.css";
-import { Heart, MapPin, Star,ArrowRight  } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Heart, MapPin, Star, ArrowRight } from "lucide-react";
+import { getAllMess } from "../services/messApi";
+import type { Mess } from "../types/mess";
 
+/* ---------------- IMAGE COMPONENT ---------------- */
+function MessImage({
+  src,
+  alt,
+}: {
+  src?: string;
+  alt: string;
+}) {
+  const [imgSrc, setImgSrc] = useState(
+    src || "/food-placeholder.png"
+  );
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => setImgSrc("/food-placeholder.png")}
+    />
+  );
+}
+
+/* ---------------- COMPONENT ---------------- */
 export default function TrendingListings() {
+  const navigate = useNavigate();
+
+  const [messList, setMessList] = useState<Mess[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTrendingMess();
+  }, []);
+
+  const fetchTrendingMess = async () => {
+    try {
+      const res = await getAllMess(1, 4); 
+      setMessList(res.data);
+    } catch (err) {
+      console.error("Failed to fetch trending mess", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="trending">
       {/* HEADER */}
@@ -14,137 +61,89 @@ export default function TrendingListings() {
           </p>
         </div>
 
-        <button className="view-all">
-            View all listings
-            <ArrowRight size={18} className="view-all-icon" />
+        <button
+          className="view-all"
+          onClick={() => navigate("/view-all-listings")}
+        >
+          View all listings
+          <ArrowRight size={18} className="view-all-icon" />
         </button>
-
       </div>
 
       {/* GRID */}
-      {/* GRID */}
-            <div className="listing-grid">
+      {loading ? (
+        <p>Loading trending messes...</p>
+      ) : (
+        <div className="listing-grid">
+          {messList.map((mess) => {
+            const imageUrl =
+              mess.images
+                ?.slice()
+                .sort((a, b) => a.sortOrder - b.sortOrder)[0]
+                ?.url;
 
-            {/* CARD */}
-            <div className="listing-card">
+            return (
+              <div className="listing-card" key={mess.id}>
+                {/* IMAGE */}
                 <div className="image-wrap">
-                <img src="/food1.avif" alt="Amma's Kitchen" />
+                  <MessImage
+                    src={imageUrl}
+                    alt={`${mess.name} mess in ${mess.location ?? "Kerala"}`}
+                  />
 
-                <span className="badge veg">• Pure Veg</span>
+                  {mess.is_verified && (
+                    <span className="badge veg">• Verified</span>
+                  )}
 
-                <button className="wishlist">
+                  <button className="wishlist" aria-label="Save mess">
                     <Heart size={18} />
-                </button>
+                  </button>
 
-                {/* TEXT ON IMAGE */}
-                <div className="image-info">
+                  {/* IMAGE TEXT */}
+                  <div className="image-info">
                     <div className="location">
-                    <MapPin size={14} /> Kakkanad, Kochi
+                      <MapPin size={14} />
+                      {mess.location || "Kerala"}
                     </div>
-                    <h3>Amma's Kitchen</h3>
-                </div>
+                    <h3>{mess.name}</h3>
+                  </div>
                 </div>
 
+                {/* BODY */}
                 <div className="card-body">
-                <div className="tags">
+                  <div className="tags">
                     <span>Homely</span>
                     <span>Monthly Plan</span>
-                    <span>Lunch & Dinner</span>
-                </div>
-                <div className="card-divider" />
-                <div className="card-footer">
+                  </div>
+
+                  <div className="card-divider" />
+
+                  <div className="card-footer">
                     <div>
-                    <small>STARTING AT</small>
-                    <strong>₹3,500<span>/mo</span></strong>
+                      <small>STARTING AT</small>
+                      <strong>
+                        ₹{mess.plans?.[0]?.price ?? "N/A"}
+                        <span>/mo</span>
+                      </strong>
                     </div>
-                    <button className="menu-btn">View Menu</button>
-                </div>
 
-                <div className="rating">
-                    <Star size={14} /> 4.8
-                </div>
-                </div>
-            </div>
+                    <button
+                      className="menu-btn"
+                      onClick={() => navigate(`/mess/${mess.id}`)}
+                    >
+                      View Menu
+                    </button>
+                  </div>
 
-            {/* CARD 2 */}
-            <div className="listing-card">
-                <div className="image-wrap">
-                <img src="/food2.avif" alt="Malabar Mess House" />
-
-                <span className="badge nonveg">• Non-Veg</span>
-
-                <button className="wishlist">
-                    <Heart size={18} />
-                </button>
-
-                <div className="image-info">
-                    <div className="location">
-                    <MapPin size={14} /> Palayam, TVM
-                    </div>
-                    <h3>Malabar Mess House</h3>
-                </div>
-                </div>
-
-                <div className="card-body">
-                <div className="tags">
-                    <span>Biryani</span>
-                    <span>Night Delivery</span>
-                </div>
-                 <div className="card-divider" />
-                <div className="card-footer">
-                    <div>
-                    <small>STARTING AT</small>
-                    <strong>₹4,200<span>/mo</span></strong>
-                    </div>
-                    <button className="menu-btn">View Menu</button>
-                </div>
-
-                <div className="rating">
+                  <div className="rating">
                     <Star size={14} /> 4.5
+                  </div>
                 </div>
-                </div>
-            </div>
-
-            {/* CARD 3 */}
-            <div className="listing-card">
-                <div className="image-wrap">
-                <img src="/food3.avif" alt="Lakshmi Foods" />
-
-                <span className="badge mixed">• Mixed</span>
-
-                <button className="wishlist">
-                    <Heart size={18} />
-                </button>
-
-                <div className="image-info">
-                    <div className="location">
-                    <MapPin size={14} /> Mavoor, Calicut
-                    </div>
-                    <h3>Lakshmi Foods</h3>
-                </div>
-                </div>
-
-                <div className="card-body">
-                <div className="tags">
-                    <span>Budget</span>
-                    <span>Breakfast</span>
-                </div>
-                 <div className="card-divider" />
-                <div className="card-footer">
-                    <div>
-                    <small>STARTING AT</small>
-                    <strong>₹3,000<span>/mo</span></strong>
-                    </div>
-                    <button className="menu-btn">View Menu</button>
-                </div>
-
-                <div className="rating">
-                    <Star size={14} /> 4.2
-                </div>
-                </div>
-            </div>
-
-            </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
