@@ -342,7 +342,7 @@
   grid-template-columns: repeat(4, 1fr);
 
   gap: 32px;
-
+  margin-bottom: -90px;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
 
 }
@@ -443,105 +443,110 @@
     bottom: -140px;
   }
 }
-@media (max-width: 767px) {
-  /* HERO */
+@media (max-width: 1024px) {
+
   .hero {
-    height: auto;
-    padding: 100px 0 180px;
+    padding: 120px 20px 160px;
   }
 
-  /* BADGE */
-  .hero-badge {
-    font-size: 13px;
-    padding: 4px 14px;
-  }
-
-  /* TITLE */
   .hero-title {
-    font-size: 34px;
+    font-size: 52px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    max-width: 620px;
+  }
+
+  .hero-search {
+    max-width: 92%;
+  }
+
+  /* 4 → 2 features */
+  .features-card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+
+  .hero-features {
+    bottom: -130px;
+  }
+}
+@media (max-width: 720px) {
+
+  .hero {
+    padding: 110px 18px 180px;
+  }
+
+  .hero-title {
+    font-size: 40px;
     line-height: 1.15;
   }
 
-  /* SUBTITLE */
   .hero-subtitle {
     font-size: 15px;
-    line-height: 1.6;
-    padding: 0 10px;
   }
 
-  /* 🔥 SEARCH BAR — KEEP HORIZONTAL */
+  /* 🔥 search slightly tighter */
   .hero-search {
-    flex-direction: row;       /* ✅ keep desktop layout */
     padding: 6px;
-    border-radius: 999px;
-    max-width: 95%;
   }
 
   .search-item {
     padding: 0 10px;
-    gap: 6px;
-  }
-
-  .search-icon {
-    size: 16px;
-  }
-
-  .hero-search input,
-  .hero-search select {
-    font-size: 14px;
-  }
-
-  .search-divider {
-    height: 26px;
   }
 
   .search-btn {
-    padding: 10px 16px;
+    padding: 10px 18px;
     font-size: 14px;
   }
 
-
-  /* POPULAR TAGS */
   .hero-tags {
     margin-top: 28px;
-    gap: 8px;
+  }
+}
+@media (max-width: 460px) {
+
+  .hero {
+    padding: 90px 14px 200px;
   }
 
-  .hero-tags span {
+  /* Title compact */
+  .hero-title {
+    font-size: 30px;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+  }
+
+  /* 🔥 STACK SEARCH (mobile friendly) */
+  .hero-search {
+    flex-direction: column;
+    border-radius: 18px;
+    gap: 10px;
+  }
+
+  .search-divider {
+    display: none;
+  }
+
+  .search-item {
     width: 100%;
-    text-align: center;
+    padding: 8px 12px;
   }
 
-  .hero-tags button {
-    font-size: 14px;
-    padding: 7px 14px;
+  .search-btn {
+    width: 100%;
+    justify-content: center;
   }
 
-  /* 🔥 FEATURES — NOT SINGLE COLUMN */
-  .hero-features {
-    bottom: -120px;
-  }
-
+  /* 2 → 1 feature */
   .features-card {
-    grid-template-columns: repeat(2, 1fr); /* ✅ desktop feel */
-    gap: 18px;
-    padding: 24px 18px;
+    grid-template-columns: 1fr;
   }
 
-  .feature-item {
-    gap: 12px;
-  }
-
-  .feature-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .feature-item h4 {
-    font-size: 14px;
-  }
-
-  .feature-item p {
-    font-size: 13px;
+  .hero-features {
+    bottom: -150px;
   }
 }
