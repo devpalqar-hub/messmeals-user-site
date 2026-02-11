@@ -6,7 +6,7 @@ import ListMessModal from "../ListMessModal/ListMessModal";
 export default function Navbar() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const closeNavbar = () => setIsNavbarOpen(false);
   return (
     <>
       <header className="navbar-wrapper">
@@ -30,15 +30,18 @@ export default function Navbar() {
 
           {/* RIGHT / MENU */}
           <div className={`navbar-right ${isNavbarOpen ? "show" : ""}`}>
-            <NavLink to="/" className="nav-link home">Home</NavLink>
-            <NavLink to="/view-all-listings" className="nav-link">Listings</NavLink>
-            <NavLink to="/about" className="nav-link">About</NavLink>
-            <NavLink to="/login" className="nav-link login">Login</NavLink>
+            <NavLink to="/" className="nav-link home" onClick={closeNavbar}>Home</NavLink>
+            <NavLink to="/view-all-listings" className="nav-link" onClick={closeNavbar}>Listings</NavLink>
+            <NavLink to="/about" className="nav-link" onClick={closeNavbar}>About</NavLink>
+            {/* <NavLink to="/login" className="nav-link login">Login</NavLink> */}
 
-            {/* 🔥 MODAL BUTTON */}
+            {/* MODAL BUTTON */}
             <button
               className="cta-btn mobile-btn"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setIsModalOpen(true);
+                closeNavbar();
+              }}
             >
               List Your Mess
             </button>
@@ -46,7 +49,7 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* 🔥 MODAL */}
+      {/* MODAL */}
       <ListMessModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
