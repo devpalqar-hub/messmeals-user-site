@@ -16,6 +16,7 @@ export type Mess = {
   id: string;
   name: string;
   description: string;
+  ratings?: number;
   address: string;
   phone: string;
   email: string;

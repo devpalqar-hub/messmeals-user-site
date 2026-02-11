@@ -105,13 +105,17 @@ export default function ViewMessDetails() {
       <div className="breadcrumb">
         <button onClick={() => navigate("/")}>Home</button>
         <span>/</span>
-        <button onClick={() => navigate("/messes")}>Kochi</button>
+        <button onClick={() => navigate("/view-all-listings")}>All Listings</button>
         <span>/</span>
         <span>{mess.name}</span>
       </div>
 
       {/* Hero Section */}
       <div className="hero-section">
+      <button className="back-to-listings" onClick={() => navigate("/view-all-listings")}>
+        <ChevronLeft size={18} />
+        Back to All Listings
+      </button>
         <div className="hero-image-container">
           <MessImage
             src={mainImage}
@@ -482,7 +486,7 @@ export default function ViewMessDetails() {
               <Phone size={18} />
               <div>
                 <small>Phone</small>
-                <p>{mess.phone || "+91 98765 43210"}</p>
+                <p>{mess.phone || "Phone number not available"}</p>
               </div>
             </div>
 
@@ -490,7 +494,7 @@ export default function ViewMessDetails() {
               <Mail size={18} />
               <div>
                 <small>Email</small>
-                <p>{mess.email || "hello@ammaskitchen.com"}</p>
+                <p>{mess.email || "Email not available"}</p>
               </div>
             </div>
           </div>
@@ -511,24 +515,18 @@ export default function ViewMessDetails() {
             ) : (
               <div className="hours-list">
                 <div className="hours-item">
-                  <span className="day">Mon - Sat</span>
-                  <span className="time">7:00 AM - 9:30 PM</span>
+                  <span className="day">Not Available</span>
+                  <span className="time">00:00 - 00:00</span>
                 </div>
                 <div className="hours-item">
-                  <span className="day">Sunday</span>
-                  <span className="time">8:00 AM - 9:00 PM</span>
+                  <span className="day">Not Available</span>
+                  <span className="time">00:00 - 00:00</span>
                 </div>
               </div>
             )}
           </div>
         </aside>
       </div>
-
-      {/* Back to Listings Button */}
-      <button className="back-to-listings" onClick={() => navigate("/view-all-listings")}>
-        <ChevronLeft size={18} />
-        Back to All Listings
-      </button>
     </div>
   );
 }
