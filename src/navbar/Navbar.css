@@ -1,165 +1,216 @@
 /* ===== WRAPPER ===== */
-body{
+body {
   background: #f3f4f2;
 }
+
 .navbar-wrapper {
   width: 100%;
   background: #f3f4f2;
-  position:sticky;
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 1000;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-   border-radius: 30px;
+  border-radius: 30px;
 }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR — 3-column grid ===== */
 .navbar {
-  max-width: 1200px;
-  height: 80px;
+  height: 60px;
+  /* reduced from 80px */
   margin: 0 auto;
-  padding: 0 48px;
-  display: flex;
+  padding: 0 28px;
+  /* reduced from 48px */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
 }
 
-/* ===== LEFT ===== */
+/* ===== LEFT — Logo ===== */
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  justify-self: start;
 }
 
 .logo-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: #63e100;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .logo-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .logo-text {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: #1b1b1b;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-/* ===== RIGHT ===== */
-.navbar-right {
+/* ===== CENTER — Nav links ===== */
+.navbar-center {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 6px;
+  position: relative;
+  /* anchor for the sliding underline */
 }
 
 .nav-link {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: #6d7f67;
   text-decoration: none;
-  transition: color 0.25s ease;
+  padding: 4px 14px;
+  border-radius: 6px;
+  transition: color 0.22s ease;
+  position: relative;
+  white-space: nowrap;
 }
 
-/* 🔥 TEXT-ONLY HOVER (ALL LINKS) */
 .nav-link:hover {
-  color: rgb(76 208 15 / 1);
-}
-
-/* HOME & LOGIN — BOLD + DARK */
-.nav-link.active {
-  font-weight: 600;
   color: #1b1b1b;
-  background: none;
 }
 
-/* 🔥 HOME & LOGIN ALSO TURN GREEN ON HOVER */
-.nav-link.home:hover,
-.nav-link.login:hover {
-  color: rgb(76 208 15 / 1);
+.nav-link.active {
+  font-weight: 650;
+  color: #1b1b1b;
+}
+
+/* ===== SLIDING UNDERLINE ===== */
+.nav-underline {
+  position: absolute;
+  bottom: -6px;
+  height: 2.5px;
+  border-radius: 99px;
+  background: #4cd00f;
+  pointer-events: none;
+  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
+}
+
+/* ===== RIGHT — CTA ===== */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-self: end;
 }
 
 .cta-btn {
-  margin-left: 8px;
-  padding: 12px 26px;
+  padding: 9px 20px;
   background: #1c3a1c;
   color: #ffffff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
+  border: none;
   border-radius: 999px;
-  text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, color 0.22s ease;
 }
 
 .cta-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
-  background-color: rgb(76 208 15 / 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  background: #4cd00f;
   color: #1b1b1b;
 }
-/* ================= MOBILE ================= */
+
+/* ===== MOBILE TOGGLE ===== */
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #1b1b1b;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.navbar-toggler:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== MOBILE DROPDOWN ===== */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px 16px;
+  background: #fff;
+  margin: 0 12px 8px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: #444;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: #f0fce8;
+  color: #2a7a10;
+  font-weight: 600;
+}
+
+.mobile-cta {
+  margin-top: 6px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 20px;
+    grid-template-columns: 1fr auto;
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    display: none;
+  }
+
+  .navbar-toggler {
+    display: block;
+    justify-self: end;
   }
 
   .logo-text {
-    font-size: 16px;
-  }
-
-  /* HAMBURGER */
-  .navbar-toggler {
-    display: block;
-    background: none;
-    border: none;
-    font-size: 26px;
-    cursor: pointer;
-    color: #1b1b1b;
-  }
-
-  /* MENU HIDDEN BY DEFAULT */
-  .navbar-right {
-    position: absolute;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 20px;
-
-    display: none;
-    flex-direction: column;
-    gap: 16px;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  }
-
-  /* SHOW MENU */
-  .navbar-right.show {
-    display: flex;
-  }
-
-  .nav-link {
-    padding: 10px 0;
     font-size: 15px;
-  }
-
-  .cta-btn {
-    text-align: center;
-    width: 100%;
-  }
-}
-
-/* ================= DESKTOP ================= */
-@media (min-width: 769px) {
-  .navbar-toggler {
-    display: none;
   }
 }
