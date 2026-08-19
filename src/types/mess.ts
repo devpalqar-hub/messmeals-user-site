@@ -5,11 +5,36 @@ export type MessImage = {
   sortOrder: number;
 };
 
+export type PlanVariation = {
+  id: string;
+  title: string;
+  description: string | null;
+  isActive: boolean;
+};
+
 export type MessPlan = {
   id: string;
   planName: string;
   price: string;
+  minPrice?: string;
   description?: string;
+  isMonthlyPlan?: boolean;
+  isDailyPlan?: boolean;
+  isActive?: boolean;
+  images?: MessImage[];
+  Variation?: PlanVariation[];
+};
+
+export type MessFoodType = {
+  id: string;
+  messId: string;
+  foodType: "VEG" | "NON_VEG" | "MIXED" | string;
+};
+
+export type MessTag = {
+  id: string;
+  messId: string;
+  tag: string;
 };
 
 export type Mess = {
@@ -73,7 +98,9 @@ export type MessDetails = {
   plans: MessPlan[];
   messAdmins: MessAdmin[];
   Testimonials: MessTestimonial[];
-  DeliveryPartnerProfile: any[]; 
-  UserSubscriptions: any[]; 
+  DeliveryPartnerProfile: any[];
+  UserSubscriptions: any[];
   images: MessImage[];
+  foodTypes?: MessFoodType[];
+  tags?: MessTag[];
 };

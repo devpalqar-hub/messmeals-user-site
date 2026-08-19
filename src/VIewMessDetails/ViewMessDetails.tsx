@@ -7,16 +7,87 @@ import {
   Star,
   Phone,
   Mail,
-//   Clock,
+  Clock,
   Check,
-  Home,
-  Utensils,
   Leaf,
-  Package,
-  ChevronLeft,
+  Salad,
+  Drumstick,
+  MessageCircle,
+  X,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import "./ViewMessDetails.css";
+
+const DAY_ORDER = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const humanizeTag = (tag: string) =>
+  tag
+    .toLowerCase()
+    .split("_")
+    .map(capitalize)
+    .join(" ");
+
+const formatTime12h = (time: string) => {
+  const [hStr, mStr] = time.split(":");
+  const h = parseInt(hStr, 10);
+  const m = mStr || "00";
+  const period = h >= 12 ? "PM" : "AM";
+  const hour12 = h % 12 || 12;
+  return `${String(hour12).padStart(2, "0")}:${m} ${period}`;
+};
+
+const groupOpeningHours = (openingHours: Record<string, string>) => {
+  const groups: { days: string[]; time: string }[] = [];
+  DAY_ORDER.forEach((day) => {
+    const time = openingHours[day];
+    if (!time) return;
+    const last = groups[groups.length - 1];
+    if (last && last.time === time) {
+      last.days.push(day);
+    } else {
+      groups.push({ days: [day], time });
+    }
+  });
+
+  return groups.map((group) => {
+    const label =
+      group.days.length > 1
+        ? `${capitalize(group.days[0]).slice(0, 3)} - ${capitalize(
+            group.days[group.days.length - 1]
+          ).slice(0, 3)}`
+        : capitalize(group.days[0]);
+    const [start, end] = group.time.split("-");
+    return {
+      label,
+      time: `${formatTime12h(start)} - ${formatTime12h(end)}`,
+    };
+  });
+};
+
+const isMessOpenNow = (openingHours?: Record<string, string>) => {
+  if (!openingHours) return false;
+  const now = new Date();
+  const day = now
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+  const range = openingHours[day];
+  if (!range) return false;
+  const [start, end] = range.split("-");
+  const current = `${String(now.getHours()).padStart(2, "0")}:${String(
+    now.getMinutes()
+  ).padStart(2, "0")}`;
+  return current >= start && current <= end;
+};
 
 export default function ViewMessDetails() {
   const { messId } = useParams();
@@ -24,8 +95,8 @@ export default function ViewMessDetails() {
   const { isAuthenticated } = useAuth();
   const [mess, setMess] = useState<MessDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [planTab, setPlanTab] = useState<"monthly" | "daily">("monthly");
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
 
   useEffect(() => {
     if (messId) {
@@ -38,14 +109,9 @@ export default function ViewMessDetails() {
     try {
       const data = await getMessById(messId!);
       setMess(data);
-      if (data.plans?.length > 0) {
-        // Auto-select "BEST VALUE" plan or first plan
-        const bestValuePlan = data.plans.find(
-            (plan: MessDetails["plans"][number]) =>
-                plan.planName.toLowerCase().includes("full")
-            );
-        setSelectedPlan(bestValuePlan?.id || data.plans[0].id);
-      }
+      const hasMonthly = data.plans?.some((p) => p.isMonthlyPlan);
+      const hasDaily = data.plans?.some((p) => p.isDailyPlan);
+      setPlanTab(hasMonthly ? "monthly" : hasDaily ? "daily" : "monthly");
     } catch (err) {
       console.error("Failed to fetch mess details", err);
     } finally {
@@ -53,11 +119,20 @@ export default function ViewMessDetails() {
     }
   };
 
-  function MessImage({ src, alt }: { src?: string; alt: string }) {
+  function MessImage({
+    src,
+    alt,
+    className,
+  }: {
+    src?: string;
+    alt: string;
+    className?: string;
+  }) {
     const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
 
     return (
       <img
+        className={className}
         src={imgSrc}
         alt={alt}
         loading="lazy"
@@ -82,22 +157,33 @@ export default function ViewMessDetails() {
     );
   }
 
-  const sortedImages = mess.images
-    ?.slice()
-    .sort((a, b) => a.sortOrder - b.sortOrder) || [];
-
-  const mainImage = sortedImages[activeImageIndex]?.url;
-
-  const formatOpeningHours = (hours: Record<string, string>) => {
-    return Object.entries(hours).map(([day, time]) => ({
-      day,
-      time,
-    }));
-  };
+  const sortedImages =
+    mess.images?.slice().sort((a, b) => a.sortOrder - b.sortOrder) || [];
 
   const openingHoursList = mess.openingHours
-    ? formatOpeningHours(mess.openingHours)
+    ? groupOpeningHours(mess.openingHours)
     : [];
+
+  const openNow = isMessOpenNow(mess.openingHours);
+
+  const cityCrumb = mess.location?.split(",")[0]?.trim() || "Mess";
+
+  const tags = mess.tags || [];
+
+  const foodTypeValues = (mess.foodTypes || []).map((f) => f.foodType);
+  const isVeg =
+    foodTypeValues.includes("VEG") || foodTypeValues.includes("MIXED");
+  const isNonVeg =
+    foodTypeValues.includes("NON_VEG") || foodTypeValues.includes("MIXED");
+
+  const hasMonthly = mess.plans?.some((p) => p.isMonthlyPlan);
+  const hasDaily = mess.plans?.some((p) => p.isDailyPlan);
+  const showPlanTabs = hasMonthly && hasDaily;
+
+  const visiblePlans = (mess.plans || []).filter((plan) => {
+    if (!showPlanTabs) return true;
+    return planTab === "monthly" ? plan.isMonthlyPlan : plan.isDailyPlan;
+  });
 
   const goToBooking = (planId: string) => {
     const bookingPath = `/mess/${mess.id}/book?planId=${planId}`;
@@ -108,441 +194,344 @@ export default function ViewMessDetails() {
     navigate(bookingPath);
   };
 
-//   const selectedPlanData = mess.plans?.find((p) => p.id === selectedPlan);
-
   return (
     <div className="mess-details-page">
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <button onClick={() => navigate("/")}>Home</button>
         <span>/</span>
-        <button onClick={() => navigate("/view-all-listings")}>All Listings</button>
+        <button onClick={() => navigate("/view-all-listings")}>
+          {cityCrumb}
+        </button>
         <span>/</span>
         <span>{mess.name}</span>
       </div>
 
+      {/* Details Card */}
+      <div className="details-card">
       {/* Hero Section */}
-      <div className="hero-section">
-      <button className="back-to-listings" onClick={() => navigate("/view-all-listings")}>
-        <ChevronLeft size={18} />
-        Back to All Listings
-      </button>
-        <div className="hero-image-container">
+      <div className="hero-card">
+        <div className="hero-media">
           <MessImage
-            src={mainImage}
+            src={sortedImages[0]?.url}
             alt={`${mess.name} - ${mess.location || "Kerala"} Style Homely Food`}
           />
+          <div className="hero-gradient-overlay" />
+          {openNow && <div className="open-now-badge">Open Now</div>}
+        </div>
 
-          {mess.is_verified && (
-            <div className="verified-badge">
-              <Check size={14} />
-              VERIFIED
+        <div className="hero-content">
+          <div className="hero-badges">
+            {mess.is_verified && (
+              <span className="verified-badge">
+                <span className="verified-badge-icon">
+                  <Check size={11} />
+                </span>
+                Verified Mess
+              </span>
+            )}
+          </div>
+
+          <h1>{mess.name}</h1>
+
+          <div className="hero-tagline">
+            <Leaf size={16} />
+            <span>Homestyle Meals Made with Love</span>
+          </div>
+
+          {mess.location && (
+            <div className="hero-location">
+              <MapPin size={15} />
+              <span>{mess.location}</span>
             </div>
           )}
 
-          <div className="dietary-badge">PURE VEG OPTIONS</div>
+          <p className="hero-description">{mess.description}</p>
 
-          <div className="hero-overlay">
-            <h1>{mess.name}</h1>
-            <div className="hero-location">
-              <MapPin size={16} />
-              {mess.address || mess.location || "Kerala"}
+          <div className="hero-info-strip">
+            <div className="hero-info-item">
+              <MapPin size={18} />
+              <div>
+                <small>Location</small>
+                <p>{mess.address || mess.location || "Not available"}</p>
+              </div>
             </div>
-            <div className="hero-rating">
-              <Star size={14} fill="currentColor" />
-              <Star size={14} fill="currentColor" />
-              <Star size={14} fill="currentColor" />
-              <Star size={14} fill="currentColor" />
-              <Star size={14} fill="currentColor" />
-              <span>4.8</span>
-              <span className="review-count">(124 Reviews)</span>
-            </div>
-          </div>
-
-          <div className="hero-actions">
-            <button className="call-btn">
+            <div className="hero-info-item">
               <Phone size={18} />
-              Call Now
-            </button>
-            <button className="whatsapp-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg>
-              WhatsApp
-            </button>
+              <div>
+                <small>Phone</small>
+                <p>{mess.phone || "Not available"}</p>
+              </div>
+            </div>
+            <div className="hero-info-item">
+              <Mail size={18} />
+              <div>
+                <small>Email</small>
+                <p>{mess.email || "Not available"}</p>
+              </div>
+            </div>
+            <div className="hero-info-item">
+              <Clock size={18} />
+              <div>
+                <small>Opening Hours</small>
+                {openingHoursList.length > 0 ? (
+                  openingHoursList.map((item) => (
+                    <p key={item.label}>
+                      {item.label} : {item.time}
+                    </p>
+                  ))
+                ) : (
+                  <p>Not available</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="content-wrapper">
-        {/* Left Column */}
-        <div className="main-content">
-          {/* About Section */}
-          <section className="about-section">
-            <h2>
-              <Home size={20} />
-              About the Mess
-            </h2>
-            <p>{mess.description}</p>
+      {/* Inquiry Banner */}
+      <div className="inquiry-banner">
+        <div className="inquiry-banner-icon">
+          <MessageCircle size={22} />
+        </div>
+        <div className="inquiry-banner-text">
+          <h3>Have Questions?</h3>
+          <p>We're here to help! Send us an inquiry and we'll get back to you soon.</p>
+        </div>
+        <button
+          className="inquiry-banner-btn"
+          onClick={() => setShowInquiryModal(true)}
+        >
+          Send an Inquiry
+        </button>
+      </div>
 
-            <div className="features-grid">
-              <div className="feature-item">
-                <Home size={24} />
-                <span>Home Delivery</span>
+        {/* Meal Plans Section */}
+        <section className="content-block">
+          <div className="plans-section-header">
+            <h2>Our Meal Plans</h2>
+            {showPlanTabs && (
+              <div className="plan-tabs">
+                <button
+                  className={planTab === "monthly" ? "active" : ""}
+                  onClick={() => setPlanTab("monthly")}
+                >
+                  Monthly Plans
+                </button>
+                <button
+                  className={planTab === "daily" ? "active" : ""}
+                  onClick={() => setPlanTab("daily")}
+                >
+                  Daily Plans
+                </button>
               </div>
-              <div className="feature-item">
-                <Utensils size={24} />
-                <span>Freshly Cooked</span>
-              </div>
-              <div className="feature-item">
-                <Leaf size={24} />
-                <span>Hygienic</span>
-              </div>
-              <div className="feature-item">
-                <Package size={24} />
-                <span>Eco-Packing</span>
-              </div>
-            </div>
-          </section>
+            )}
+          </div>
+          <p className="plans-section-subtitle">
+            Choose the perfect plan that suits your needs
+          </p>
 
-          {/* Meal Plans Section */}
-          <section className="plans-section">
-            <h2>
-              <Package size={20} />
-              Meal Plans & Pricing
-            </h2>
+          {visiblePlans.length > 0 ? (
+            <div className="plans-list">
+              {visiblePlans.map((plan) => {
+                const planImages =
+                  plan.images
+                    ?.slice()
+                    .sort((a, b) => a.sortOrder - b.sortOrder) || [];
 
-            {mess.plans && mess.plans.length > 0 ? (
-              <div className="plans-grid">
-                {mess.plans.map((plan) => {
-                  const isPopular = plan.planName
-                    .toLowerCase()
-                    .includes("full");
-                  const isBestValue = isPopular;
-
-                  return (
-                    <div
-                      key={plan.id}
-                      className={`plan-card ${
-                        selectedPlan === plan.id ? "selected" : ""
-                      } ${isBestValue ? "best-value" : ""}`}
-                      onClick={() => setSelectedPlan(plan.id)}
-                    >
-                      {isPopular && (
-                        <div className="popular-badge">POPULAR</div>
-                      )}
-                      {isBestValue && (
-                        <div className="best-value-badge">BEST VALUE</div>
-                      )}
-
+                return (
+                  <div key={plan.id} className="plan-row-card">
+                    <div className="plan-row-info">
                       <h3>{plan.planName}</h3>
-                      <p className="plan-description">
-                        {plan.description || "Breakfast, Lunch & Dinner"}
-                      </p>
+                      <p className="plan-description">{plan.description}</p>
+
+                      <div className="plan-meta">
+                        {plan.Variation && plan.Variation.length > 0 && (
+                          <span className="plan-meta-item">
+                            <Salad size={14} />
+                            {plan.Variation.map((v) => v.title).join(", ")}
+                          </span>
+                        )}
+                        <span className="plan-meta-item">
+                          <Clock size={14} />
+                          {plan.isMonthlyPlan ? "30 Days Plan" : "Daily Plan"}
+                        </span>
+                      </div>
 
                       <div className="plan-price">
                         <span className="currency">₹</span>
                         <span className="amount">{plan.price}</span>
-                        <span className="period">/month</span>
+                        <span className="period">
+                          /{plan.isMonthlyPlan ? "month" : "meal"}
+                        </span>
                       </div>
-
-                      <ul className="plan-features">
-                        {/* Placeholder features - will be dynamic when API provides them */}
-                        <li>
-                          <Check size={16} />
-                          All Items in Lunch Plan
-                        </li>
-                        <li>
-                          <Check size={16} />
-                          Snack/Roti: Dosa, Puttu, Appam
-                        </li>
-                        <li>
-                          <Check size={16} />
-                          Dinner: Chappati/Rice + Curry
-                        </li>
-                        <li>
-                          <Check size={16} />
-                          Sunday Special: Non-Veg
-                        </li>
-                      </ul>
+                      {plan.minPrice && (
+                        <p className="plan-min-price">
+                          Min. Price: ₹{plan.minPrice}
+                        </p>
+                      )}
 
                       <button
-                        className={`plan-action-btn ${
-                          selectedPlan === plan.id ? "selected-btn" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPlan(plan.id);
-                          goToBooking(plan.id);
-                        }}
+                        className="plan-action-btn"
+                        onClick={() => goToBooking(plan.id)}
                       >
-                        {selectedPlan === plan.id
-                          ? "Subscribe Now"
-                          : "Choose Plan"}
+                        {plan.isMonthlyPlan ? "View Full Menu" : "View Details"}
                       </button>
                     </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="no-plans">
-                <p>No meal plans available at the moment.</p>
-              </div>
-            )}
-          </section>
 
-          {/* Photo Gallery Section */}
-          <section className="gallery-section">
-            <h2>
-              <Star size={20} />
-              Photo Gallery
-            </h2>
-
-            {sortedImages.length > 0 ? (
-              <div className="gallery-grid">
-                {sortedImages.map((image, index) => (
-                  <div
-                    key={image.id}
-                    className={`gallery-item ${
-                      index === 0 ? "gallery-main" : ""
-                    }`}
-                    onClick={() => setActiveImageIndex(index)}
-                  >
-                    <MessImage
-                      src={image.url}
-                      alt={image.altText || `${mess.name} photo ${index + 1}`}
-                    />
+                    {planImages.length > 0 && (
+                      <div className="plan-row-images">
+                        <MessImage
+                          className="plan-row-main-image"
+                          src={planImages[0].url}
+                          alt={plan.planName}
+                        />
+                        {planImages.length > 1 && (
+                          <div className="plan-row-thumbs">
+                            {planImages.slice(1, 5).map((img) => (
+                              <MessImage
+                                key={img.id}
+                                src={img.url}
+                                alt={plan.planName}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="no-gallery">
-                <p>No photos available</p>
-              </div>
-            )}
+                );
+              })}
+            </div>
+          ) : (
+            <div className="no-plans">
+              <p>No meal plans available at the moment.</p>
+            </div>
+          )}
+        </section>
+
+        {/* Tags Section */}
+        {tags.length > 0 && (
+          <section className="content-block">
+            <h2>Tags</h2>
+            <div className="tags-list">
+              {tags.map((tag) => (
+                <span key={tag.id} className="tag-pill">
+                  {humanizeTag(tag.tag)}
+                </span>
+              ))}
+            </div>
           </section>
+        )}
 
-          {/* Customer Reviews Section */}
-          <section className="reviews-section">
-            <h2>
-              <Star size={20} />
-              Customer Reviews
-            </h2>
+        {/* Food Types Section */}
+        {(isVeg || isNonVeg) && (
+          <section className="content-block">
+            <h2>Food Types</h2>
+            <div className="food-types-list">
+              {isVeg && (
+                <span className="food-type-pill veg">
+                  <Leaf size={16} />
+                  Vegetarian
+                </span>
+              )}
+              {isNonVeg && (
+                <span className="food-type-pill non-veg">
+                  <Drumstick size={16} />
+                  Non-Vegetarian
+                </span>
+              )}
+            </div>
+          </section>
+        )}
 
-            <div className="reviews-summary">
-              <div className="rating-overview">
-                <div className="rating-number">4.8</div>
-                <div className="rating-stars">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={16} fill="currentColor" />
-                  ))}
+        {/* Photo Gallery Section */}
+        <section className="content-block">
+          <h2>
+            <Star size={20} />
+            Gallery
+          </h2>
+
+          {sortedImages.length > 0 ? (
+            <div className="gallery-grid">
+              {sortedImages.map((image, index) => (
+                <div key={image.id} className="gallery-item">
+                  <MessImage
+                    src={image.url}
+                    alt={image.altText || `${mess.name} photo ${index + 1}`}
+                  />
                 </div>
-                <p className="rating-count">Based on 124 reviews</p>
-              </div>
-
-              <div className="rating-bars">
-                {[5, 4, 3, 2, 1].map((stars) => (
-                  <div key={stars} className="rating-bar-row">
-                    <span className="stars-label">{stars}</span>
-                    <div className="rating-bar">
-                      <div
-                        className="rating-bar-fill"
-                        style={{
-                          width: `${
-                            stars === 5
-                              ? 93
-                              : stars === 4
-                              ? 5
-                              : stars === 3
-                              ? 1
-                              : stars === 2
-                              ? 1
-                              : 0
-                          }%`,
-                        }}
-                      />
-                    </div>
-                    <span className="percentage">
-                      {stars === 5
-                        ? "93"
-                        : stars === 4
-                        ? "5"
-                        : stars === 3
-                        ? "1"
-                        : stars === 2
-                        ? "1"
-                        : "0"}
-                      %
-                    </span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
-
-            {/* Sample Reviews - Replace with actual data when API provides */}
-            <div className="reviews-list">
-              <div className="review-item">
-                <div className="review-header">
-                  <div className="reviewer-avatar">AK</div>
-                  <div className="reviewer-info">
-                    <h4>Arun Kumar</h4>
-                    <div className="review-stars">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} size={12} fill="currentColor" />
-                      ))}
-                    </div>
-                  </div>
-                  <span className="review-date">2 days ago</span>
-                </div>
-                <p className="review-text">
-                  Absolutely the best homely food in Edappally. The fish curry
-                  is to die for! The packaging is also very neat.
-                </p>
-              </div>
-
-              <div className="review-item">
-                <div className="review-header">
-                  <div className="reviewer-avatar">SM</div>
-                  <div className="reviewer-info">
-                    <h4>Sarah Mathews</h4>
-                    <div className="review-stars">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} size={12} fill="currentColor" />
-                      ))}
-                    </div>
-                  </div>
-                  <span className="review-date">1 week ago</span>
-                </div>
-                <p className="review-text">
-                  Very convenient for working women. Dinner chapatis are soft
-                  and curry quantity is good. Highly recommended!
-                </p>
-              </div>
+          ) : (
+            <div className="no-gallery">
+              <p>No photos available</p>
             </div>
-          </section>
+          )}
+        </section>
+      </div>
 
-          {/* Location Section */}
-          <section className="location-section">
-            <h2>
-              <MapPin size={20} />
-              Location
-            </h2>
+      {/* Send an Inquiry Modal */}
+      {showInquiryModal && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowInquiryModal(false)}
+        >
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="modal-close-btn"
+              onClick={() => setShowInquiryModal(false)}
+              aria-label="Close"
+            >
+              <X size={20} />
+            </button>
 
-            <div className="map-container">
-              {/* Placeholder for map - integrate Google Maps when ready */}
-              <div className="map-placeholder">
-                <MapPin size={48} />
-                <p>{mess.address || mess.location}</p>
-                <p className="map-note">Map integration coming soon</p>
-              </div>
-            </div>
-
-            <div className="location-footer">
-              <div className="location-marker">
-                <MapPin size={16} />
-                <span>{mess.name}</span>
-              </div>
-              <div className="location-distance">
-                {/* Placeholder distances */}
-                <span>📍 Near Lulu Mall (3km)</span>
-                <span>📍 Chembu Mall (1.8km)</span>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        {/* Right Sidebar */}
-        <aside className="sidebar">
-          {/* Inquiry Form */}
-          <div className="inquiry-card">
             <h3>Send an Inquiry</h3>
             <p className="inquiry-subtitle">
-              Reach out to the mess owner directly
+              Have questions? We're here to help!
             </p>
 
-            <form className="inquiry-form">
+            <form
+              className="inquiry-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setShowInquiryModal(false);
+              }}
+            >
               <div className="form-group">
-                <label>YOUR NAME</label>
+                <label>Your Name</label>
                 <input
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                   className="form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label>PHONE NUMBER</label>
+                <label>Phone Number</label>
                 <input
                   type="tel"
-                  placeholder="+91 98765 43210"
+                  placeholder="Enter your phone number"
                   className="form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label>MESSAGE</label>
+                <label>Your Message</label>
                 <textarea
-                  placeholder="I am interested in the lunch plan..."
+                  placeholder="Type your message here..."
                   className="form-textarea"
                   rows={4}
                 />
               </div>
 
               <button type="submit" className="send-message-btn">
-                Send Message
+                Send Inquiry
               </button>
             </form>
           </div>
-
-          {/* Contact Info */}
-          <div className="contact-card">
-            <h3>Contact Info</h3>
-
-            <div className="contact-item">
-              <Phone size={18} />
-              <div>
-                <small>Phone</small>
-                <p>{mess.phone || "Phone number not available"}</p>
-              </div>
-            </div>
-
-            <div className="contact-item">
-              <Mail size={18} />
-              <div>
-                <small>Email</small>
-                <p>{mess.email || "Email not available"}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Opening Hours */}
-          <div className="hours-card">
-            <h3>Opening Hours</h3>
-
-            {openingHoursList.length > 0 ? (
-              <div className="hours-list">
-                {openingHoursList.map((item) => (
-                  <div key={item.day} className="hours-item">
-                    <span className="day">{item.day}</span>
-                    <span className="time">{item.time}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="hours-list">
-                <div className="hours-item">
-                  <span className="day">Not Available</span>
-                  <span className="time">00:00 - 00:00</span>
-                </div>
-                <div className="hours-item">
-                  <span className="day">Not Available</span>
-                  <span className="time">00:00 - 00:00</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </aside>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

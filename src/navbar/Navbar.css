@@ -5,13 +5,12 @@ body {
 
 .navbar-wrapper {
   width: 100%;
-  background: #f3f4f2;
+  background: #fff;
   position: sticky;
   top: 0;
   left: 0;
   z-index: 1000;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  border-radius: 30px;
 }
 
 /* ===== NAVBAR — 3-column grid ===== */
