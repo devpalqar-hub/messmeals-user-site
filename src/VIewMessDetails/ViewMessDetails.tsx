@@ -107,7 +107,7 @@ export default function ViewMessDetails() {
   const fetchMessDetails = async () => {
     setLoading(true);
     try {
-      const data = await getMessById(messId!);
+      const data: MessDetails = await getMessById(messId!);
       setMess(data);
       const hasMonthly = data.plans?.some((p) => p.isMonthlyPlan);
       const hasDaily = data.plans?.some((p) => p.isDailyPlan);
