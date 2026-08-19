@@ -75,10 +75,11 @@ export default function ViewAllListings() {
     setLoading(true);
     try {
       const res = await getAllMess(page, 6, filters);
-      setMessList(res.data);
-      setMeta(res.meta);
+      setMessList(Array.isArray(res) ? res : res?.data ?? []);
+      setMeta(Array.isArray(res) ? null : res?.meta ?? null);
     } catch (err) {
       console.error("Failed to fetch mess", err);
+      setMessList([]);
     } finally {
       setLoading(false);
     }

@@ -90,9 +90,10 @@ export default function MessListingRow({
   const fetchMess = async () => {
     try {
       const res = await getAllMess(1, limit);
-      setMessList(res.data);
+      setMessList(Array.isArray(res) ? res : res?.data ?? []);
     } catch (err) {
       console.error("Failed to fetch mess listings", err);
+      setMessList([]);
     } finally {
       setLoading(false);
     }
