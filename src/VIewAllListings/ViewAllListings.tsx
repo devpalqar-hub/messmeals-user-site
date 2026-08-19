@@ -1,9 +1,46 @@
 import { useEffect, useState } from "react";
 import { getAllMess } from "../services/messApi";
 import type { Mess, MessMeta } from "../types/mess";
-import { MapPin, Star, Heart, Search, Filter, X } from "lucide-react";
+import {
+  MapPin,
+  Star,
+  Heart,
+  Search,
+  Filter,
+  X,
+  Utensils,
+  Building2,
+  ShieldCheck,
+  CircleDot,
+  Sprout,
+  CalendarDays,
+  Headphones,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./ViewAllListings.css";
+
+const TRUST_FEATURES = [
+  {
+    icon: ShieldCheck,
+    title: "Verified Messes",
+    desc: "All messes are verified for quality & hygiene",
+  },
+  {
+    icon: Sprout,
+    title: "Hygienic Food",
+    desc: "Fresh, homely and hygienic meals",
+  },
+  {
+    icon: CalendarDays,
+    title: "Flexible Plans",
+    desc: "Daily, monthly or custom plans",
+  },
+  {
+    icon: Headphones,
+    title: "Support 24/7",
+    desc: "We're here to help you anytime",
+  },
+];
 
 type Filters = {
   search?: string;
@@ -88,8 +125,18 @@ export default function ViewAllListings() {
 
       {/* PAGE HEADER */}
       <div className="page-header">
-        <h1>All Mess Listings</h1>
-        {meta && <div className="results-count">{meta.total} results found</div>}
+        <div>
+          <h1>All Mess Listings</h1>
+          <p className="page-subtitle">
+            Discover verified messes offering homely and hygienic meals near you.
+          </p>
+        </div>
+        {meta && (
+          <div className="results-count">
+            <Utensils size={15} />
+            {meta.total} results found
+          </div>
+        )}
       </div>
 
       {/* SEARCH BAR */}
@@ -143,16 +190,22 @@ export default function ViewAllListings() {
           </div>
 
           <div className="filter-group">
-            <label>Location</label>
+            <label>
+              <MapPin size={15} />
+              Location
+            </label>
             <input
-              placeholder="Enter location"
+              placeholder="Enter your location"
               value={filters.location || ""}
               onChange={(e) => updateFilter("location", e.target.value)}
             />
           </div>
 
           <div className="filter-group">
-            <label>District</label>
+            <label>
+              <Building2 size={15} />
+              District
+            </label>
             <input
               placeholder="Enter district name"
               value={filters.districtName || ""}
@@ -161,7 +214,10 @@ export default function ViewAllListings() {
           </div>
 
           <div className="filter-group">
-            <label>Food Type</label>
+            <label>
+              <Utensils size={15} />
+              Food Type
+            </label>
             <select
               value={filters.foodType || ""}
               onChange={(e) => updateFilter("foodType", e.target.value)}
@@ -174,7 +230,10 @@ export default function ViewAllListings() {
           </div>
 
           <div className="filter-group">
-            <label>Verification Status</label>
+            <label>
+              <ShieldCheck size={15} />
+              Verification Status
+            </label>
             <select
               value={filters.is_verified || ""}
               onChange={(e) => updateFilter("is_verified", e.target.value)}
@@ -186,7 +245,10 @@ export default function ViewAllListings() {
           </div>
 
           <div className="filter-group">
-            <label>Status</label>
+            <label>
+              <CircleDot size={15} />
+              Status
+            </label>
             <select
               value={filters.is_active || ""}
               onChange={(e) => updateFilter("is_active", e.target.value)}
@@ -198,7 +260,10 @@ export default function ViewAllListings() {
           </div>
 
           <div className="filter-group">
-            <label>Minimum Rating</label>
+            <label>
+              <Star size={15} />
+              Minimum Rating
+            </label>
             <select
               value={filters.ratings || ""}
               onChange={(e) => updateFilter("ratings", e.target.value)}
@@ -245,6 +310,14 @@ export default function ViewAllListings() {
               onChange={(e) => updateFilter("date2", e.target.value)}
             />
           </div> */}
+
+          <button
+            className="apply-filters-btn"
+            onClick={() => setShowMobileFilters(false)}
+          >
+            <Filter size={16} />
+            Apply Filters
+          </button>
         </aside>
 
         {/* LISTINGS */}
@@ -365,6 +438,21 @@ export default function ViewAllListings() {
             </>
           )}
         </div>
+      </div>
+
+      {/* TRUST STRIP */}
+      <div className="trust-strip">
+        {TRUST_FEATURES.map(({ icon: Icon, title, desc }) => (
+          <div className="trust-item" key={title}>
+            <div className="trust-icon">
+              <Icon size={22} />
+            </div>
+            <div>
+              <h4>{title}</h4>
+              <p>{desc}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 .how-it-works {
-  max-width: 1232px;
-  margin: 0 auto 90px;
-  padding: 0 20px;
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: var(--section-py) var(--section-px);
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
   text-align: center;
 }

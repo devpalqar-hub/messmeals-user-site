@@ -1,15 +1,7 @@
 import "./HeroSection.css";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import {
-  Search,
-  MapPin,
-  Utensils,
-  CalendarDays,
-  ShieldCheck,
-  Sprout,
-  HeadphonesIcon,
-} from "lucide-react";
+import { Search, MapPin, Utensils, CalendarDays } from "lucide-react";
 
 /* ---------------- ANIMATION VARIANTS ---------------- */
 
@@ -39,29 +31,6 @@ const stagger: Variants = {
 };
 
 const POPULAR_SEARCHES = ["Kochi", "Trivandrum", "Calicut", "Ernakulam", "Thrissur"];
-
-const FEATURES = [
-  {
-    icon: ShieldCheck,
-    title: "Verified Messes",
-    desc: "All messes are verified for quality & hygiene",
-  },
-  {
-    icon: Sprout,
-    title: "Hygienic Food",
-    desc: "Fresh, homely and hygienic meals",
-  },
-  {
-    icon: CalendarDays,
-    title: "Flexible Plans",
-    desc: "Daily, monthly or custom plans",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "Support 24/7",
-    desc: "We're here to help you anytime",
-  },
-];
 
 /* ---------------- COMPONENT ---------------- */
 
@@ -154,27 +123,6 @@ export default function HeroSection() {
             </button>
           ))}
         </motion.div>
-      </motion.div>
-
-      {/* FEATURES ROW */}
-      <motion.div
-        className="hero-light-features"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={stagger}
-      >
-        {FEATURES.map(({ icon: Icon, title, desc }) => (
-          <motion.div className="hlf-item" key={title} variants={fadeUp}>
-            <div className="hlf-icon">
-              <Icon size={22} />
-            </div>
-            <div>
-              <h4>{title}</h4>
-              <p>{desc}</p>
-            </div>
-          </motion.div>
-        ))}
       </motion.div>
     </section>
   );

@@ -1,24 +1,29 @@
 import Navbar from "./navbar/Navbar";
 import MobileBottomNav from "./navbar/MobileBottomNav";
 import HeroSection from "./herosection/HeroSection";
-import TrendingListings from "./TrendingListings/TrendingListings";
-import PopularLocations from "./PopularLocations/PopularLocations";
+import AffordableMeals from "./AffordableMeals/AffordableMeals";
+import PopularAroundYou from "./PopularAroundYou/PopularAroundYou";
+import NewOnMessMeals from "./NewOnMessMeals/NewOnMessMeals";
 import HowItWorks from "./HowItWorks/HowItWorks";
 import Testimonials from "./Testimonials/Testimonials";
 import OwnAMess from "./OwnAMess/OwnAMess";
 import Footer from "./Footer/Footer";
 import ViewAllListings from "./VIewAllListings/ViewAllListings";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import ViewMessDetails from "./VIewMessDetails/ViewMessDetails";
 import Login from "./Login/Login";
 import BookPlan from "./BookPlan/BookPlan";
 import Profile from "./Profile/Profile";
+import TopRated from "./TopRated/TopRated";
 
 
 function App() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+
   return (
     <>
-    <Navbar />
+    {!isLoginPage && <Navbar />}
 
     <Routes>
       <Route
@@ -26,11 +31,13 @@ function App() {
         element={
           <>
            <HeroSection />
-           <TrendingListings />
+           <TopRated/>
            <HowItWorks />
+           <PopularAroundYou />
            <Testimonials />
+           <AffordableMeals />
            <OwnAMess />
-           <PopularLocations/>
+           <NewOnMessMeals />
           </>
         }
       />
@@ -46,8 +53,8 @@ function App() {
       <Route path="/mess/:messId/book" element={<BookPlan />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>
-      <Footer />
-      <MobileBottomNav />
+      {!isLoginPage && <Footer />}
+      {!isLoginPage && <MobileBottomNav />}
     </>
   );
 }

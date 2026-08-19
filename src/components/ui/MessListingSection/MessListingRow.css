@@ -1,28 +1,52 @@
 .trending {
-  padding: 120px 6%;
+  max-width: var(--section-max-width);
+  margin: 0 auto;
+  padding: var(--section-py) var(--section-px);
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  margin-top: 100px;
 }
 
 /* HEADER */
 .trending-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 40px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: nowrap;
 }
 
 .trending-header h2 {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 700;
   color: #1b1b1b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trending-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 9px;
+  background: #eaf9e2;
+  color: #2f7d32;
+  flex-shrink: 0;
+}
+
+.trending-icon svg {
+  width: 62%;
+  height: 62%;
 }
 
 .trending-header p {
-  margin-top: 8px;
+  margin: 4px 0 0;
   color: #5f6f52;
   max-width: 520px;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .view-all {
@@ -35,8 +59,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 
-  font-size: 16px;
+  font-size: 15px;
   transition: color 0.2s ease;
 }
 
@@ -53,19 +78,30 @@
   transform: translateX(4px);
 }
 
-/* GRID */
-.listing-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+/* SCROLLABLE ROW */
+.listing-row {
+  display: flex;
   gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #d7ded4 transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
-@media (max-width: 1200px) and (min-width: 1024px) {
-  .listing-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.listing-row::-webkit-scrollbar {
+  height: 7px;
 }
 
+.listing-row::-webkit-scrollbar-thumb {
+  background: #d7ded4;
+  border-radius: 999px;
+}
+
+.listing-row::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* CARD */
 .listing-card {
@@ -75,11 +111,15 @@
   border: 1px solid #eef1ee;
   box-shadow: 0 4px 14px rgba(20, 40, 20, 0.05);
   transition: transform .2s ease, box-shadow .2s ease;
+
+  flex: 0 0 auto;
+  width: clamp(230px, 24vw, 270px);
+  scroll-snap-align: start;
 }
 
 .listing-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(20, 40, 20, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.15);
 }
 
 /* IMAGE WRAP */
@@ -146,30 +186,41 @@
 .listing-card:hover .image-wrap::after {
   opacity: 1;
 }
-.listing-card {
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
 
-.listing-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.15);
-}
-
-
+/* ---- CORNER BADGES ---- */
 .badge {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   background: #ffffff;
 }
 
-.badge.veg { color: #16a34a; }
-.badge.nonveg { color: #dc2626; }
-.badge.mixed { color: #2563eb; }
+.badge-verified {
+  color: #16a34a;
+}
+
+.badge-popular {
+  background: #ff5a1f;
+  color: #ffffff;
+}
+
+.badge-new {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.badge-affordable {
+  background: #0f8b5c;
+  color: #ffffff;
+}
 
 /* WISHLIST BUTTON */
 .wishlist {
@@ -205,7 +256,7 @@
   transition: transform 0.25s ease;
 }
 
-/* 🔥 HOVER EFFECT (LIKE IMAGE) */
+/* HOVER EFFECT (LIKE IMAGE) */
 .wishlist:hover {
   background: #ffffff;
   color: #ef4444; /* red heart */
@@ -289,6 +340,14 @@
   color: #0f2f0f;
 }
 
+.rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
 .rating {
   display: flex;
   align-items: center;
@@ -296,78 +355,78 @@
   font-size: 12px;
   font-weight: 600;
   color: #b8860b;
-  margin-bottom: 8px;
 }
+
+.booking-count {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ff5a1f;
+  background: #fff1ea;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ===================== RESPONSIVE ===================== */
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .trending {
-    padding: 90px 5%;
-  }
-
-  .trending-header {
-    gap: 24px;
-    align-items: flex-start;
-  }
-
-  .trending-header h2 {
-    font-size: 30px;
-  }
-
-  .trending-header p {
-    font-size: 16px;
-    max-width: 100%;
-  }
-
-  .listing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
-  }
-
-  .image-wrap {
-    height: 240px;
-  }
-
-  .image-info h3 {
-    font-size: 18px;
-  }
-
-  .card-footer strong {
-    font-size: 22px;
-  }
-}
-@media (max-width: 767px) {
-  .trending {
-    padding: 70px 16px;
-  }
-
-  /* HEADER STACK */
-  .trending-header {
-    flex-direction: column;
-    gap: 18px;
-    align-items: flex-start;
-  }
-
   .trending-header h2 {
     font-size: 26px;
   }
 
   .trending-header p {
-    font-size: 15px;
+    font-size: 14px;
+    max-width: 100%;
+  }
+
+  .listing-card {
+    width: clamp(230px, 40vw, 270px);
+  }
+
+  .image-wrap {
+    height: 190px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* HEADER STAYS IN ONE ROW */
+  .trending-header {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .trending-header h2 {
+    font-size: 19px;
+  }
+
+  .trending-header p {
+    font-size: 12.5px;
+    margin-top: 2px;
   }
 
   .view-all {
-    font-size: 15px;
+    font-size: 0;
+    gap: 0;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
   }
 
-  /* GRID stays 2 columns */
-  .listing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+  .view-all-icon {
+    flex-shrink: 0;
+  }
+
+  .listing-row {
+    gap: 14px;
+  }
+
+  .listing-card {
+    width: 68vw;
   }
 
   /* CARD BODY */
   .card-body {
-    padding: 14px 12px 16px;
+    padding: 12px 12px 14px;
   }
 
   /* TAGS */
@@ -376,27 +435,12 @@
     padding: 4px 10px;
   }
 
-  /* 🔥 FIXED FOOTER LAYOUT */
-  .card-footer {
-    flex-direction: column;      /* stack */
-    align-items: stretch;        /* full width */
-    gap: 8px;
-  }
-
-  .card-footer small {
-    font-size: 11px;
-    color: #0f2f0f;
-  }
-
   .card-footer strong {
-    font-size: 18px;
-    line-height: 1.2;
+    font-size: 17px;
   }
 
-  /* BUTTON — FULL WIDTH */
   .menu-btn {
-    width: 100%;
-    padding: 8px 0;
+    padding: 8px 14px;
     font-size: 12px;
     border-radius: 8px;
     white-space: nowrap;
@@ -404,30 +448,34 @@
 
   /* IMAGE */
   .image-wrap {
-    height: 190px;
+    height: 170px;
   }
 
   .image-info {
-    bottom: 10px;
+    bottom: 12px;
     left: 12px;
     right: 12px;
   }
 
   .image-info .location {
-    font-size: 8px;
+    font-size: 11px;
     gap: 4px;
     margin-bottom: 4px;
   }
 
   .image-info h3 {
-    font-size: 8px;
+    font-size: 15px;
     line-height: 1.25;
   }
 
-  /* RATING */
-  .rating {
-    top: -28px;
-    font-size: 11px;
-    padding: 2px 4px;
+  .booking-count {
+    font-size: 9.5px;
+    padding: 2px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .listing-card {
+    width: 78vw;
   }
 }

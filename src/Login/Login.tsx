@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Phone, ShieldCheck, ArrowLeft } from "lucide-react";
+import { Phone, ShieldCheck, ArrowLeft, BadgeCheck } from "lucide-react";
 import { sendOtp, verifyOtp, OTP_LENGTH } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
@@ -100,6 +100,22 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <div className="login-visual">
+        <div className="login-badge">
+          <BadgeCheck size={16} />
+          Secure &amp; Private
+        </div>
+        <h2 className="login-visual-title">
+          Good food.
+          <br />
+          Made simple.
+        </h2>
+        <p className="login-visual-sub">
+          Login to your account and discover the best mess around you.
+        </p>
+      </div>
+
+      <div className="login-card-wrap">
       <div className="login-card">
         <div className="login-brand">
           <span className="login-logo">🍽️</span>
@@ -202,6 +218,7 @@ export default function Login() {
           <ShieldCheck size={14} />
           Your number is safe with us and used only for booking updates.
         </div>
+      </div>
       </div>
     </div>
   );

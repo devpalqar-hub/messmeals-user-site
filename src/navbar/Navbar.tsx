@@ -8,7 +8,6 @@ import { useAuth } from "../context/AuthContext";
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
   { to: "/view-all-listings", label: "Listings", end: false },
-  { to: "/#how-it-works", label: "How It Works", end: false },
   { to: "/about", label: "About Us", end: false },
   { to: "/blog", label: "Blog", end: false },
 ];

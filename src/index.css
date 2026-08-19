@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Shared rhythm for home-page sections: keeps side padding and the
+     gap between sections consistent everywhere they're used. */
+  --section-max-width: min(1600px, 96vw);
+  --section-px: clamp(6px, 1vw, 8px);
+  --section-py: clamp(16px, 2.5vw, 36px);
+}
+
 html {
   scroll-behavior: smooth;
 }
