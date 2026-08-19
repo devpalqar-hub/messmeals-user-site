@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
 import "./Navbar.css";
 import ListMessModal from "../ListMessModal/ListMessModal";
+import { useAuth } from "../context/AuthContext";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
   { to: "/view-all-listings", label: "Listings", end: false },
-  { to: "/about", label: "About", end: false },
+  { to: "/#how-it-works", label: "How It Works", end: false },
+  { to: "/about", label: "About Us", end: false },
+  { to: "/blog", label: "Blog", end: false },
 ];
 
 export default function Navbar() {
@@ -15,6 +19,8 @@ export default function Navbar() {
   const [underline, setUnderline] = useState({ left: 0, width: 0, opacity: 0 });
   const navCenterRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
 
   const closeNavbar = () => setIsNavbarOpen(false);
 
@@ -81,6 +87,16 @@ export default function Navbar() {
             <button className="cta-btn" onClick={() => setIsModalOpen(true)}>
               List Your Mess
             </button>
+            {isAuthenticated ? (
+              <button className="profile-chip" onClick={() => navigate("/profile")}>
+                <User size={15} />
+                {user?.name || "My Account"}
+              </button>
+            ) : (
+              <button className="signin-btn" onClick={() => navigate("/login")}>
+                Sign In
+              </button>
+            )}
           </div>
 
           {/* MOBILE TOGGLE */}
@@ -113,6 +129,21 @@ export default function Navbar() {
             >
               List Your Mess
             </button>
+            {isAuthenticated ? (
+              <button
+                className="signin-btn mobile-signin"
+                onClick={() => { navigate("/profile"); closeNavbar(); }}
+              >
+                My Account
+              </button>
+            ) : (
+              <button
+                className="signin-btn mobile-signin"
+                onClick={() => { navigate("/login"); closeNavbar(); }}
+              >
+                Sign In
+              </button>
+            )}
           </div>
         )}
       </header>

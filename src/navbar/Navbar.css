@@ -104,7 +104,49 @@ body {
 .navbar-right {
   display: flex;
   align-items: center;
+  gap: 10px;
   justify-self: end;
+}
+
+.signin-btn {
+  padding: 9px 20px;
+  background: transparent;
+  color: #1b1b1b;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #d7ded4;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.22s ease, background 0.22s ease;
+}
+
+.signin-btn:hover {
+  background: #ffffff;
+  border-color: #1b1b1b;
+}
+
+.profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px 8px 10px;
+  background: #ecfdf3;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s ease;
+}
+
+.profile-chip:hover {
+  background: #dcfce7;
 }
 
 .cta-btn {
@@ -192,22 +234,31 @@ body {
   width: 100%;
 }
 
+.mobile-signin {
+  margin-top: 4px;
+  text-align: center;
+  width: 100%;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .navbar {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     height: 56px;
     padding: 0 16px;
+    justify-content: center;
   }
 
+  .navbar-left {
+    justify-self: center;
+  }
+
+  /* Bottom nav takes over navigation + account/list-mess actions on mobile */
   .navbar-center,
-  .navbar-right {
+  .navbar-right,
+  .navbar-toggler,
+  .mobile-menu {
     display: none;
-  }
-
-  .navbar-toggler {
-    display: block;
-    justify-self: end;
   }
 
   .logo-text {

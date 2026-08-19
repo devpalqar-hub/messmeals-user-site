@@ -1,13 +1,14 @@
 import "./HeroSection.css";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   MapPin,
   Utensils,
+  CalendarDays,
   ShieldCheck,
-  CookingPot,
-  IndianRupee,
-  Phone,
+  Sprout,
+  HeadphonesIcon,
 } from "lucide-react";
 
 /* ---------------- ANIMATION VARIANTS ---------------- */
@@ -17,14 +18,14 @@ import type { Variants } from "framer-motion";
 const fadeUp: Variants = {
   hidden: {
     opacity: 0,
-    y: 30,
+    y: 24,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1], 
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
     },
   },
 };
@@ -32,169 +33,148 @@ const fadeUp: Variants = {
 const stagger: Variants = {
   visible: {
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.1,
     },
   },
 };
 
+const POPULAR_SEARCHES = ["Kochi", "Trivandrum", "Calicut", "Ernakulam", "Thrissur"];
+
+const FEATURES = [
+  {
+    icon: ShieldCheck,
+    title: "Verified Messes",
+    desc: "All messes are verified for quality & hygiene",
+  },
+  {
+    icon: Sprout,
+    title: "Hygienic Food",
+    desc: "Fresh, homely and hygienic meals",
+  },
+  {
+    icon: CalendarDays,
+    title: "Flexible Plans",
+    desc: "Daily, monthly or custom plans",
+  },
+  {
+    icon: HeadphonesIcon,
+    title: "Support 24/7",
+    desc: "We're here to help you anytime",
+  },
+];
 
 /* ---------------- COMPONENT ---------------- */
 
 export default function HeroSection() {
-  return (
-    <section className="hero">
-      {/* Background Overlay */}
-      <div className="hero-overlay" />
+  const navigate = useNavigate();
 
-      {/* HERO CONTENT */}
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate("/view-all-listings");
+  };
+
+  return (
+    <section className="hero-light">
       <motion.div
-        className="hero-content"
+        className="hero-light-content"
         initial="hidden"
         animate="visible"
         variants={stagger}
       >
-        {/* Badge */}
-        <motion.span className="hero-badge" variants={fadeUp}>
-          <span className="badge-dot" />
-          #1 Food Network in Kerala
-        </motion.span>
-
         {/* Title */}
-        <motion.h1 className="hero-title" variants={fadeUp}>
-          Discover Homely & <br />
-          <span>Verified Mess Services</span> in <br />
-          Kerala
+        <motion.h1 className="hero-light-title" variants={fadeUp}>
+          Find homely meals <br />
+          from <span>trusted messes.</span>
         </motion.h1>
 
         {/* Subtitle */}
-        <motion.p className="hero-subtitle" variants={fadeUp}>
-          Experience the warmth of homemade food away from home.
+        <motion.p className="hero-light-subtitle" variants={fadeUp}>
+          Search, compare and book the best mess plans
           <br />
-          <span>
-            Connect directly with trusted kitchens from Kasaragod to
-            <br />
-            Trivandrum.
-          </span>
+          that suit your taste and budget.
         </motion.p>
 
         {/* SEARCH BAR */}
-        <motion.div
-          className="hero-search"
+        <motion.form
+          className="hero-light-search"
           variants={fadeUp}
-          whileHover={{ scale: 1.01 }}
+          onSubmit={handleSearch}
         >
           {/* Location */}
-          <div className="search-item">
-            <MapPin size={20} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search location (e.g. Infopark, Kochi)"
-            />
+          <div className="hls-item">
+            <MapPin size={18} className="hls-icon" />
+            <div className="hls-field">
+              <label>Enter location</label>
+              <input type="text" placeholder="e.g. Kochi, Kerala" />
+            </div>
           </div>
 
-          <div className="search-divider" />
+          <div className="hls-divider" />
 
-          {/* Preference */}
-          <div className="search-item select">
-            <Utensils size={20} className="search-icon" />
-            <select defaultValue="">
-              <option value="" disabled>
-                Any Preference
-              </option>
-              <option value="veg">Veg</option>
-              <option value="non-veg">Non-Veg</option>
-            </select>
+          {/* Meal preference */}
+          <div className="hls-item hls-select">
+            <Utensils size={18} className="hls-icon" />
+            <div className="hls-field">
+              <label>Meal preference</label>
+              <select defaultValue="">
+                <option value="">Any</option>
+                <option value="veg">Veg</option>
+                <option value="non-veg">Non-Veg</option>
+              </select>
+            </div>
           </div>
 
-          {/* Search Button */}
-          <button type="button" className="search-btn">
-            Search <Search size={18} />
+          <div className="hls-divider" />
+
+          {/* Plan type */}
+          <div className="hls-item hls-select">
+            <CalendarDays size={18} className="hls-icon" />
+            <div className="hls-field">
+              <label>Plan type</label>
+              <select defaultValue="">
+                <option value="">Any</option>
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" className="hls-btn">
+            Search Meals <Search size={17} />
           </button>
-        </motion.div>
+        </motion.form>
 
-        {/* Popular Locations */}
-        <motion.div className="hero-tags" variants={fadeUp}>
-          <span>Popular now:</span>
-          <button>Kochi</button>
-          <button>Trivandrum</button>
-          <button>Calicut</button>
-          <button>Technopark</button>
+        {/* Popular Searches */}
+        <motion.div className="hero-light-tags" variants={fadeUp}>
+          <span>Popular searches:</span>
+          {POPULAR_SEARCHES.map((city) => (
+            <button key={city} onClick={() => navigate("/view-all-listings")}>
+              {city}
+            </button>
+          ))}
         </motion.div>
       </motion.div>
 
-      {/* FEATURES */}
+      {/* FEATURES ROW */}
       <motion.div
-        className="hero-features"
+        className="hero-light-features"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={stagger}
       >
-        <div className="features-card">
-          {/* Feature 1 */}
-          <motion.div
-            className="feature-item"
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <div className="feature-icon">
-              <ShieldCheck size={20} />
+        {FEATURES.map(({ icon: Icon, title, desc }) => (
+          <motion.div className="hlf-item" key={title} variants={fadeUp}>
+            <div className="hlf-icon">
+              <Icon size={22} />
             </div>
             <div>
-              <h4>100% Verified</h4>
-              <p>Every kitchen physically inspected.</p>
+              <h4>{title}</h4>
+              <p>{desc}</p>
             </div>
           </motion.div>
-
-          {/* Feature 2 */}
-          <motion.div
-            className="feature-item"
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <div className="feature-icon">
-              <CookingPot size={20} />
-            </div>
-            <div>
-              <h4>Homely Taste</h4>
-              <p>Authentic recipes, zero preservatives.</p>
-            </div>
-          </motion.div>
-
-          {/* Feature 3 */}
-          <motion.div
-            className="feature-item"
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <div className="feature-icon">
-              <IndianRupee size={20} />
-            </div>
-            <div>
-              <h4>Transparent Pricing</h4>
-              <p>No hidden fees or commissions.</p>
-            </div>
-          </motion.div>
-
-          {/* Feature 4 */}
-          <motion.div
-            className="feature-item"
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <div className="feature-icon">
-              <Phone size={20} />
-            </div>
-            <div>
-              <h4>Direct Contact</h4>
-              <p>Connect directly with owners.</p>
-            </div>
-          </motion.div>
-        </div>
+        ))}
       </motion.div>
     </section>
   );

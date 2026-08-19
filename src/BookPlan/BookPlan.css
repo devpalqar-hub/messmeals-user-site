@@ -1,0 +1,384 @@
+.book-plan-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 20px 80px;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+.bp-loading {
+  padding: 100px 0;
+  text-align: center;
+  color: #7a837b;
+  font-size: 16px;
+}
+
+.bp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #4b7a4b;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.bp-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+
+.bp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bp-section {
+  background: #ffffff;
+  border: 1px solid #f0f2f0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(20, 40, 20, 0.04);
+}
+
+.bp-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 18px;
+}
+
+.bp-plantype-toggle {
+  display: flex;
+  gap: 10px;
+  background: #f4f6f4;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.bp-plantype-toggle button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #57604f;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bp-plantype-toggle button.active {
+  background: #ffffff;
+  color: #14181a;
+  box-shadow: 0 4px 14px rgba(20, 40, 20, 0.1);
+}
+
+.bp-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.bp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.bp-field:last-child {
+  margin-bottom: 0;
+}
+
+.bp-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #14181a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bp-field input,
+.bp-field select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bp-field input:focus {
+  outline: none;
+  border-color: #4cd00f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(76, 208, 15, 0.1);
+}
+
+.bp-field input:disabled {
+  background: #f0f2f0;
+  color: #8a938a;
+}
+
+.bp-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 6px;
+  background: #fafafa;
+}
+
+.bp-stepper button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #ffffff;
+  border-radius: 9px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #14181a;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.bp-stepper span {
+  font-size: 16px;
+  font-weight: 700;
+  color: #14181a;
+}
+
+.bp-weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bp-weekdays button {
+  width: 46px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 13px;
+  font-weight: 600;
+  color: #57604f;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.bp-weekdays button.active {
+  background: #4cd00f;
+  border-color: #4cd00f;
+  color: #0f2f0f;
+}
+
+.bp-extra-dates-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1.5px dashed #b7e6a5;
+  background: #f2f9ee;
+  color: #2a7a10;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.bp-extra-dates-btn:hover {
+  background: #e7fbdc;
+}
+
+.bp-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #37403a;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+/* Summary sidebar */
+.bp-summary {
+  position: sticky;
+  top: 88px;
+}
+
+.bp-summary-card {
+  background: #ffffff;
+  border: 1px solid #f0f2f0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(20, 40, 20, 0.06);
+}
+
+.bp-summary-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 16px;
+}
+
+.bp-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #7a837b;
+  margin-bottom: 10px;
+}
+
+.bp-summary-row strong {
+  color: #14181a;
+  font-size: 14px;
+  text-align: right;
+}
+
+.bp-capitalize {
+  text-transform: capitalize;
+}
+
+.bp-summary-divider {
+  border-top: 1px dashed #e5e7eb;
+  margin: 14px 0;
+}
+
+.bp-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #14181a;
+  margin-bottom: 18px;
+}
+
+.bp-summary-total strong {
+  font-size: 22px;
+  color: #1f3d1f;
+}
+
+.bp-submit-btn {
+  width: 100%;
+  background: #4cd00f;
+  color: #0f2f0f;
+  border: none;
+  padding: 15px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.bp-submit-btn:hover:not(:disabled) {
+  background: #3cb800;
+  transform: translateY(-1px);
+}
+
+.bp-submit-btn:disabled {
+  background: #d7ded4;
+  color: #9aa39a;
+  cursor: not-allowed;
+}
+
+.bp-summary-note {
+  text-align: center;
+  font-size: 12px;
+  color: #b3bab3;
+  margin: 10px 0 0;
+}
+
+/* Success state */
+.bp-success {
+  max-width: 440px;
+  margin: 60px auto;
+  text-align: center;
+  color: #22c55e;
+}
+
+.bp-success h1 {
+  font-size: 26px;
+  color: #14181a;
+  margin: 18px 0 10px;
+}
+
+.bp-success p {
+  color: #57604f;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 26px;
+}
+
+.bp-success-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.bp-primary-btn,
+.bp-secondary-btn {
+  padding: 13px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+
+.bp-primary-btn {
+  background: #1c3a1c;
+  color: #fff;
+}
+
+.bp-primary-btn:hover {
+  background: #4cd00f;
+  color: #0f2f0f;
+}
+
+.bp-secondary-btn {
+  background: #f4f6f4;
+  color: #37403a;
+}
+
+@media (max-width: 980px) {
+  .bp-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .bp-summary {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .bp-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .bp-weekdays button {
+    flex: 1;
+    min-width: 40px;
+  }
+}

@@ -285,7 +285,7 @@ export default function ViewAllListings() {
                         )}
 
                         <button className="wishlist" aria-label="Add to wishlist">
-                          <Heart size={18} />
+                          <Heart size={14} />
                         </button>
 
                         <div className="image-overlay">

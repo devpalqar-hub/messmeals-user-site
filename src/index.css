@@ -15,3 +15,10 @@ body {
   background-color: #fff;
   color: #1b1b1b;
 }
+
+@media (max-width: 768px) {
+  /* leave room for the fixed mobile bottom nav */
+  body {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom));
+  }
+}

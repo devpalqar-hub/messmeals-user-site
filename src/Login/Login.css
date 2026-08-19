@@ -1,0 +1,198 @@
+.login-page {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #f7f9f6;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 60px rgba(20, 40, 20, 0.08);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: 14px;
+  color: #1b1b1b;
+  margin-bottom: 28px;
+}
+
+.login-logo {
+  font-size: 18px;
+}
+
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 8px;
+}
+
+.login-sub {
+  font-size: 14px;
+  color: #7a837b;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.login-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #4b7a4b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #14181a;
+}
+
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fafafa;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.phone-input-wrap:focus-within {
+  border-color: #4cd00f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(76, 208, 15, 0.12);
+}
+
+.phone-prefix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px 14px 16px;
+  color: #57604f;
+  font-weight: 600;
+  font-size: 14px;
+  border-right: 1.5px solid #e5e7eb;
+}
+
+.phone-input-wrap input {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px 16px;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  width: 100%;
+}
+
+.otp-input-wrap {
+  display: flex;
+  gap: 10px;
+  margin: 6px 0 4px;
+}
+
+.otp-box {
+  width: 100%;
+  aspect-ratio: 1;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.otp-box:focus {
+  border-color: #4cd00f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(76, 208, 15, 0.12);
+}
+
+.login-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.login-btn {
+  margin-top: 14px;
+  background: #4cd00f;
+  color: #0f2f0f;
+  border: none;
+  padding: 15px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: #3cb800;
+  transform: translateY(-1px);
+}
+
+.login-btn:disabled {
+  background: #d7ded4;
+  color: #9aa39a;
+  cursor: not-allowed;
+}
+
+.resend-btn {
+  margin-top: 4px;
+  background: none;
+  border: none;
+  color: #4b7a4b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.resend-btn:disabled {
+  color: #b3bab3;
+  cursor: not-allowed;
+}
+
+.login-trust {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #8a938a;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+}

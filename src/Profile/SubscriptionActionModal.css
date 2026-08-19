@@ -1,0 +1,157 @@
+.sam-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.sam-card {
+  position: relative;
+  width: 400px;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.sam-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #57604f;
+}
+
+.sam-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.sam-icon.default {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.sam-icon.danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.sam-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 4px;
+}
+
+.sam-sub {
+  font-size: 13px;
+  color: #7a837b;
+  margin: 0 0 18px;
+}
+
+.sam-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #14181a;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.sam-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.sam-note {
+  font-size: 12.5px;
+  color: #7a837b;
+  line-height: 1.5;
+  margin: 10px 0 0;
+}
+
+.sam-note strong {
+  color: #14181a;
+}
+
+.sam-warning {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sam-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.sam-cancel-btn,
+.sam-confirm-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+
+.sam-cancel-btn {
+  background: #f4f6f4;
+  color: #37403a;
+}
+
+.sam-confirm-btn.default {
+  background: #4cd00f;
+  color: #0f2f0f;
+}
+
+.sam-confirm-btn.default:hover {
+  background: #3cb800;
+}
+
+.sam-confirm-btn.danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.sam-confirm-btn.danger:hover {
+  background: #b91c1c;
+}
+
+.sam-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -40,7 +40,7 @@ export default function TrendingListings() {
 
   const fetchTrendingMess = async () => {
     try {
-      const res = await getAllMess(1, 4); 
+      const res = await getAllMess(1, 8);
       setMessList(res.data);
     } catch (err) {
       console.error("Failed to fetch trending mess", err);
@@ -54,7 +54,7 @@ export default function TrendingListings() {
       {/* HEADER */}
       <div className="trending-header">
         <div>
-          <h2>Trending Mess Listings</h2>
+          <h2>Top rated messes near you</h2>
           <p>
             Highly rated home kitchens serving authentic Kerala meals in your
             area today.
@@ -96,7 +96,7 @@ export default function TrendingListings() {
                   )}
 
                   <button className="wishlist" aria-label="Save mess">
-                    <Heart size={18} />
+                    <Heart size={14} />
                   </button>
 
                   {/* IMAGE TEXT */}
@@ -111,6 +111,10 @@ export default function TrendingListings() {
 
                 {/* BODY */}
                 <div className="card-body">
+                  <div className="rating">
+                    <Star size={13} fill="currentColor" /> 4.5
+                  </div>
+
                   <div className="tags">
                     <span>Homely</span>
                     <span>Monthly Plan</span>
@@ -133,10 +137,6 @@ export default function TrendingListings() {
                     >
                       View Menu
                     </button>
-                  </div>
-
-                  <div className="rating">
-                    <Star size={14} /> 4.5
                   </div>
                 </div>
               </div>

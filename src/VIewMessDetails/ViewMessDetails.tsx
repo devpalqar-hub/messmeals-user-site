@@ -15,11 +15,13 @@ import {
   Package,
   ChevronLeft,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 import "./ViewMessDetails.css";
 
 export default function ViewMessDetails() {
   const { messId } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [mess, setMess] = useState<MessDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -96,6 +98,15 @@ export default function ViewMessDetails() {
   const openingHoursList = mess.openingHours
     ? formatOpeningHours(mess.openingHours)
     : [];
+
+  const goToBooking = (planId: string) => {
+    const bookingPath = `/mess/${mess.id}/book?planId=${planId}`;
+    if (!isAuthenticated) {
+      navigate("/login", { state: { redirectTo: bookingPath } });
+      return;
+    }
+    navigate(bookingPath);
+  };
 
 //   const selectedPlanData = mess.plans?.find((p) => p.id === selectedPlan);
 
@@ -259,6 +270,11 @@ export default function ViewMessDetails() {
                         className={`plan-action-btn ${
                           selectedPlan === plan.id ? "selected-btn" : ""
                         }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPlan(plan.id);
+                          goToBooking(plan.id);
+                        }}
                       >
                         {selectedPlan === plan.id
                           ? "Subscribe Now"
