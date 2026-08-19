@@ -6,6 +6,7 @@ import {
   MapPin,
   Star,
   ArrowRight,
+  Check,
   Flame,
   Sparkles,
   Wallet,
@@ -63,7 +64,14 @@ function CornerBadge({ type, isVerified }: { type: RowBadgeType; isVerified: boo
     );
   }
   if (isVerified) {
-    return <span className="badge badge-verified">• Verified</span>;
+    return (
+      <span className="badge badge-verified">
+        <span className="badge-icon">
+          <Check size={11} />
+        </span>
+        Verified
+      </span>
+    );
   }
   return null;
 }
@@ -144,7 +152,7 @@ export default function MessListingRow({
                 <div className="image-wrap">
                   <MessImage
                     src={imageUrl}
-                    alt={`${mess.name} mess in ${mess.location ?? "Kerala"}`}
+                    alt={`${mess.name} mess at ${mess.address}`}
                   />
 
                   <CornerBadge type={badgeType} isVerified={mess.is_verified} />
@@ -157,7 +165,7 @@ export default function MessListingRow({
                   <div className="image-info">
                     <div className="location">
                       <MapPin size={14} />
-                      {mess.location || "Kerala"}
+                      <span>{mess.address}</span>
                     </div>
                     <h3>{mess.name}</h3>
                   </div>
@@ -168,22 +176,20 @@ export default function MessListingRow({
                   <div className="rating-row">
                     <div className="rating">
                       <Star size={13} fill="currentColor" /> 4.5
+                      <span className="review-count">
+                        {mess.Testimonials?.length ?? 0} Reviews
+                      </span>
                     </div>
                     {badgeType === "popular" && (
                       <span className="booking-count">{bookingCount}+ bookings</span>
                     )}
                   </div>
 
-                  <div className="tags">
-                    <span>Homely</span>
-                    <span>Monthly Plan</span>
-                  </div>
-
                   <div className="card-divider" />
 
                   <div className="card-footer">
-                    <div>
-                      <small>STARTING AT</small>
+                    <div className="price-info">
+                      <small>STARTING FROM</small>
                       <strong>
                         ₹{mess.plans?.[0]?.price ?? "N/A"}
                         <span>/mo</span>
@@ -194,7 +200,8 @@ export default function MessListingRow({
                       className="menu-btn"
                       onClick={() => navigate(`/mess/${mess.id}`)}
                     >
-                      View Menu
+                      View Details
+                      <ArrowRight size={16} />
                     </button>
                   </div>
                 </div>

@@ -125,7 +125,7 @@
 /* IMAGE WRAP */
 .image-wrap {
   position: relative;
-  height: 168px;
+  height: 180px;
   overflow: hidden;
   border-radius: 16px 16px 0 0;
 }
@@ -172,6 +172,12 @@
   margin-bottom: 6px;
 }
 
+.image-info .location span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .image-info h3 {
   font-size: 16px;
   font-weight: 700;
@@ -204,7 +210,22 @@
 }
 
 .badge-verified {
+  background: #16a34a;
+  color: #ffffff;
+  padding: 4px 10px 4px 4px;
+  gap: 6px;
+}
+
+.badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
   color: #16a34a;
+  flex-shrink: 0;
 }
 
 .badge-popular {
@@ -232,15 +253,17 @@
   height: 32px;
   border-radius: 50%;
 
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(255, 255, 255, 0.95);
   border: none;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
+  color: #111111;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
 
   transition:
     background 0.25s ease,
@@ -258,8 +281,8 @@
 
 /* HOVER EFFECT (LIKE IMAGE) */
 .wishlist:hover {
-  background: #ffffff;
-  color: #ef4444; /* red heart */
+  background: #ff4444;
+  color: #ffffff;
 
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   transform: scale(1.05);
@@ -278,26 +301,11 @@
   margin: 10px 0 12px;
 }
 
-.tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-
-.tags span {
-  background: #f2f8f2;
-  color: #4b7a4b;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
 .card-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
 }
 
 .card-footer small {
@@ -322,22 +330,27 @@
 }
 
 .menu-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: #1f3d1f;
   color: #ffffff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 9px;
-  font-weight: 600;
-  font-size: 13px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .menu-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
-  background: #8df25a;
+  background: #63e100;
   color: #0f2f0f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 225, 0, 0.3);
 }
 
 .rating-row {
@@ -355,6 +368,12 @@
   font-size: 12px;
   font-weight: 600;
   color: #b8860b;
+}
+
+.review-count {
+  font-weight: 500;
+  color: #9ca3af;
+  margin-left: 2px;
 }
 
 .booking-count {
@@ -427,12 +446,6 @@
   /* CARD BODY */
   .card-body {
     padding: 12px 12px 14px;
-  }
-
-  /* TAGS */
-  .tags span {
-    font-size: 11px;
-    padding: 4px 10px;
   }
 
   .card-footer strong {

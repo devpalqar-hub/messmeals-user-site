@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMessById } from "../services/messApi";
-import type { MessDetails } from "../types/mess";
+import type { MessDetails, MessPlan } from "../types/mess";
 import {
   MapPin,
   Star,
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import "./ViewMessDetails.css";
+
+const DESCRIPTION_PREVIEW_LENGTH = 110;
 
 const DAY_ORDER = [
   "monday",
@@ -97,12 +99,26 @@ export default function ViewMessDetails() {
   const [loading, setLoading] = useState(true);
   const [planTab, setPlanTab] = useState<"monthly" | "daily">("monthly");
   const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [viewPlan, setViewPlan] = useState<MessPlan | null>(null);
+  const [activePlanImage, setActivePlanImage] = useState(0);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     if (messId) {
       fetchMessDetails();
     }
   }, [messId]);
+
+  useEffect(() => {
+    const isAnyModalOpen = showInquiryModal || viewPlan !== null;
+    if (isAnyModalOpen) {
+      const previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = previousOverflow;
+      };
+    }
+  }, [showInquiryModal, viewPlan]);
 
   const fetchMessDetails = async () => {
     setLoading(true);
@@ -166,8 +182,6 @@ export default function ViewMessDetails() {
 
   const openNow = isMessOpenNow(mess.openingHours);
 
-  const cityCrumb = mess.location?.split(",")[0]?.trim() || "Mess";
-
   const tags = mess.tags || [];
 
   const foodTypeValues = (mess.foodTypes || []).map((f) => f.foodType);
@@ -194,6 +208,13 @@ export default function ViewMessDetails() {
     navigate(bookingPath);
   };
 
+  const openPlanModal = (plan: MessPlan) => {
+    setViewPlan(plan);
+    setActivePlanImage(0);
+  };
+
+  const closePlanModal = () => setViewPlan(null);
+
   return (
     <div className="mess-details-page">
       {/* Breadcrumb */}
@@ -201,7 +222,7 @@ export default function ViewMessDetails() {
         <button onClick={() => navigate("/")}>Home</button>
         <span>/</span>
         <button onClick={() => navigate("/view-all-listings")}>
-          {cityCrumb}
+          All listings
         </button>
         <span>/</span>
         <span>{mess.name}</span>
@@ -234,11 +255,6 @@ export default function ViewMessDetails() {
 
           <h1>{mess.name}</h1>
 
-          <div className="hero-tagline">
-            <Leaf size={16} />
-            <span>Homestyle Meals Made with Love</span>
-          </div>
-
           {mess.location && (
             <div className="hero-location">
               <MapPin size={15} />
@@ -246,44 +262,73 @@ export default function ViewMessDetails() {
             </div>
           )}
 
-          <p className="hero-description">{mess.description}</p>
+          <p className="hero-description hero-description-desktop">
+            {mess.description}
+          </p>
 
-          <div className="hero-info-strip">
-            <div className="hero-info-item">
+          {mess.description && (
+            <p className="hero-description hero-description-mobile">
+              {showFullDescription || mess.description.length <= DESCRIPTION_PREVIEW_LENGTH
+                ? mess.description
+                : `${mess.description
+                    .slice(0, DESCRIPTION_PREVIEW_LENGTH)
+                    .trimEnd()}… `}
+              {mess.description.length > DESCRIPTION_PREVIEW_LENGTH && (
+                <button
+                  type="button"
+                  className="description-toggle-inline"
+                  onClick={() => setShowFullDescription((prev) => !prev)}
+                >
+                  {showFullDescription ? " View Less" : "View More"}
+                </button>
+              )}
+            </p>
+          )}
+        </div>
+
+        <div className="hero-info-strip">
+          <div className="hero-info-item">
+            <span className="hero-info-icon">
               <MapPin size={18} />
-              <div>
-                <small>Location</small>
-                <p>{mess.address || mess.location || "Not available"}</p>
-              </div>
+            </span>
+            <div>
+              <small>Location</small>
+              <p>{mess.address || mess.location || "Not available"}</p>
             </div>
-            <div className="hero-info-item">
+          </div>
+          <div className="hero-info-item">
+            <span className="hero-info-icon">
               <Phone size={18} />
-              <div>
-                <small>Phone</small>
-                <p>{mess.phone || "Not available"}</p>
-              </div>
+            </span>
+            <div>
+              <small>Phone</small>
+              <p>{mess.phone || "Not available"}</p>
             </div>
-            <div className="hero-info-item">
+          </div>
+          <div className="hero-info-item">
+            <span className="hero-info-icon">
               <Mail size={18} />
-              <div>
-                <small>Email</small>
-                <p>{mess.email || "Not available"}</p>
-              </div>
+            </span>
+            <div>
+              <small>Email</small>
+              <p>{mess.email || "Not available"}</p>
             </div>
-            <div className="hero-info-item">
+          </div>
+          <div className="hero-info-item">
+            <span className="hero-info-icon">
               <Clock size={18} />
-              <div>
-                <small>Opening Hours</small>
-                {openingHoursList.length > 0 ? (
-                  openingHoursList.map((item) => (
-                    <p key={item.label}>
-                      {item.label} : {item.time}
-                    </p>
-                  ))
-                ) : (
-                  <p>Not available</p>
-                )}
-              </div>
+            </span>
+            <div>
+              <small>Opening Hours</small>
+              {openingHoursList.length > 0 ? (
+                openingHoursList.map((item) => (
+                  <p key={item.label}>
+                    {item.label} : {item.time}
+                  </p>
+                ))
+              ) : (
+                <p>Not available</p>
+              )}
             </div>
           </div>
         </div>
@@ -371,12 +416,20 @@ export default function ViewMessDetails() {
                         </p>
                       )}
 
-                      <button
-                        className="plan-action-btn"
-                        onClick={() => goToBooking(plan.id)}
-                      >
-                        {plan.isMonthlyPlan ? "View Full Menu" : "View Details"}
-                      </button>
+                      <div className="plan-action-buttons">
+                        <button
+                          className="plan-action-btn secondary"
+                          onClick={() => openPlanModal(plan)}
+                        >
+                          View Details
+                        </button>
+                        <button
+                          className="plan-action-btn"
+                          onClick={() => goToBooking(plan.id)}
+                        >
+                          Book Now
+                        </button>
+                      </div>
                     </div>
 
                     {planImages.length > 0 && (
@@ -386,17 +439,6 @@ export default function ViewMessDetails() {
                           src={planImages[0].url}
                           alt={plan.planName}
                         />
-                        {planImages.length > 1 && (
-                          <div className="plan-row-thumbs">
-                            {planImages.slice(1, 5).map((img) => (
-                              <MessImage
-                                key={img.id}
-                                src={img.url}
-                                alt={plan.planName}
-                              />
-                            ))}
-                          </div>
-                        )}
                       </div>
                     )}
                   </div>
@@ -532,6 +574,110 @@ export default function ViewMessDetails() {
           </div>
         </div>
       )}
+
+      {/* Plan Details Modal */}
+      {viewPlan &&
+        (() => {
+          const modalImages =
+            viewPlan.images
+              ?.slice()
+              .sort((a, b) => a.sortOrder - b.sortOrder) || [];
+
+          return (
+            <div className="modal-overlay" onClick={closePlanModal}>
+              <div
+                className="modal-card plan-modal-card"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="modal-close-btn"
+                  onClick={closePlanModal}
+                  aria-label="Close"
+                >
+                  <X size={20} />
+                </button>
+
+                <div className="plan-modal-gallery">
+                  <div className="plan-modal-main-image">
+                    <MessImage
+                      src={modalImages[activePlanImage]?.url}
+                      alt={viewPlan.planName}
+                    />
+                  </div>
+
+                  {modalImages.length > 1 && (
+                    <div className="plan-modal-thumbs">
+                      {modalImages.map((img, index) => (
+                        <button
+                          key={img.id}
+                          type="button"
+                          className={`plan-modal-thumb ${
+                            index === activePlanImage ? "active" : ""
+                          }`}
+                          onClick={() => setActivePlanImage(index)}
+                          aria-label={`Show image ${index + 1}`}
+                        >
+                          <MessImage
+                            src={img.url}
+                            alt={`${viewPlan.planName} ${index + 1}`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="plan-modal-body">
+                  <div className="plan-modal-header">
+                    <h3>{viewPlan.planName}</h3>
+                    <span className="plan-modal-type-badge">
+                      {viewPlan.isMonthlyPlan ? "Monthly Plan" : "Daily Plan"}
+                    </span>
+                  </div>
+
+                  <p className="plan-modal-description">
+                    {viewPlan.description}
+                  </p>
+
+                  {viewPlan.Variation && viewPlan.Variation.length > 0 && (
+                    <div className="plan-modal-variations">
+                      {viewPlan.Variation.map((v) => (
+                        <span key={v.id} className="plan-meta-item">
+                          <Salad size={14} />
+                          {v.title}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="plan-price">
+                    <span className="currency">₹</span>
+                    <span className="amount">{viewPlan.price}</span>
+                    <span className="period">
+                      /{viewPlan.isMonthlyPlan ? "month" : "meal"}
+                    </span>
+                  </div>
+                  {viewPlan.minPrice && (
+                    <p className="plan-min-price">
+                      Min. Price: ₹{viewPlan.minPrice}
+                    </p>
+                  )}
+
+                  <button
+                    className="plan-action-btn full-width"
+                    onClick={() => {
+                      const planId = viewPlan.id;
+                      closePlanModal();
+                      goToBooking(planId);
+                    }}
+                  >
+                    Book Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
     </div>
   );
 }

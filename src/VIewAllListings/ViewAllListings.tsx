@@ -15,6 +15,8 @@ import {
   Sprout,
   CalendarDays,
   Headphones,
+  Check,
+  ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./ViewAllListings.css";
@@ -121,7 +123,7 @@ export default function ViewAllListings() {
       <div className="breadcrumb">
         <a href="/">Home</a>
         <span>/</span>
-        <span>All Listings</span>
+        <span>All listings</span>
       </div>
 
       {/* PAGE HEADER */}
@@ -349,12 +351,15 @@ export default function ViewAllListings() {
                       <div className="image-wrap">
                         <MessImage
                           src={imageUrl}
-                          alt={`${mess.name} in ${mess.location || "Kerala"}`}
+                          alt={`${mess.name} at ${mess.address}`}
                         />
 
                         {mess.is_verified && (
                           <span className="badge verified">
-                            <span className="check-mark">✓</span> Verified
+                            <span className="badge-icon">
+                              <Check size={11} />
+                            </span>
+                            Verified
                           </span>
                         )}
 
@@ -365,7 +370,7 @@ export default function ViewAllListings() {
                         <div className="image-overlay">
                           <div className="location-badge">
                             <MapPin size={14} />
-                            <span>{mess.location || "Kerala"}</span>
+                            <span>{mess.address}</span>
                           </div>
                           <h3 className="mess-name">{mess.name}</h3>
                         </div>
@@ -375,11 +380,9 @@ export default function ViewAllListings() {
                         <div className="rating-badge">
                           <Star size={14} fill="#ffa500" stroke="#ffa500" />
                           <span>{mess.ratings ?? 4.5}</span>
-                        </div>
-
-                        <div className="tags">
-                          <span className="tag">Homely</span>
-                          <span className="tag">Monthly Plan</span>
+                          <span className="review-count">
+                            {mess.Testimonials?.length ?? 0} Reviews
+                          </span>
                         </div>
 
                         <div className="card-divider" />
@@ -398,6 +401,7 @@ export default function ViewAllListings() {
                             onClick={() => navigate(`/mess/${mess.id}`)}
                           >
                             View Details
+                            <ArrowRight size={16} />
                           </button>
                         </div>
                       </div>

@@ -1,12 +1,11 @@
 .footer {
   background: #ffffff;
-  padding: 40px 18px 24px; /* ⬅ reduced top & bottom */
+  padding: 40px 40px 24px; /* ⬅ reduced top & bottom */
   border-top: 1px solid #eef2ee;
   font-family: "Inter", sans-serif;
 }
 
 .footer-container {
-  max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.3fr 2fr;
@@ -77,7 +76,7 @@
 
 /* DIVIDER */
 .footer-divider {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 50px auto 30px;
   height: 1px;
   background: #e6efe6;
@@ -85,7 +84,6 @@
 
 /* BOTTOM */
 .footer-bottom {
-  max-width: 1200px;
   margin: 0 auto;
 
   display: flex;

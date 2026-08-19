@@ -50,6 +50,7 @@ export type Mess = {
   location: string | null;
   plans: MessPlan[];
   images?: MessImage[];
+  Testimonials?: MessTestimonial[];
 };
 
 export type MessMeta = {
