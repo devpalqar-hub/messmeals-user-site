@@ -119,13 +119,6 @@ export default function ViewAllListings() {
 
   return (
     <section className="view-all-page">
-      {/* BREADCRUMB */}
-      <div className="breadcrumb">
-        <a href="/">Home</a>
-        <span>/</span>
-        <span>All listings</span>
-      </div>
-
       {/* PAGE HEADER */}
       <div className="page-header">
         <div>

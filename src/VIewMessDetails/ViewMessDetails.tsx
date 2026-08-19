@@ -217,17 +217,6 @@ export default function ViewMessDetails() {
 
   return (
     <div className="mess-details-page">
-      {/* Breadcrumb */}
-      <div className="breadcrumb">
-        <button onClick={() => navigate("/")}>Home</button>
-        <span>/</span>
-        <button onClick={() => navigate("/view-all-listings")}>
-          All listings
-        </button>
-        <span>/</span>
-        <span>{mess.name}</span>
-      </div>
-
       {/* Details Card */}
       <div className="details-card">
       {/* Hero Section */}
