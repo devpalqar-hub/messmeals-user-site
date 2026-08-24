@@ -1,40 +1,66 @@
-/**
- * MOCK auth service — UI/flow only for now.
- * TODO: replace the bodies of sendOtp/verifyOtp with real API calls once
- * the backend endpoints are available. Keep the function signatures the
- * same so nothing else needs to change.
- */
+export const OTP_LENGTH = 6;
 
-export type AuthUser = {
-  phone: string;
-  name: string;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+export const sendRegOtp = async (data: { name: string; email: string; phone: string }): Promise<{ success: boolean; message?: string }> => {
+  try {
+    const formattedPhone = data.phone.startsWith("+91") ? data.phone : `+91${data.phone}`;
+    const response = await fetch(`${API_BASE_URL}/auth/send-reg-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...data, phone: formattedPhone }),
+    });
+    const resData = await response.json();
+    if (!response.ok) return { success: false, message: resData.message || "Failed to send OTP" };
+    return { success: true, message: resData.message };
+  } catch (error) {
+    return { success: false, message: "Network error. Try again later." };
+  }
 };
 
-const OTP_LENGTH = 4;
-const MOCK_OTP = "1234"; // any OTP works in dev; kept for local testing hint
-
-export const sendOtp = async (phone: string): Promise<{ success: boolean }> => {
-  // TODO: POST /auth/send-otp { phone }
-  await new Promise((r) => setTimeout(r, 700));
-  console.info(`[mock] OTP sent to ${phone}. Use ${MOCK_OTP} to verify.`);
-  return { success: true };
+export const sendLoginOtp = async (phone: string): Promise<{ success: boolean; message?: string }> => {
+  try {
+    const formattedPhone = phone.startsWith("+91") ? phone : `+91${phone}`;
+    const response = await fetch(`${API_BASE_URL}/auth/send-login-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: formattedPhone }),
+    });
+    const resData = await response.json();
+    if (!response.ok) return { success: false, message: resData.message || "Failed to send OTP" };
+    return { success: true, message: resData.message };
+  } catch (error) {
+    return { success: false, message: "Network error. Try again later." };
+  }
 };
 
 export const verifyOtp = async (
   phone: string,
   otp: string
-): Promise<{ success: boolean; user?: AuthUser; message?: string }> => {
-  // TODO: POST /auth/verify-otp { phone, otp }
-  await new Promise((r) => setTimeout(r, 700));
-
-  if (otp.length !== OTP_LENGTH) {
-    return { success: false, message: `Enter the ${OTP_LENGTH}-digit OTP` };
+): Promise<{ success: boolean; user?: { token: string; role: string; name: string; phone: string }; message?: string }> => {
+  try {
+    if (otp.length !== OTP_LENGTH) {
+      return { success: false, message: `Enter the ${OTP_LENGTH}-digit OTP` };
+    }
+    const formattedPhone = phone.startsWith("+91") ? phone : `+91${phone}`;
+    const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: formattedPhone, otp }),
+    });
+    const resData = await response.json();
+    if (!response.ok) return { success: false, message: resData.message || "Invalid OTP" };
+    
+    return {
+      success: true,
+      user: {
+        token: resData.accessToken,
+        role: resData.user.role,
+        name: resData.user.name,
+        phone: resData.user.phone || phone,
+      },
+    };
+  } catch (error) {
+    return { success: false, message: "Verification failed. Try again." };
   }
-
-  return {
-    success: true,
-    user: { phone, name: "" },
-  };
 };
-
-export { OTP_LENGTH };

@@ -1,8 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { AuthUser } from "../services/authService";
+
 
 const STORAGE_KEY = "mm_auth_user";
+
+export type AuthUser = {
+  token: string;
+  role: string;
+  name: string;
+  phone: string;
+};
 
 type AuthContextValue = {
   user: AuthUser | null;

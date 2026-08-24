@@ -1,4 +1,4 @@
-import "./MessListingRow.css";
+import styles from "./MessListingRow.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -44,29 +44,29 @@ function MessImage({ src, alt }: { src?: string; alt: string }) {
 function CornerBadge({ type, isVerified }: { type: RowBadgeType; isVerified: boolean }) {
   if (type === "popular") {
     return (
-      <span className="badge badge-popular">
+      <span className={`${styles.badge} ${styles["badge-popular"]}`}>
         <Flame size={12} fill="currentColor" /> Popular
       </span>
     );
   }
   if (type === "new") {
     return (
-      <span className="badge badge-new">
+      <span className={`${styles.badge} ${styles["badge-new"]}`}>
         <Sparkles size={12} /> NEW
       </span>
     );
   }
   if (type === "affordable") {
     return (
-      <span className="badge badge-affordable">
+      <span className={`${styles.badge} ${styles["badge-affordable"]}`}>
         <Wallet size={12} /> Great value
       </span>
     );
   }
   if (isVerified) {
     return (
-      <span className="badge badge-verified">
-        <span className="badge-icon">
+      <span className={`${styles.badge} ${styles["badge-verified"]}`}>
+        <span className={styles["badge-icon"]}>
           <Check size={11} />
         </span>
         Verified
@@ -108,13 +108,13 @@ export default function MessListingRow({
   };
 
   return (
-    <section className={`trending ${sectionClassName}`}>
+    <section className={`${styles.trending} ${sectionClassName}`}>
       {/* HEADER */}
-      <div className="trending-header">
+      <div className={styles["trending-header"]}>
         <div>
           <h2>
             {Icon && (
-              <span className="trending-icon">
+              <span className={styles["trending-icon"]}>
                 <Icon size={22} />
               </span>
             )}
@@ -124,11 +124,11 @@ export default function MessListingRow({
         </div>
 
         <button
-          className="view-all"
+          className={styles["view-all"]}
           onClick={() => navigate("/view-all-listings")}
         >
           View all
-          <ArrowRight size={18} className="view-all-icon" />
+          <ArrowRight size={18} className={styles["view-all-icon"]} />
         </button>
       </div>
 
@@ -136,7 +136,7 @@ export default function MessListingRow({
       {loading ? (
         <p>Loading messes...</p>
       ) : (
-        <div className="listing-row">
+        <div className={styles["listing-row"]}>
           {messList.map((mess, index) => {
             const imageUrl =
               mess.images
@@ -147,9 +147,9 @@ export default function MessListingRow({
             const bookingCount = 40 + ((index * 17) % 160);
 
             return (
-              <div className="listing-card" key={mess.id}>
+              <div className={styles["listing-card"]} key={mess.id}>
                 {/* IMAGE */}
-                <div className="image-wrap">
+                <div className={styles["image-wrap"]}>
                   <MessImage
                     src={imageUrl}
                     alt={`${mess.name} mess at ${mess.address}`}
@@ -157,13 +157,13 @@ export default function MessListingRow({
 
                   <CornerBadge type={badgeType} isVerified={mess.is_verified} />
 
-                  <button className="wishlist" aria-label="Save mess">
+                  <button className={styles.wishlist} aria-label="Save mess">
                     <Heart size={14} />
                   </button>
 
                   {/* IMAGE TEXT */}
-                  <div className="image-info">
-                    <div className="location">
+                  <div className={styles["image-info"]}>
+                    <div className={styles.location}>
                       <MapPin size={14} />
                       <span>{mess.address}</span>
                     </div>
@@ -172,23 +172,23 @@ export default function MessListingRow({
                 </div>
 
                 {/* BODY */}
-                <div className="card-body">
-                  <div className="rating-row">
-                    <div className="rating">
+                <div className={styles["card-body"]}>
+                  <div className={styles["rating-row"]}>
+                    <div className={styles.rating}>
                       <Star size={13} fill="currentColor" /> 4.5
-                      <span className="review-count">
+                      <span className={styles["review-count"]}>
                         {mess.Testimonials?.length ?? 0} Reviews
                       </span>
                     </div>
                     {badgeType === "popular" && (
-                      <span className="booking-count">{bookingCount}+ bookings</span>
+                      <span className={styles["booking-count"]}>{bookingCount}+ bookings</span>
                     )}
                   </div>
 
-                  <div className="card-divider" />
+                  <div className={styles["card-divider"]} />
 
-                  <div className="card-footer">
-                    <div className="price-info">
+                  <div className={styles["card-footer"]}>
+                    <div className={styles["price-info"]}>
                       <small>STARTING FROM</small>
                       <strong>
                         ₹{mess.plans?.[0]?.price ?? "N/A"}
@@ -197,7 +197,7 @@ export default function MessListingRow({
                     </div>
 
                     <button
-                      className="menu-btn"
+                      className={styles["menu-btn"]}
                       onClick={() => navigate(`/mess/${mess.id}`)}
                     >
                       View Details

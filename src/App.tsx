@@ -1,20 +1,20 @@
-import Navbar from "./navbar/Navbar";
-import MobileBottomNav from "./navbar/MobileBottomNav";
-import HeroSection from "./herosection/HeroSection";
-import AffordableMeals from "./AffordableMeals/AffordableMeals";
-import PopularAroundYou from "./PopularAroundYou/PopularAroundYou";
-import NewOnMessMeals from "./NewOnMessMeals/NewOnMessMeals";
-import HowItWorks from "./HowItWorks/HowItWorks";
-import Testimonials from "./Testimonials/Testimonials";
-import OwnAMess from "./OwnAMess/OwnAMess";
-import Footer from "./Footer/Footer";
-import ViewAllListings from "./VIewAllListings/ViewAllListings";
+import Navbar from "./components/shared/Navbar/Navbar";
+import MobileBottomNav from "./components/shared/Navbar/MobileBottomNav";
+import HeroSection from "./sections/HeroSection/HeroSection";
+import AffordableMeals from "./sections/AffordableMeals/AffordableMeals";
+import PopularAroundYou from "./sections/PopularAroundYou/PopularAroundYou";
+import NewOnMessMeals from "./sections/NewOnMessMeals/NewOnMessMeals";
+import HowItWorks from "./sections/HowItWorks/HowItWorks";
+import Testimonials from "./sections/Testimonials/Testimonials";
+import OwnAMess from "./sections/OwnAMess/OwnAMess";
+import Footer from "./components/shared/Footer/Footer";
+import ViewAllListings from "./pages/ViewAllListings/ViewAllListings";
 import { Route, Routes, useLocation } from "react-router-dom";
-import ViewMessDetails from "./VIewMessDetails/ViewMessDetails";
-import Login from "./Login/Login";
-import BookPlan from "./BookPlan/BookPlan";
-import Profile from "./Profile/Profile";
-import TopRated from "./TopRated/TopRated";
+import ViewMessDetails from "./pages/ViewMessDetails/ViewMessDetails";
+import Login from "./pages/Login/Login";
+import BookPlan from "./pages/BookPlan/BookPlan";
+import Profile from "./pages/Profile/Profile";
+import TopRated from "./sections/TopRated/TopRated";
 
 
 function App() {
