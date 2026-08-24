@@ -51,7 +51,7 @@
 .logo-text {
   font-size: clamp(14px, 2.4vw, 17px);
   font-weight: 700;
-  color: #fff;
+  color: #1f3d1f;
   letter-spacing: 0.04em;
   white-space: nowrap;
   overflow: hidden;
