@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, MapPin } from "lucide-react";
+import { X } from "lucide-react";
 import styles from "./AddressModal.module.css";
 import type { AddressPayload } from "../../types/address";
 import { createAddress } from "../../services/addressService";
