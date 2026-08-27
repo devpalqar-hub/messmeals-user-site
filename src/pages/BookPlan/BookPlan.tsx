@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import {
   MapPin,
   CalendarDays,
@@ -45,7 +45,6 @@ const SCHEDULE_LABELS: Record<ScheduleType, string> = {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function BookPlan() {
-  const { messId } = useParams();
   const [searchParams] = useSearchParams();
   const planIdParam = searchParams.get("planId");
   const navigate = useNavigate();
@@ -54,6 +53,7 @@ export default function BookPlan() {
   const toast = useToast();
 
   // ── wizard step ──────────────────────────────────────────────────────────
+
   const [step, setStep] = useState(1);
 
   // ── plan detail ──────────────────────────────────────────────────────────
@@ -111,7 +111,7 @@ export default function BookPlan() {
       })
       .catch(() => toast.error("Failed to load plan details."))
       .finally(() => setPlanLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planIdParam]);
 
   // ── load addresses on step-2 entry ────────────────────────────────────────
