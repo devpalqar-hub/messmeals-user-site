@@ -105,3 +105,26 @@ export type MessDetails = {
   foodTypes?: MessFoodType[];
   tags?: MessTag[];
 };
+
+/** Full plan detail returned by GET /plans/:id */
+export type PlanDetail = {
+  id: string;
+  planName: string;
+  price: string;
+  minPrice?: string;
+  description?: string;
+  messId: string;
+  isMonthlyPlan: boolean;
+  isDailyPlan: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  images: MessImage[];
+  mess: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+  };
+  Variation: PlanVariation[];
+};

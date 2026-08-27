@@ -1,11 +1,40 @@
-import type { BookingDraft, Subscription } from "../types/booking";
+import type {
+  BookingDraft,
+  Subscription,
+  ChoosePlanPayload,
+  ChoosePlanResponse,
+} from "../types/booking";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+/**
+ * Real API call — POST /customer/choose/plan
+ * Creates a pending subscription + Razorpay order.
+ * Caller should redirect to data.payment.sessionUrl after success.
+ */
+export const choosePlan = async (
+  token: string,
+  payload: ChoosePlanPayload
+): Promise<ChoosePlanResponse> => {
+  const response = await fetch(`${API_BASE_URL}/customer/choose/plan`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const resData = await response.json();
+  if (!response.ok) {
+    throw new Error(resData.message || "Failed to initiate payment");
+  }
+  return resData as ChoosePlanResponse;
+};
 
 /**
  * MOCK booking service — persists to localStorage so the booking + profile
  * (pause / cancel) flows can be exercised end-to-end in the UI.
- * TODO: swap every function body below for a real API call once the
- * backend endpoints are available. Signatures are designed to map 1:1
- * onto typical REST endpoints (POST /subscriptions, PATCH .../pause, etc.)
  */
 
 const STORAGE_KEY = "mm_subscriptions";

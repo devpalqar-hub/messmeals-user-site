@@ -1,0 +1,203 @@
+/* ─── Page ───────────────────────────────────────────────────────────────────── */
+.bc-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, #fff5f5 0%, #fef3f3 50%, #fff9f0 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+.bc-blob-1 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  pointer-events: none;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #e05c5c, transparent);
+  top: -100px;
+  right: -80px;
+}
+
+.bc-blob-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  pointer-events: none;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #f97316, transparent);
+  bottom: -60px;
+  left: -60px;
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
+.bc-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 32px;
+  box-shadow:
+    0 32px 80px rgba(60, 20, 20, 0.1),
+    0 0 0 1px rgba(224, 92, 92, 0.06) inset;
+  max-width: 480px;
+  width: 100%;
+  overflow: hidden;
+  animation: cardPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardPop {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ─── Icon ───────────────────────────────────────────────────────────────────── */
+.bc-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 0;
+  position: relative;
+}
+
+.bc-ring {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(224, 92, 92, 0.2);
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.12); opacity: 0.1; }
+}
+
+.bc-icon {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 6px 18px rgba(224, 92, 92, 0.35));
+  animation: popIn 0.4s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5) rotate(-15deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.bc-xmark {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawX 0.45s 0.4s ease forwards;
+}
+
+@keyframes drawX {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ─── Content ────────────────────────────────────────────────────────────────── */
+.bc-content {
+  padding: 24px 36px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bc-content h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #14181a;
+  margin: 0;
+}
+
+.bc-subtitle {
+  font-size: 15px;
+  color: #7a837b;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ─── Tips ───────────────────────────────────────────────────────────────────── */
+.bc-tips {
+  background: #fff9f9;
+  border: 1px solid #fde8e8;
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.bc-tip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #57604f;
+  font-weight: 500;
+}
+
+.bc-tip > span:first-child { font-size: 18px; flex-shrink: 0; }
+
+/* ─── Buttons ────────────────────────────────────────────────────────────────── */
+.bc-actions {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.bc-primary-btn {
+  width: 100%;
+  padding: 15px;
+  background: #1c3a1c;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s;
+}
+
+.bc-primary-btn:hover {
+  background: #4cd00f;
+  color: #0f2f0f;
+  transform: translateY(-1px);
+}
+
+.bc-secondary-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: #7a837b;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.bc-secondary-btn:hover {
+  background: #f4f6f4;
+  color: #14181a;
+  border-color: #d1d5db;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bc-content { padding: 20px 22px 28px; }
+  .bc-content h1 { font-size: 22px; }
+}

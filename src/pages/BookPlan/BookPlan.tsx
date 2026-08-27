@@ -1,24 +1,48 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
 import {
   MapPin,
   CalendarDays,
-  User,
-  Phone,
-  CheckCircle2,
   ChevronLeft,
-  CalendarPlus,
+  ChevronRight,
+  Plus,
+  CheckCircle2,
+  CreditCard,
+  Home,
+  Loader2,
+  Utensils,
 } from "lucide-react";
-import { getMessById } from "../../services/messApi";
-import { createBooking } from "../../services/bookingService";
+import { getPlanById } from "../../services/messApi";
+import { choosePlan } from "../../services/bookingService";
+import { getAddresses, createAddress } from "../../services/addressService";
 import { useAuth } from "../../context/AuthContext";
-import { WEEKDAYS } from "../../types/booking";
-import type { MessDetails, MessPlan } from "../../types/mess";
-import type { PlanType, Weekday, DeliveryAddress } from "../../types/booking";
-import ExtraDatesModal from "./ExtraDatesModal";
+import { useToast } from "../../context/ToastContext";
+import type { PlanDetail } from "../../types/mess";
+import type { ScheduleType, ApiWeekday, ChoosePlanPayload } from "../../types/booking";
+import type { Address, AddressPayload } from "../../types/address";
 import styles from "./BookPlan.module.css";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const API_WEEKDAYS: ApiWeekday[] = [
+  "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY",
+];
+
+const DAY_SHORT: Record<ApiWeekday, string> = {
+  MONDAY: "Mon", TUESDAY: "Tue", WEDNESDAY: "Wed",
+  THURSDAY: "Thu", FRIDAY: "Fri", SATURDAY: "Sat", SUNDAY: "Sun",
+};
+
 const today = () => new Date().toISOString().slice(0, 10);
+
+const SCHEDULE_LABELS: Record<ScheduleType, string> = {
+  CUSTOM: "Custom days",
+  DAILY: "Every day",
+  WEEKLY: "Weekly",
+  MONTHLY: "Monthly",
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function BookPlan() {
   const { messId } = useParams();
@@ -27,483 +51,546 @@ export default function BookPlan() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const toast = useToast();
 
-  const [mess, setMess] = useState<MessDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [plan, setPlan] = useState<MessPlan | null>(null);
+  // ── wizard step ──────────────────────────────────────────────────────────
+  const [step, setStep] = useState(1);
 
-  const [planType, setPlanType] = useState<PlanType>("monthly");
+  // ── plan detail ──────────────────────────────────────────────────────────
+  const [plan, setPlan] = useState<PlanDetail | null>(null);
+  const [planLoading, setPlanLoading] = useState(true);
+  const [activeImg, setActiveImg] = useState(0);
 
-  // Monthly
+  // ── step-1 schedule ──────────────────────────────────────────────────────
+  const [scheduleType, setScheduleType] = useState<ScheduleType>("MONTHLY");
   const [startDate, setStartDate] = useState(today());
-  const [months, setMonths] = useState(1);
-
-  // Daily
   const [endDate, setEndDate] = useState("");
-  const [weekdays, setWeekdays] = useState<Weekday[]>(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
-  const [extraDates, setExtraDates] = useState<string[]>([]);
-  const [extraDatesOpen, setExtraDatesOpen] = useState(false);
+  const [selectedDays, setSelectedDays] = useState<ApiWeekday[]>([
+    "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY",
+  ]);
 
-  // Address & contact
-  const [address, setAddress] = useState<DeliveryAddress>({
-    line1: "",
-    line2: "",
-    city: "",
-    pincode: "",
+  // ── step-2 address ───────────────────────────────────────────────────────
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addrLoading, setAddrLoading] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>("");
+  const [showNewAddr, setShowNewAddr] = useState(false);
+  const [savingAddr, setSavingAddr] = useState(false);
+  const [newAddr, setNewAddr] = useState<AddressPayload>({
+    name: user?.name || "",
+    street: "",
+    townOrcity: "",
+    country: "India",
+    postcode: "",
     landmark: "",
+    latitudeLogitude: "",
+    phone: user?.phone || "",
+    email: "",
+    locationLink: "",
   });
-  const [contactName, setContactName] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [useProfile, setUseProfile] = useState(true);
 
+  // ── step-3 submit ────────────────────────────────────────────────────────
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
 
-  // Require login
+  // ── auth guard ───────────────────────────────────────────────────────────
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login", { state: { redirectTo: location.pathname + location.search } });
     }
   }, [isAuthenticated, navigate, location.pathname, location.search]);
 
-  // Prefill contact from profile
+  // ── load plan via GET /plans/:id ─────────────────────────────────────────
   useEffect(() => {
-    if (useProfile && user) {
-      setContactName(user.name || "");
-      setContactPhone(user.phone || "");
-    }
-  }, [useProfile, user]);
+    if (!planIdParam) { toast.error("No plan selected."); navigate(-1 as any); return; }
+    setPlanLoading(true);
+    getPlanById(planIdParam)
+      .then((data: PlanDetail) => {
+        setPlan(data);
+        if (data.isMonthlyPlan && !data.isDailyPlan) setScheduleType("MONTHLY");
+        else if (data.isDailyPlan && !data.isMonthlyPlan) setScheduleType("DAILY");
+        else setScheduleType("CUSTOM");
+      })
+      .catch(() => toast.error("Failed to load plan details."))
+      .finally(() => setPlanLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planIdParam]);
 
-  useEffect(() => {
-    if (messId) fetchMess();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messId]);
-
-  const fetchMess = async () => {
-    setLoading(true);
+  // ── load addresses on step-2 entry ────────────────────────────────────────
+  const fetchAddresses = async () => {
+    if (!user?.token) return;
+    setAddrLoading(true);
     try {
-      const data = await getMessById(messId!);
-      setMess(data);
-      const chosen =
-        data.plans?.find((p: MessPlan) => p.id === planIdParam) ||
-        data.plans?.[0] ||
-        null;
-      setPlan(chosen);
-      if (chosen) {
-        const isDaily = chosen.planName.toLowerCase().includes("day");
-        setPlanType(isDaily ? "daily" : "monthly");
-      }
-    } catch (err) {
-      console.error("Failed to load mess for booking", err);
-    } finally {
-      setLoading(false);
-    }
+      const data = await getAddresses(user.token);
+      setAddresses(data);
+      if (data.length > 0 && !selectedAddressId) setSelectedAddressId(data[0].id);
+    } catch { toast.error("Failed to load addresses."); }
+    finally { setAddrLoading(false); }
   };
 
-  const toggleWeekday = (day: Weekday) => {
-    setWeekdays((prev) =>
+  const toggleDay = (day: ApiWeekday) =>
+    setSelectedDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
+
+  const step1Valid = () => {
+    if (!plan || !startDate) return false;
+    if (scheduleType === "MONTHLY" || scheduleType === "DAILY") return true;
+    return !!endDate && selectedDays.length > 0 && new Date(endDate) >= new Date(startDate);
   };
 
-  const dailyDayCount = useMemo(() => {
-    if (planType !== "daily" || !startDate || !endDate) return 0;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    if (end < start) return 0;
+  const step2Valid = () => !!selectedAddressId;
 
-    let count = 0;
-    const cursor = new Date(start);
-    while (cursor <= end) {
-      const dow = WEEKDAYS[(cursor.getDay() + 6) % 7]; // Mon-first index
-      if (weekdays.includes(dow)) count++;
-      cursor.setDate(cursor.getDate() + 1);
-    }
-    // extra dates outside the range/pattern still count
-    const inRangeExtras = extraDates.filter((d) => {
-      const dt = new Date(d);
-      return dt < start || dt > end;
-    });
-    return count + inRangeExtras.length;
-  }, [planType, startDate, endDate, weekdays, extraDates]);
-
-  const estimatedTotal = useMemo(() => {
-    const price = Number(plan?.price || 0);
-    if (!price) return 0;
-    if (planType === "monthly") return price * (months || 0);
-    return price * dailyDayCount;
-  }, [plan, planType, months, dailyDayCount]);
-
-  const isFormValid = () => {
-    if (!plan) return false;
-    if (!address.line1 || !address.city || !address.pincode) return false;
-    if (!contactName || !/^\d{10}$/.test(contactPhone)) return false;
-    if (planType === "monthly") return !!startDate && months >= 1;
-    return !!startDate && !!endDate && weekdays.length > 0 && new Date(endDate) >= new Date(startDate);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mess || !plan || !isFormValid()) return;
+    if (!user?.token) return;
+    setSavingAddr(true);
+    try {
+      const created = await createAddress(user.token, newAddr);
+      setAddresses((prev) => [...prev, created]);
+      setSelectedAddressId(created.id);
+      setShowNewAddr(false);
+      toast.success("Address saved!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save address.");
+    } finally { setSavingAddr(false); }
+  };
 
+  const goNext = () => {
+    if (step === 1 && step1Valid()) { setStep(2); fetchAddresses(); }
+    else if (step === 2 && step2Valid()) setStep(3);
+  };
+
+  const goBack = () => step > 1 ? setStep((s) => s - 1) : navigate(-1 as any);
+
+  const handleSubmit = async () => {
+    if (!plan || !user?.token || !selectedAddressId) return;
     setSubmitting(true);
     try {
-      await createBooking({
-        messId: mess.id,
-        messName: mess.name,
+      const payload: ChoosePlanPayload = {
+        addressId: selectedAddressId,
         planId: plan.id,
-        planName: plan.planName,
-        price: plan.price,
-        planType,
-        startDate,
-        months: planType === "monthly" ? months : undefined,
-        endDate: planType === "daily" ? endDate : undefined,
-        weekdays: planType === "daily" ? weekdays : undefined,
-        extraDates: planType === "daily" ? extraDates : undefined,
-        address,
-        contactName,
-        contactPhone,
-      });
-      setSuccess(true);
-    } catch (err) {
-      console.error("Booking failed", err);
-      alert("Something went wrong while booking. Please try again.");
-    } finally {
+        start_date: startDate,
+        scheduleType,
+        successUrl: `${window.location.origin}/booking/success`,
+        cancelUrl: `${window.location.origin}/booking/cancel`,
+      };
+      if (scheduleType === "CUSTOM" || scheduleType === "WEEKLY") {
+        payload.end_date = endDate;
+        payload.selectedDays = selectedDays;
+      }
+      if (scheduleType === "DAILY" && endDate) payload.end_date = endDate;
+
+      const res = await choosePlan(user.token, payload);
+      const sessionUrl = res.data.payment.sessionUrl;
+      if (sessionUrl) { window.location.href = sessionUrl; }
+      else { toast.error("No payment URL received. Please try again."); setSubmitting(false); }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to initiate payment. Please try again.");
       setSubmitting(false);
     }
   };
 
   if (!isAuthenticated) return null;
 
-  if (loading) {
+  if (planLoading) {
     return (
-      <div className={styles["book-plan-page"]}>
-        <div className={styles["bp-loading"]}>Loading plan details...</div>
-      </div>
-    );
-  }
-
-  if (!mess || !plan) {
-    return (
-      <div className={styles["book-plan-page"]}>
-        <div className={styles["bp-loading"]}>Plan not found.</div>
-      </div>
-    );
-  }
-
-  if (success) {
-    return (
-      <div className={styles["book-plan-page"]}>
-        <div className={styles["bp-success"]}>
-          <CheckCircle2 size={56} />
-          <h1>Booking confirmed!</h1>
-          <p>
-            Your {planType} plan with <strong>{mess.name}</strong> has been booked.
-            Manage deliveries anytime from your profile.
-          </p>
-          <div className={styles["bp-success-actions"]}>
-            <button className={styles["bp-secondary-btn"]} onClick={() => navigate(`/mess/${mess.id}`)}>
-              Back to Mess
-            </button>
-            <button className={styles["bp-primary-btn"]} onClick={() => navigate("/profile")}>
-              Go to My Plans
-            </button>
-          </div>
+      <div className={styles["bp-page"]}>
+        <div className={styles["bp-loader"]}>
+          <Loader2 size={32} className={styles["bp-spin"]} />
+          <span>Loading plan details…</span>
         </div>
       </div>
     );
   }
 
+  if (!plan) {
+    return (
+      <div className={styles["bp-page"]}>
+        <div className={styles["bp-loader"]}>Plan not found.</div>
+      </div>
+    );
+  }
+
+  const backLabel = plan.mess?.name ? `Back to ${plan.mess.name}` : "Back";
+  const priceDisplay = `₹${Number(plan.price).toLocaleString("en-IN")}`;
+  const selectedAddr = addresses.find((a) => a.id === selectedAddressId);
+
+  // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div className={styles["book-plan-page"]}>
-      <button className={styles["bp-back"]} onClick={() => navigate(`/mess/${mess.id}`)}>
-        <ChevronLeft size={18} /> Back to {mess.name}
+    <div className={styles["bp-page"]}>
+
+      {/* Back */}
+      <button className={styles["bp-back"]} onClick={goBack}>
+        <ChevronLeft size={18} />
+        {step === 1 ? backLabel : step === 2 ? "Back to Schedule" : "Back to Address"}
       </button>
 
-      <div className={styles["bp-layout"]}>
-        <form className={styles["bp-form"]} id="book-plan-form" onSubmit={handleSubmit}>
-          {/* Plan type */}
-          <section className={styles["bp-section"]}>
-            <h2>Choose plan type</h2>
-            <div className={styles["bp-plantype-toggle"]}>
-              <button
-                type="button"
-                className={planType === "monthly" ? styles.active : ""}
-                onClick={() => setPlanType("monthly")}
-              >
-                Monthly Plan
-              </button>
-              <button
-                type="button"
-                className={planType === "daily" ? styles.active : ""}
-                onClick={() => setPlanType("daily")}
-              >
-                Daily Plan
-              </button>
+      {/* Progress stepper */}
+      <div className={styles["bp-stepper"]}>
+        {["Schedule", "Address", "Review & Pay"].map((label, i) => {
+          const num = i + 1;
+          const done = step > num;
+          const active = step === num;
+          return (
+            <div key={label} className={styles["bp-step-wrap"]}>
+              <div className={`${styles["bp-step"]} ${active ? styles["bp-step--active"] : ""} ${done ? styles["bp-step--done"] : ""}`}>
+                <span className={styles["bp-step-dot"]}>
+                  {done ? <CheckCircle2 size={16} /> : num}
+                </span>
+                <span className={styles["bp-step-label"]}>{label}</span>
+              </div>
+              {i < 2 && <div className={`${styles["bp-step-line"]} ${done ? styles["bp-step-line--done"] : ""}`} />}
             </div>
-          </section>
+          );
+        })}
+      </div>
 
-          {/* Schedule */}
-          <section className={styles["bp-section"]}>
-            <h2>
-              <CalendarDays size={18} /> Schedule
-            </h2>
+      <div className={styles["bp-layout"]}>
 
-            {planType === "monthly" ? (
-              <div className={styles["bp-grid-2"]}>
-                <div className={styles["bp-field"]}>
-                  <label>Starting date</label>
-                  <input
-                    type="date"
-                    min={today()}
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className={styles["bp-field"]}>
-                  <label>Number of months</label>
-                  <div className={styles["bp-stepper"]}>
+        {/* ═══ MAIN (form) ═══════════════════════════════════════════════════ */}
+        <div className={styles["bp-main"]}>
+
+          {/* ── Plan detail card (above the form steps) ─────────────────── */}
+          <div className={styles["bp-plan-detail-card"]}>
+            {plan.images.length > 0 && (
+              <div className={styles["bp-img-carousel"]}>
+                <img src={plan.images[activeImg]?.url} alt={plan.images[activeImg]?.altText || plan.planName}
+                  className={styles["bp-img"]} />
+                {plan.images.length > 1 && (
+                  <>
                     <button
-                      type="button"
-                      onClick={() => setMonths((m) => Math.max(1, m - 1))}
-                    >
-                      −
+                      className={`${styles["bp-img-nav"]} ${styles["bp-img-nav--left"]}`}
+                      onClick={() => setActiveImg((i) => (i - 1 + plan.images.length) % plan.images.length)}>
+                      <ChevronLeft size={16} />
                     </button>
-                    <span>{months}</span>
-                    <button type="button" onClick={() => setMonths((m) => Math.min(12, m + 1))}>
-                      +
+                    <button
+                      className={`${styles["bp-img-nav"]} ${styles["bp-img-nav--right"]}`}
+                      onClick={() => setActiveImg((i) => (i + 1) % plan.images.length)}>
+                      <ChevronRight size={16} />
                     </button>
-                  </div>
+                    <div className={styles["bp-img-dots"]}>
+                      {plan.images.map((_, i) => (
+                        <button key={i}
+                          className={`${styles["bp-img-dot"]} ${i === activeImg ? styles["bp-img-dot--active"] : ""}`}
+                          onClick={() => setActiveImg(i)} />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            <div className={styles["bp-plan-detail-body"]}>
+              <p className={styles["bp-mess-name"]}>{plan.mess.name}</p>
+              <div className={styles["bp-plan-title-row"]}>
+                <h3 className={styles["bp-plan-title"]}>{plan.planName}</h3>
+                <div className={styles["bp-plan-price-wrap"]}>
+                  <span className={styles["bp-plan-price"]}>{priceDisplay}</span>
+                  <span className={styles["bp-plan-price-unit"]}>/day</span>
                 </div>
               </div>
-            ) : (
-              <>
-                <div className={styles["bp-grid-2"]}>
-                  <div className={styles["bp-field"]}>
-                    <label>Start date</label>
-                    <input
-                      type="date"
-                      min={today()}
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className={styles["bp-field"]}>
-                    <label>End date</label>
-                    <input
-                      type="date"
-                      min={startDate || today()}
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className={styles["bp-field"]}>
-                  <label>Delivery days</label>
-                  <div className={styles["bp-weekdays"]}>
-                    {WEEKDAYS.map((day) => (
-                      <button
-                        type="button"
-                        key={day}
-                        className={weekdays.includes(day) ? styles.active : ""}
-                        onClick={() => toggleWeekday(day)}
-                      >
-                        {day}
-                      </button>
+              {plan.description && <p className={styles["bp-plan-desc"]}>{plan.description}</p>}
+              {plan.Variation.length > 0 && (
+                <div className={styles["bp-variations"]}>
+                  <p className={styles["bp-variations-label"]}><Utensils size={13} /> Includes</p>
+                  <div className={styles["bp-variation-chips"]}>
+                    {plan.Variation.map((v) => (
+                      <span key={v.id} className={styles["bp-variation-chip"]}>{v.title}</span>
                     ))}
                   </div>
                 </div>
+              )}
+              <div className={styles["bp-plan-badges"]}>
+                {plan.isMonthlyPlan && <span className={styles["bp-badge"]}>Monthly</span>}
+                {plan.isDailyPlan && <span className={styles["bp-badge"]}>Daily</span>}
+                {plan.minPrice && (
+                  <span className={`${styles["bp-badge"]} ${styles["bp-badge--muted"]}`}>
+                    From ₹{Number(plan.minPrice).toLocaleString("en-IN")}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
 
-                <button
-                  type="button"
-                  className={styles["bp-extra-dates-btn"]}
-                  onClick={() => setExtraDatesOpen(true)}
-                >
-                  <CalendarPlus size={16} />
-                  {extraDates.length > 0
-                    ? `${extraDates.length} extra date${extraDates.length > 1 ? "s" : ""} added`
-                    : "Add extra one-off dates"}
+          {/* ── STEP 1: Schedule ─────────────────────────────────────────── */}
+          {step === 1 && (
+            <div className={styles["bp-card"]}>
+              <div className={styles["bp-card-header"]}>
+                <CalendarDays size={20} />
+                <div>
+                  <h2>Set your schedule</h2>
+                  <p>Choose dates and frequency for your meal deliveries</p>
+                </div>
+              </div>
+
+              <div className={styles["bp-field"]}>
+                <label className={styles["bp-label"]}>Schedule type</label>
+                <div className={styles["bp-schedule-toggle"]}>
+                  {(["MONTHLY", "DAILY", "CUSTOM"] as ScheduleType[]).map((type) => (
+                    <button
+                      key={type} type="button"
+                      className={`${styles["bp-toggle-btn"]} ${scheduleType === type ? styles["bp-toggle-btn--active"] : ""}`}
+                      onClick={() => setScheduleType(type)}
+                    >
+                      {SCHEDULE_LABELS[type]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles["bp-grid-2"]}>
+                <div className={styles["bp-field"]}>
+                  <label className={styles["bp-label"]}>Start date *</label>
+                  <input type="date" className={styles["bp-input"]} min={today()} value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)} required />
+                </div>
+                {(scheduleType === "CUSTOM" || scheduleType === "DAILY") && (
+                  <div className={styles["bp-field"]}>
+                    <label className={styles["bp-label"]}>
+                      End date {scheduleType === "CUSTOM" ? "*" : "(optional)"}
+                    </label>
+                    <input type="date" className={styles["bp-input"]} min={startDate || today()} value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)} required={scheduleType === "CUSTOM"} />
+                  </div>
+                )}
+              </div>
+
+              {scheduleType === "CUSTOM" && (
+                <div className={styles["bp-field"]}>
+                  <label className={styles["bp-label"]}>Delivery days *</label>
+                  <div className={styles["bp-weekdays"]}>
+                    {API_WEEKDAYS.map((day) => (
+                      <button key={day} type="button"
+                        className={`${styles["bp-day-btn"]} ${selectedDays.includes(day) ? styles["bp-day-btn--active"] : ""}`}
+                        onClick={() => toggleDay(day)}>
+                        {DAY_SHORT[day]}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedDays.length === 0 && <p className={styles["bp-hint"]}>Select at least one delivery day</p>}
+                </div>
+              )}
+
+              <button className={styles["bp-next-btn"]} onClick={goNext} disabled={!step1Valid()}>
+                Continue to Address <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+
+          {/* ── STEP 2: Address ──────────────────────────────────────────── */}
+          {step === 2 && (
+            <div className={styles["bp-card"]}>
+              <div className={styles["bp-card-header"]}>
+                <MapPin size={20} />
+                <div>
+                  <h2>Delivery address</h2>
+                  <p>Where should we deliver your meals?</p>
+                </div>
+              </div>
+
+              {addrLoading ? (
+                <div className={styles["bp-addr-loading"]}>
+                  <Loader2 size={22} className={styles["bp-spin"]} /> Loading addresses…
+                </div>
+              ) : (
+                <>
+                  {addresses.length === 0 && !showNewAddr && (
+                    <div className={styles["bp-no-addr"]}>
+                      <Home size={36} />
+                      <p>No saved addresses yet.</p>
+                      <button className={styles["bp-add-addr-btn"]} onClick={() => setShowNewAddr(true)}>
+                        <Plus size={16} /> Add your first address
+                      </button>
+                    </div>
+                  )}
+
+                  {addresses.length > 0 && (
+                    <div className={styles["bp-addr-list"]}>
+                      {addresses.map((addr) => (
+                        <button key={addr.id} type="button"
+                          className={`${styles["bp-addr-card"]} ${selectedAddressId === addr.id ? styles["bp-addr-card--selected"] : ""}`}
+                          onClick={() => setSelectedAddressId(addr.id)}>
+                          <div className={styles["bp-addr-radio"]}>
+                            <div className={styles["bp-addr-radio-dot"]} />
+                          </div>
+                          <div className={styles["bp-addr-info"]}>
+                            <span className={styles["bp-addr-name"]}>{addr.name}</span>
+                            <span className={styles["bp-addr-street"]}>{addr.street}{addr.landmark ? `, ${addr.landmark}` : ""}</span>
+                            <span className={styles["bp-addr-city"]}>{addr.townOrcity}, {addr.postcode} · {addr.country}</span>
+                            {addr.phone && <span className={styles["bp-addr-phone"]}>{addr.phone}</span>}
+                          </div>
+                        </button>
+                      ))}
+                      {!showNewAddr && (
+                        <button className={styles["bp-add-addr-btn"]} onClick={() => setShowNewAddr(true)}>
+                          <Plus size={16} /> Add new address
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {showNewAddr && (
+                    <form className={styles["bp-new-addr-form"]} onSubmit={handleSaveAddress}>
+                      <h3 className={styles["bp-new-addr-title"]}>New address</h3>
+                      <div className={styles["bp-grid-2"]}>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Contact Name *</label>
+                          <input className={styles["bp-input"]} type="text" required placeholder="Your name"
+                            value={newAddr.name} onChange={(e) => setNewAddr((p) => ({ ...p, name: e.target.value }))} />
+                        </div>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Phone *</label>
+                          <input className={styles["bp-input"]} type="tel" required placeholder="9876543210"
+                            value={newAddr.phone} onChange={(e) => setNewAddr((p) => ({ ...p, phone: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className={styles["bp-field"]}>
+                        <label className={styles["bp-label"]}>Email</label>
+                        <input className={styles["bp-input"]} type="email" placeholder="email@example.com"
+                          value={newAddr.email} onChange={(e) => setNewAddr((p) => ({ ...p, email: e.target.value }))} />
+                      </div>
+                      <div className={styles["bp-field"]}>
+                        <label className={styles["bp-label"]}>Street / Flat No. *</label>
+                        <input className={styles["bp-input"]} type="text" required placeholder="123 Main St, Apt 4B"
+                          value={newAddr.street} onChange={(e) => setNewAddr((p) => ({ ...p, street: e.target.value }))} />
+                      </div>
+                      <div className={styles["bp-grid-2"]}>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Town / City *</label>
+                          <input className={styles["bp-input"]} type="text" required placeholder="Kochi"
+                            value={newAddr.townOrcity} onChange={(e) => setNewAddr((p) => ({ ...p, townOrcity: e.target.value }))} />
+                        </div>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Postcode *</label>
+                          <input className={styles["bp-input"]} type="text" required placeholder="682001"
+                            value={newAddr.postcode} onChange={(e) => setNewAddr((p) => ({ ...p, postcode: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className={styles["bp-grid-2"]}>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Landmark</label>
+                          <input className={styles["bp-input"]} type="text" placeholder="Near central mall"
+                            value={newAddr.landmark} onChange={(e) => setNewAddr((p) => ({ ...p, landmark: e.target.value }))} />
+                        </div>
+                        <div className={styles["bp-field"]}>
+                          <label className={styles["bp-label"]}>Country *</label>
+                          <input className={styles["bp-input"]} type="text" required value={newAddr.country}
+                            onChange={(e) => setNewAddr((p) => ({ ...p, country: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className={styles["bp-addr-form-actions"]}>
+                        <button type="button" className={styles["bp-cancel-btn"]} onClick={() => setShowNewAddr(false)}>Cancel</button>
+                        <button type="submit" className={styles["bp-save-btn"]} disabled={savingAddr}>
+                          {savingAddr ? "Saving…" : "Save Address"}
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </>
+              )}
+
+              {!showNewAddr && (
+                <button className={styles["bp-next-btn"]} onClick={goNext} disabled={!step2Valid()} style={{ marginTop: 8 }}>
+                  Review & Pay <ChevronRight size={18} />
                 </button>
-              </>
-            )}
-          </section>
+              )}
+            </div>
+          )}
 
-          {/* Address */}
-          <section className={styles["bp-section"]}>
-            <h2>
-              <MapPin size={18} /> Delivery address
-            </h2>
-            <div className={styles["bp-field"]}>
-              <label>Address line 1</label>
-              <input
-                type="text"
-                placeholder="House / Flat no, Street"
-                value={address.line1}
-                onChange={(e) => setAddress({ ...address, line1: e.target.value })}
-                required
-              />
-            </div>
-            <div className={styles["bp-field"]}>
-              <label>Address line 2 (optional)</label>
-              <input
-                type="text"
-                placeholder="Area, Landmark"
-                value={address.line2}
-                onChange={(e) => setAddress({ ...address, line2: e.target.value })}
-              />
-            </div>
-            <div className={styles["bp-grid-2"]}>
-              <div className={styles["bp-field"]}>
-                <label>City</label>
-                <input
-                  type="text"
-                  placeholder="Kochi"
-                  value={address.city}
-                  onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                  required
-                />
+          {/* ── STEP 3: Review & Pay ─────────────────────────────────────── */}
+          {step === 3 && (
+            <div className={styles["bp-card"]}>
+              <div className={styles["bp-card-header"]}>
+                <CreditCard size={20} />
+                <div>
+                  <h2>Review your order</h2>
+                  <p>Double-check everything before paying</p>
+                </div>
               </div>
-              <div className={styles["bp-field"]}>
-                <label>Pincode</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={6}
-                  placeholder="682001"
-                  value={address.pincode}
-                  onChange={(e) =>
-                    setAddress({ ...address, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) })
+
+              <div className={styles["bp-review-grid"]}>
+                {[
+                  { label: "Mess", value: plan.mess.name },
+                  { label: "Plan", value: plan.planName },
+                  { label: "Schedule", value: SCHEDULE_LABELS[scheduleType] },
+                  { label: "Start date", value: startDate },
+                  ...(endDate ? [{ label: "End date", value: endDate }] : []),
+                  ...(scheduleType === "CUSTOM" && selectedDays.length > 0
+                    ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", ") }]
+                    : []),
+                  { label: "Price", value: `${priceDisplay} / day` },
+                  ...(selectedAddr
+                    ? [{ label: "Deliver to", value: `${selectedAddr.name} · ${selectedAddr.street}, ${selectedAddr.townOrcity} ${selectedAddr.postcode}`, full: true }]
+                    : []),
+                ].map(({ label, value, full }) => (
+                  <div key={label} className={styles["bp-review-item"]} style={full ? { gridColumn: "1 / -1" } : {}}>
+                    <span className={styles["bp-review-label"]}>{label}</span>
+                    <span className={styles["bp-review-value"]}>{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles["bp-pay-btn-wrap"]}>
+                <button className={styles["bp-razorpay-btn"]} onClick={handleSubmit} disabled={submitting}>
+                  {submitting
+                    ? <><Loader2 size={18} className={styles["bp-spin"]} /> Redirecting to payment…</>
+                    : <><span className={styles["bp-rzp-logo"]}>₹</span> Pay with Razorpay</>
                   }
-                  required
-                />
+                </button>
+                <p className={styles["bp-pay-note"]}>
+                  You'll be redirected to Razorpay's secure checkout.
+                  Deliveries start after payment confirmation.
+                </p>
               </div>
             </div>
-            <div className={styles["bp-field"]}>
-              <label>Landmark (optional)</label>
-              <input
-                type="text"
-                placeholder="Near..."
-                value={address.landmark}
-                onChange={(e) => setAddress({ ...address, landmark: e.target.value })}
-              />
-            </div>
-          </section>
+          )}
+        </div>
 
-          {/* Contact */}
-          <section className={styles["bp-section"]}>
-            <h2>
-              <User size={18} /> Contact details
-            </h2>
+        {/* ═══ SIDEBAR ══════════════════════════════════════════════════════════ */}
+        <aside className={styles["bp-sidebar"]}>
 
-            <label className={styles["bp-checkbox"]}>
-              <input
-                type="checkbox"
-                checked={useProfile}
-                onChange={(e) => setUseProfile(e.target.checked)}
-              />
-              Use details from my profile
-            </label>
-
-            <div className={styles["bp-grid-2"]}>
-              <div className={styles["bp-field"]}>
-                <label>Full name</label>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  disabled={useProfile}
-                  required
-                />
-              </div>
-              <div className={styles["bp-field"]}>
-                <label>
-                  <Phone size={13} /> Contact number
-                </label>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="98765 43210"
-                  value={contactPhone}
-                  onChange={(e) =>
-                    setContactPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
-                  }
-                  disabled={useProfile}
-                  required
-                />
-              </div>
-            </div>
-          </section>
-        </form>
-
-        {/* Summary sidebar */}
-        <aside className={styles["bp-summary"]}>
+          {/* Mini order summary */}
           <div className={styles["bp-summary-card"]}>
             <h3>Order Summary</h3>
-
             <div className={styles["bp-summary-row"]}>
-              <span>Mess</span>
-              <strong>{mess.name}</strong>
+              <span>Schedule</span><strong>{SCHEDULE_LABELS[scheduleType]}</strong>
             </div>
-            <div className={styles["bp-summary-row"]}>
-              <span>Plan</span>
-              <strong>{plan.planName}</strong>
-            </div>
-            <div className={styles["bp-summary-row"]}>
-              <span>Type</span>
-              <strong className={styles["bp-capitalize"]}>{planType}</strong>
-            </div>
-            <div className={styles["bp-summary-row"]}>
-              <span>Price</span>
-              <strong>₹{plan.price} {planType === "monthly" ? "/mo" : "/day"}</strong>
-            </div>
-
-            {planType === "monthly" ? (
+            {startDate && (
               <div className={styles["bp-summary-row"]}>
-                <span>Duration</span>
-                <strong>{months} month{months > 1 ? "s" : ""}</strong>
-              </div>
-            ) : (
-              <div className={styles["bp-summary-row"]}>
-                <span>Meal days</span>
-                <strong>{dailyDayCount} day{dailyDayCount !== 1 ? "s" : ""}</strong>
+                <span>Start</span><strong>{startDate}</strong>
               </div>
             )}
-
+            {endDate && (
+              <div className={styles["bp-summary-row"]}>
+                <span>End</span><strong>{endDate}</strong>
+              </div>
+            )}
+            {scheduleType === "CUSTOM" && selectedDays.length > 0 && (
+              <div className={styles["bp-summary-row"]}>
+                <span>Days</span>
+                <strong>{selectedDays.map((d) => DAY_SHORT[d]).join(", ")}</strong>
+              </div>
+            )}
+            {selectedAddr && (
+              <div className={styles["bp-summary-row"]}>
+                <span>Deliver to</span><strong>{selectedAddr.townOrcity}</strong>
+              </div>
+            )}
             <div className={styles["bp-summary-divider"]} />
-
-            <div className={styles["bp-summary-total"]}>
-              <span>Estimated total</span>
-              <strong>₹{estimatedTotal.toLocaleString("en-IN")}</strong>
+            <div className={styles["bp-summary-price"]}>
+              <span>Price</span>
+              <strong>{priceDisplay}<small>/day</small></strong>
             </div>
-
-            <button
-              type="submit"
-              form="book-plan-form"
-              className={styles["bp-submit-btn"]}
-              disabled={!isFormValid() || submitting}
-            >
-              {submitting ? "Booking..." : "Confirm Booking"}
-            </button>
-            <p className={styles["bp-summary-note"]}>
-              No payment integration yet — this reserves your plan.
-            </p>
+            {step < 3 && (
+              <button
+                className={styles["bp-sidebar-next-btn"]}
+                onClick={goNext}
+                disabled={step === 1 ? !step1Valid() : !step2Valid()}>
+                {step === 1 ? "Next: Address" : "Next: Review"}
+              </button>
+            )}
           </div>
         </aside>
-      </div>
 
-      <ExtraDatesModal
-        isOpen={extraDatesOpen}
-        onClose={() => setExtraDatesOpen(false)}
-        dates={extraDates}
-        onChange={setExtraDates}
-        minDate={today()}
-      />
+      </div>
     </div>
   );
 }

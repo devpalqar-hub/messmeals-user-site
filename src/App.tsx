@@ -15,15 +15,20 @@ import Login from "./pages/Login/Login";
 import BookPlan from "./pages/BookPlan/BookPlan";
 import Profile from "./pages/Profile/Profile";
 import TopRated from "./sections/TopRated/TopRated";
+import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
+import BookingCancel from "./pages/BookingCancel/BookingCancel";
 
 
 function App() {
   const location = useLocation();
-  const isLoginPage = location.pathname === "/login";
+
+  // Pages that render full-screen without navbar/footer
+  const fullPagePaths = ["/login", "/booking/success", "/booking/cancel"];
+  const isFullPage = fullPagePaths.some((p) => location.pathname.startsWith(p));
 
   return (
     <>
-    {!isLoginPage && <Navbar />}
+    {!isFullPage && <Navbar />}
 
     <Routes>
       <Route
@@ -52,9 +57,11 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/mess/:messId/book" element={<BookPlan />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/booking/success" element={<BookingSuccess />} />
+      <Route path="/booking/cancel" element={<BookingCancel />} />
     </Routes>
-      {!isLoginPage && <Footer />}
-      {!isLoginPage && <MobileBottomNav />}
+      {!isFullPage && <Footer />}
+      {!isFullPage && <MobileBottomNav />}
     </>
   );
 }

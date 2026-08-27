@@ -40,3 +40,8 @@ export const getMessById = async (messId: string) => {
   const res = await api.get(`/mess/${messId}`);
   return res.data;
 };
+
+export const getPlanById = async (planId: string) => {
+  const res = await api.get(`/plans/${planId}`);
+  return res.data;
+};

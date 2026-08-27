@@ -1,0 +1,273 @@
+/* ─── Page ───────────────────────────────────────────────────────────────────── */
+.bs-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, #f0fce6 0%, #e8f8ff 50%, #f4fff0 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+/* Decorative background blobs */
+.bs-blob-1 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #4cd00f, transparent);
+  top: -100px;
+  left: -100px;
+}
+
+.bs-blob-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #3395ff, transparent);
+  bottom: -80px;
+  right: -80px;
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
+.bs-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  box-shadow:
+    0 32px 80px rgba(20, 40, 20, 0.12),
+    0 0 0 1px rgba(76, 208, 15, 0.08) inset;
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: cardPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardPop {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ─── Animated check icon ────────────────────────────────────────────────────── */
+.bs-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 0;
+  position: relative;
+}
+
+.bs-ring {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(76, 208, 15, 0.2);
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.15); opacity: 0.1; }
+}
+
+.bs-check {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 6px 20px rgba(76, 208, 15, 0.4));
+  animation: popIn 0.4s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.bs-checkmark {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawCheck 0.5s 0.4s ease forwards;
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ─── Confetti dots ──────────────────────────────────────────────────────────── */
+.bs-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: floatDot 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.bs-dot-1 { background: #4cd00f; top: 60px; left: 60px; animation-delay: 0s; }
+.bs-dot-2 { background: #3395ff; top: 40px; right: 80px; animation-delay: 0.4s; width: 8px; height: 8px; }
+.bs-dot-3 { background: #fbbf24; top: 120px; left: 30px; animation-delay: 0.8s; width: 6px; height: 6px; }
+.bs-dot-4 { background: #ec4899; top: 80px; right: 40px; animation-delay: 1.2s; width: 12px; height: 12px; }
+.bs-dot-5 { background: #4cd00f; bottom: 80px; left: 50px; animation-delay: 0.2s; width: 7px; height: 7px; }
+.bs-dot-6 { background: #a78bfa; bottom: 60px; right: 60px; animation-delay: 0.6s; }
+.bs-dot-7 { background: #f97316; top: 160px; right: 30px; animation-delay: 1.0s; width: 5px; height: 5px; }
+.bs-dot-8 { background: #3395ff; bottom: 100px; left: 80px; animation-delay: 1.4s; width: 9px; height: 9px; }
+
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-12px) scale(1.1); opacity: 1; }
+}
+
+/* ─── Content ────────────────────────────────────────────────────────────────── */
+.bs-content {
+  padding: 24px 36px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bs-content h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #14181a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.bs-subtitle {
+  font-size: 15px;
+  color: #57604f;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.bs-subtitle strong { color: #2ea300; }
+
+/* ─── Payment ref ────────────────────────────────────────────────────────────── */
+.bs-ref {
+  background: #f8fcf5;
+  border: 1px solid #d8f0c8;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bs-ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.bs-ref-row span {
+  color: #7a837b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.bs-ref-row code {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  color: #14181a;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 3px 8px;
+  word-break: break-all;
+}
+
+/* ─── Info cards ─────────────────────────────────────────────────────────────── */
+.bs-info-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bs-info-card {
+  background: #f4f6f4;
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #57604f;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.bs-info-icon { font-size: 22px; }
+
+/* ─── Buttons ────────────────────────────────────────────────────────────────── */
+.bs-actions {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.bs-primary-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #4cd00f 0%, #2ea300 100%);
+  color: #0f2f0f;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s;
+  box-shadow: 0 4px 16px rgba(76, 208, 15, 0.3);
+}
+
+.bs-primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(76, 208, 15, 0.4);
+}
+
+.bs-secondary-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: #4b7a4b;
+  border: 1.5px solid #c8e6b8;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.bs-secondary-btn:hover {
+  background: #f0fbea;
+  border-color: #4cd00f;
+  color: #1c3a1c;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .bs-content { padding: 20px 22px 28px; }
+  .bs-content h1 { font-size: 24px; }
+  .bs-info-cards { grid-template-columns: 1fr; }
+  .bs-dot { display: none; }
+}
