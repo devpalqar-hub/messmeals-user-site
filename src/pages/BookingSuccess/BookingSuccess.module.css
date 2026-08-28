@@ -9,6 +9,7 @@
   position: relative;
   overflow: hidden;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
 }
 
 /* Decorative background blobs */
@@ -53,11 +54,19 @@
   position: relative;
   overflow: hidden;
   animation: cardPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-sizing: border-box;
 }
 
 @keyframes cardPop {
-  from { opacity: 0; transform: scale(0.9) translateY(20px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* ─── Animated check icon ────────────────────────────────────────────────────── */
@@ -79,8 +88,17 @@
 }
 
 @keyframes ringPulse {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.15); opacity: 0.1; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.1;
+  }
 }
 
 .bs-check {
@@ -91,8 +109,15 @@
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .bs-checkmark {
@@ -102,31 +127,9 @@
 }
 
 @keyframes drawCheck {
-  to { stroke-dashoffset: 0; }
-}
-
-/* ─── Confetti dots ──────────────────────────────────────────────────────────── */
-.bs-dot {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  animation: floatDot 3s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.bs-dot-1 { background: #4cd00f; top: 60px; left: 60px; animation-delay: 0s; }
-.bs-dot-2 { background: #3395ff; top: 40px; right: 80px; animation-delay: 0.4s; width: 8px; height: 8px; }
-.bs-dot-3 { background: #fbbf24; top: 120px; left: 30px; animation-delay: 0.8s; width: 6px; height: 6px; }
-.bs-dot-4 { background: #ec4899; top: 80px; right: 40px; animation-delay: 1.2s; width: 12px; height: 12px; }
-.bs-dot-5 { background: #4cd00f; bottom: 80px; left: 50px; animation-delay: 0.2s; width: 7px; height: 7px; }
-.bs-dot-6 { background: #a78bfa; bottom: 60px; right: 60px; animation-delay: 0.6s; }
-.bs-dot-7 { background: #f97316; top: 160px; right: 30px; animation-delay: 1.0s; width: 5px; height: 5px; }
-.bs-dot-8 { background: #3395ff; bottom: 100px; left: 80px; animation-delay: 1.4s; width: 9px; height: 9px; }
-
-@keyframes floatDot {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
-  50% { transform: translateY(-12px) scale(1.1); opacity: 1; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* ─── Content ────────────────────────────────────────────────────────────────── */
@@ -136,6 +139,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-sizing: border-box;
 }
 
 .bs-content h1 {
@@ -153,7 +157,9 @@
   margin: 0;
 }
 
-.bs-subtitle strong { color: #2ea300; }
+.bs-subtitle strong {
+  color: #2ea300;
+}
 
 /* ─── Payment ref ────────────────────────────────────────────────────────────── */
 .bs-ref {
@@ -164,6 +170,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  box-sizing: border-box;
 }
 
 .bs-ref-row {
@@ -172,6 +179,7 @@
   align-items: center;
   gap: 12px;
   font-size: 12px;
+  flex-wrap: wrap;
 }
 
 .bs-ref-row span {
@@ -191,12 +199,13 @@
   border-radius: 6px;
   padding: 3px 8px;
   word-break: break-all;
+  min-width: 0;
 }
 
 /* ─── Info cards ─────────────────────────────────────────────────────────────── */
 .bs-info-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
 }
 
@@ -213,9 +222,14 @@
   font-weight: 500;
   text-align: center;
   line-height: 1.4;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
-.bs-info-icon { font-size: 22px; }
+.bs-info-icon {
+  color: #3a9a1a;
+  flex-shrink: 0;
+}
 
 /* ─── Buttons ────────────────────────────────────────────────────────────────── */
 .bs-actions {
@@ -237,6 +251,7 @@
   font-family: inherit;
   transition: all 0.25s;
   box-shadow: 0 4px 16px rgba(76, 208, 15, 0.3);
+  box-sizing: border-box;
 }
 
 .bs-primary-btn:hover {
@@ -256,6 +271,7 @@
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .bs-secondary-btn:hover {
@@ -264,10 +280,211 @@
   color: #1c3a1c;
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────────── */
-@media (max-width: 560px) {
-  .bs-content { padding: 20px 22px 28px; }
-  .bs-content h1 { font-size: 24px; }
-  .bs-info-cards { grid-template-columns: 1fr; }
-  .bs-dot { display: none; }
+/* ===================== RESPONSIVE ===================== */
+
+/* Desktop */
+/* default styles above */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .bs-card {
+    max-width: 480px;
+  }
+
+  .bs-content {
+    padding: 22px 30px 32px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .bs-page {
+    padding: 20px 14px;
+  }
+
+  .bs-card {
+    max-width: 440px;
+    border-radius: 26px;
+  }
+
+  .bs-icon-wrap {
+    padding: 32px 0 0;
+  }
+
+  .bs-ring {
+    width: 78px;
+    height: 78px;
+  }
+
+  .bs-check {
+    width: 62px;
+    height: 62px;
+  }
+
+  .bs-content {
+    padding: 20px 24px 28px;
+    gap: 18px;
+  }
+
+  .bs-content h1 {
+    font-size: 24px;
+  }
+
+  .bs-subtitle {
+    font-size: 14px;
+  }
+
+  .bs-ref {
+    padding: 12px 14px;
+  }
+
+  .bs-ref-row {
+    font-size: 11px;
+  }
+
+  .bs-ref-row code {
+    font-size: 11px;
+  }
+
+  .bs-info-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .bs-info-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .bs-info-icon {
+    font-size: 20px;
+  }
+
+  .bs-primary-btn {
+    padding: 14px;
+    font-size: 14.5px;
+  }
+
+  .bs-secondary-btn {
+    padding: 13px;
+    font-size: 13.5px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .bs-page {
+    padding: 16px 10px;
+  }
+
+  .bs-card {
+    border-radius: 22px;
+  }
+
+  .bs-icon-wrap {
+    padding: 26px 0 0;
+  }
+
+  .bs-ring {
+    width: 68px;
+    height: 68px;
+  }
+
+  .bs-check {
+    width: 54px;
+    height: 54px;
+  }
+
+  .bs-content {
+    padding: 16px 18px 24px;
+    gap: 16px;
+  }
+
+  .bs-content h1 {
+    font-size: 20px;
+  }
+
+  .bs-subtitle {
+    font-size: 13px;
+  }
+
+  .bs-ref {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .bs-ref-row {
+    font-size: 10.5px;
+    gap: 8px;
+  }
+
+  .bs-ref-row code {
+    font-size: 10.5px;
+    padding: 2px 6px;
+  }
+
+  .bs-info-card {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 12px;
+  }
+
+  .bs-info-icon {
+    font-size: 18px;
+  }
+
+  .bs-primary-btn,
+  .bs-secondary-btn {
+    padding: 12px;
+    font-size: 13px;
+    border-radius: 12px;
+  }
+}
+
+/* Very small phones — only when necessary */
+@media (max-width: 360px) {
+  .bs-page {
+    padding: 12px 8px;
+  }
+
+  .bs-icon-wrap {
+    padding: 20px 0 0;
+  }
+
+  .bs-ring {
+    width: 58px;
+    height: 58px;
+  }
+
+  .bs-check {
+    width: 46px;
+    height: 46px;
+  }
+
+  .bs-content {
+    padding: 14px 14px 20px;
+    gap: 14px;
+  }
+
+  .bs-content h1 {
+    font-size: 18px;
+  }
+
+  .bs-subtitle {
+    font-size: 12.5px;
+  }
+
+  .bs-ref-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .bs-primary-btn,
+  .bs-secondary-btn {
+    font-size: 12.5px;
+    padding: 11px;
+  }
 }

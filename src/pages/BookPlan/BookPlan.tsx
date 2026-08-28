@@ -11,14 +11,15 @@ import {
   Home,
   Loader2,
   Utensils,
+  Wallet,
 } from "lucide-react";
 import { getPlanById } from "../../services/messApi";
-import { choosePlan } from "../../services/bookingService";
+import { choosePlan, getPlanPrice } from "../../services/bookingService";
 import { getAddresses, createAddress } from "../../services/addressService";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import type { PlanDetail } from "../../types/mess";
-import type { ScheduleType, ApiWeekday, ChoosePlanPayload } from "../../types/booking";
+import type { ScheduleType, ApiWeekday, ChoosePlanPayload, PlanPriceResponse } from "../../types/booking";
 import type { Address, AddressPayload } from "../../types/address";
 import styles from "./BookPlan.module.css";
 
@@ -40,7 +41,10 @@ const SCHEDULE_LABELS: Record<ScheduleType, string> = {
   DAILY: "Every day",
   WEEKLY: "Weekly",
   MONTHLY: "Monthly",
+  EVERYDAY: "Everyday",
 };
+
+const UI_SCHEDULE_TYPES: ScheduleType[] = ["DAILY", "MONTHLY"];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -91,6 +95,10 @@ export default function BookPlan() {
   // ── step-3 submit ────────────────────────────────────────────────────────
   const [submitting, setSubmitting] = useState(false);
 
+  // ── price estimate ───────────────────────────────────────────────────────
+  const [priceData, setPriceData] = useState<PlanPriceResponse | null>(null);
+  const [priceLoading, setPriceLoading] = useState(false);
+
   // ── auth guard ───────────────────────────────────────────────────────────
   useEffect(() => {
     if (!isAuthenticated) {
@@ -114,6 +122,39 @@ export default function BookPlan() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planIdParam]);
 
+  // ── fetch price estimate ─────────────────────────────────────────────────
+  useEffect(() => {
+    if (!plan || !startDate || !user?.token) return;
+    // For MONTHLY, end_date and selectedDays are not required
+    // For DAILY, end_date is optional too but we pass if present
+    const pricePayload: ChoosePlanPayload = {
+      addressId: selectedAddressId || "00000000-0000-0000-0000-000000000000",
+      planId: plan.id,
+      start_date: startDate,
+      scheduleType,
+      successUrl: `${window.location.origin}/booking/success`,
+      cancelUrl: `${window.location.origin}/booking/cancel`,
+    };
+    if (endDate) pricePayload.end_date = endDate;
+    if (selectedDays.length > 0) pricePayload.selectedDays = selectedDays;
+
+    const timer = setTimeout(async () => {
+      setPriceLoading(true);
+      try {
+        const data = await getPlanPrice(user.token!, pricePayload);
+        setPriceData(data);
+      } catch {
+        // silently ignore — price is informational
+        setPriceData(null);
+      } finally {
+        setPriceLoading(false);
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, startDate, endDate, scheduleType, selectedDays, user?.token]);
+
   // ── load addresses on step-2 entry ────────────────────────────────────────
   const fetchAddresses = async () => {
     if (!user?.token) return;
@@ -133,8 +174,8 @@ export default function BookPlan() {
 
   const step1Valid = () => {
     if (!plan || !startDate) return false;
-    if (scheduleType === "MONTHLY" || scheduleType === "DAILY") return true;
-    return !!endDate && selectedDays.length > 0 && new Date(endDate) >= new Date(startDate);
+    if (endDate && new Date(endDate) < new Date(startDate)) return false;
+    return true;
   };
 
   const step2Valid = () => !!selectedAddressId;
@@ -173,15 +214,12 @@ export default function BookPlan() {
         successUrl: `${window.location.origin}/booking/success`,
         cancelUrl: `${window.location.origin}/booking/cancel`,
       };
-      if (scheduleType === "CUSTOM" || scheduleType === "WEEKLY") {
-        payload.end_date = endDate;
-        payload.selectedDays = selectedDays;
-      }
-      if (scheduleType === "DAILY" && endDate) payload.end_date = endDate;
+      payload.end_date = endDate;
+      payload.selectedDays = selectedDays;
 
       const res = await choosePlan(user.token, payload);
-      const sessionUrl = res.data.payment.sessionUrl;
-      if (sessionUrl) { window.location.href = sessionUrl; }
+      const paymentUrl = res.data.payment.paymentUrl;
+      if (paymentUrl) { window.location.href = paymentUrl; }
       else { toast.error("No payment URL received. Please try again."); setSubmitting(false); }
     } catch (err: any) {
       toast.error(err.message || "Failed to initiate payment. Please try again.");
@@ -284,7 +322,7 @@ export default function BookPlan() {
                 <h3 className={styles["bp-plan-title"]}>{plan.planName}</h3>
                 <div className={styles["bp-plan-price-wrap"]}>
                   <span className={styles["bp-plan-price"]}>{priceDisplay}</span>
-                  <span className={styles["bp-plan-price-unit"]}>/day</span>
+                  <span className={styles["bp-plan-price-unit"]}>/{plan.isMonthlyPlan ? "month" : "day"}</span>
                 </div>
               </div>
               {plan.description && <p className={styles["bp-plan-desc"]}>{plan.description}</p>}
@@ -324,11 +362,11 @@ export default function BookPlan() {
               <div className={styles["bp-field"]}>
                 <label className={styles["bp-label"]}>Schedule type</label>
                 <div className={styles["bp-schedule-toggle"]}>
-                  {(["MONTHLY", "DAILY", "CUSTOM"] as ScheduleType[]).map((type) => (
+                  {UI_SCHEDULE_TYPES.map((type) => (
                     <button
                       key={type} type="button"
                       className={`${styles["bp-toggle-btn"]} ${scheduleType === type ? styles["bp-toggle-btn--active"] : ""}`}
-                      onClick={() => setScheduleType(type)}
+                      onClick={() => { setScheduleType(type); setPriceData(null); }}
                     >
                       {SCHEDULE_LABELS[type]}
                     </button>
@@ -342,30 +380,60 @@ export default function BookPlan() {
                   <input type="date" className={styles["bp-input"]} min={today()} value={startDate}
                     onChange={(e) => setStartDate(e.target.value)} required />
                 </div>
-                {(scheduleType === "CUSTOM" || scheduleType === "DAILY") && (
-                  <div className={styles["bp-field"]}>
-                    <label className={styles["bp-label"]}>
-                      End date {scheduleType === "CUSTOM" ? "*" : "(optional)"}
-                    </label>
-                    <input type="date" className={styles["bp-input"]} min={startDate || today()} value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)} required={scheduleType === "CUSTOM"} />
-                  </div>
-                )}
+                <div className={styles["bp-field"]}>
+                  <label className={styles["bp-label"]}>End date (optional)</label>
+                  <input type="date" className={styles["bp-input"]} min={startDate || today()} value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)} />
+                </div>
               </div>
 
-              {scheduleType === "CUSTOM" && (
-                <div className={styles["bp-field"]}>
-                  <label className={styles["bp-label"]}>Delivery days *</label>
-                  <div className={styles["bp-weekdays"]}>
-                    {API_WEEKDAYS.map((day) => (
-                      <button key={day} type="button"
-                        className={`${styles["bp-day-btn"]} ${selectedDays.includes(day) ? styles["bp-day-btn--active"] : ""}`}
-                        onClick={() => toggleDay(day)}>
-                        {DAY_SHORT[day]}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedDays.length === 0 && <p className={styles["bp-hint"]}>Select at least one delivery day</p>}
+              <div className={styles["bp-field"]}>
+                <label className={styles["bp-label"]}>Delivery days (optional)</label>
+                <div className={styles["bp-weekdays"]}>
+                  {API_WEEKDAYS.map((day) => (
+                    <button key={day} type="button"
+                      className={`${styles["bp-day-btn"]} ${selectedDays.includes(day) ? styles["bp-day-btn--active"] : ""}`}
+                      onClick={() => toggleDay(day)}>
+                      {DAY_SHORT[day]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price estimate */}
+              {(priceLoading || priceData) && (
+                <div className={styles["bp-price-estimate"]}>
+                  {priceLoading ? (
+                    <span className={styles["bp-price-fetching"]}>
+                      <Loader2 size={14} className={styles["bp-spin"]} /> Calculating price…
+                    </span>
+                  ) : priceData ? (
+                    <>
+                      {/* Left: icon + label + days */}
+                      <div className={styles["bp-pe-left"]}>
+                        <div className={styles["bp-pe-icon"]}>
+                          <Wallet size={18} />
+                        </div>
+                        <div className={styles["bp-pe-meta"]}>
+                          <span className={styles["bp-pe-label"]}>Estimated total</span>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className={styles["bp-pe-divider"]} />
+
+                      {/* Right: price + days badge */}
+                      <div className={styles["bp-pe-right"]}>
+                        <span className={styles["bp-pe-price"]}>
+                          ₹{Number(priceData.price).toLocaleString("en-IN")}
+                        </span>
+                        <span className={styles["bp-pe-badge"]}>
+                          <CalendarDays size={12} />
+                          {priceData.chargeableDays} day{priceData.chargeableDays !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
               )}
 
@@ -513,10 +581,13 @@ export default function BookPlan() {
                   { label: "Schedule", value: SCHEDULE_LABELS[scheduleType] },
                   { label: "Start date", value: startDate },
                   ...(endDate ? [{ label: "End date", value: endDate }] : []),
-                  ...(scheduleType === "CUSTOM" && selectedDays.length > 0
-                    ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", ") }]
-                    : []),
-                  { label: "Price", value: `${priceDisplay} / day` },
+                  ...(selectedDays.length > 0 ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", "), full: true as const }] : []),
+                  ...(priceData
+                    ? [
+                      { label: "Chargeable days", value: `${priceData.chargeableDays} day${priceData.chargeableDays !== 1 ? "s" : ""}` },
+                      { label: "Total price", value: `₹${Number(priceData.price).toLocaleString("en-IN")}` },
+                    ]
+                    : [{ label: "Price", value: `${priceDisplay} / ${plan.isMonthlyPlan ? "month" : "day"}` }]),
                   ...(selectedAddr
                     ? [{ label: "Deliver to", value: `${selectedAddr.name} · ${selectedAddr.street}, ${selectedAddr.townOrcity} ${selectedAddr.postcode}`, full: true }]
                     : []),
@@ -576,8 +647,17 @@ export default function BookPlan() {
             )}
             <div className={styles["bp-summary-divider"]} />
             <div className={styles["bp-summary-price"]}>
-              <span>Price</span>
-              <strong>{priceDisplay}<small>/day</small></strong>
+              <span>Total</span>
+              {priceLoading ? (
+                <strong><Loader2 size={13} className={styles["bp-spin"]} /> …</strong>
+              ) : priceData ? (
+                <strong>
+                  ₹{Number(priceData.price).toLocaleString("en-IN")}
+                  <small> · {priceData.chargeableDays}d</small>
+                </strong>
+              ) : (
+                <strong>{priceDisplay}<small>/{plan.isMonthlyPlan ? "month" : "day"}</small></strong>
+              )}
             </div>
             {step < 3 && (
               <button

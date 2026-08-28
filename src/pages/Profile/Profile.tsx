@@ -3,32 +3,62 @@ import { useNavigate } from "react-router-dom";
 import {
   User,
   Phone,
-  PauseCircle,
-  XCircle,
-  CalendarX2,
-  PlayCircle,
   LogOut,
   CalendarDays,
   MapPin,
   Mail,
   Wallet,
   Plus,
+  Loader2,
+  UtensilsCrossed,
+  Clock,
+  ChevronRight,
+  CalendarCheck2,
+  BadgeCheck,
+  Ban,
+  PauseCircle,
+  RotateCcw,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { getUserProfile } from "../../services/userService";
 import { getAddresses } from "../../services/addressService";
 import type { Address } from "../../types/address";
 import AddressModal from "./AddressModal";
-import {
-  getSubscriptions,
-  pauseSubscription,
-  cancelSubscription,
-  skipMeal,
-} from "../../services/bookingService";
-import type { Subscription } from "../../types/booking";
-import SubscriptionActionModal from "./SubscriptionActionModal";
-import type { ActionMode } from "./SubscriptionActionModal";
+import { getMySubscriptions } from "../../services/bookingService";
+import type { MySubscription } from "../../types/booking";
 import styles from "./Profile.module.css";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const DAY_SHORT: Record<string, string> = {
+  MONDAY: "Mon", TUESDAY: "Tue", WEDNESDAY: "Wed",
+  THURSDAY: "Thu", FRIDAY: "Fri", SATURDAY: "Sat", SUNDAY: "Sun",
+};
+
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+
+function statusMeta(status: string) {
+  switch (status.toUpperCase()) {
+    case "ACTIVE":   return { label: "Active",    cls: styles["status-active"],    icon: <BadgeCheck size={12} /> };
+    case "PAUSED":   return { label: "Paused",    cls: styles["status-paused"],    icon: <PauseCircle size={12} /> };
+    case "CANCELLED":return { label: "Cancelled", cls: styles["status-cancelled"], icon: <Ban size={12} /> };
+    default:         return { label: "Inactive",  cls: styles["status-inactive"],  icon: <Clock size={12} /> };
+  }
+}
+
+function scheduleLabel(sub: MySubscription) {
+  switch (sub.scheduleType) {
+    case "DAILY":     return "Daily";
+    case "MONTHLY":   return "Monthly";
+    case "EVERYDAY":  return "Every day";
+    case "CUSTOM":    return "Custom days";
+    case "WEEKLY":    return "Weekly";
+    default:          return sub.scheduleType;
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -36,9 +66,10 @@ export default function Profile() {
 
   const [activeTab, setActiveTab] = useState<"details" | "addresses" | "plans">("details");
 
-  const [subs, setSubs] = useState<Subscription[]>([]);
-  const [loading, setLoading] = useState(true);
-  
+  const [mySubs, setMySubs] = useState<MySubscription[]>([]);
+  const [subsLoading, setSubsLoading] = useState(false);
+  const [subsError, setSubsError] = useState("");
+
   const [profileData, setProfileData] = useState<any>(null);
   const [profileLoading, setProfileLoading] = useState(true);
 
@@ -46,21 +77,23 @@ export default function Profile() {
   const [addressesLoading, setAddressesLoading] = useState(true);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
-  const [activeModal, setActiveModal] = useState<{
-    mode: ActionMode;
-    sub: Subscription;
-  } | null>(null);
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login", { state: { redirectTo: "/profile" } });
       return;
     }
-    fetchSubs();
     fetchProfile();
     fetchAddresses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
+
+  // Load subscriptions lazily when tab is opened
+  useEffect(() => {
+    if (activeTab === "plans" && mySubs.length === 0 && !subsLoading) {
+      fetchSubs();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   const fetchProfile = async () => {
     if (!user?.token) return;
@@ -89,36 +122,24 @@ export default function Profile() {
   };
 
   const fetchSubs = async () => {
-    if (!user) return;
-    setLoading(true);
+    if (!user?.token) return;
+    setSubsLoading(true);
+    setSubsError("");
     try {
-      const data = await getSubscriptions(user.phone);
-      setSubs(data);
-    } catch (err) {
-      console.error("Failed to load subscriptions", err);
+      const res = await getMySubscriptions(user.token);
+      setMySubs(res.data);
+    } catch (err: any) {
+      setSubsError(err.message || "Failed to load subscriptions.");
     } finally {
-      setLoading(false);
+      setSubsLoading(false);
     }
-  };
-
-  const handleAction = async (payload: { start?: string; end?: string; date?: string }) => {
-    if (!activeModal) return;
-    const { mode, sub } = activeModal;
-
-    if (mode === "pause" && payload.start && payload.end) {
-      await pauseSubscription(sub.id, { start: payload.start, end: payload.end });
-    } else if (mode === "cancel") {
-      await cancelSubscription(sub.id);
-    } else if (mode === "skip" && payload.date) {
-      await skipMeal(sub.id, payload.date);
-    }
-    await fetchSubs();
   };
 
   if (!isAuthenticated || !user) return null;
 
   return (
     <div className={styles["profile-page"]}>
+      {/* Header */}
       <div className={styles["profile-header"]}>
         <div className={styles["profile-avatar"]}>
           <User size={26} />
@@ -131,27 +152,20 @@ export default function Profile() {
         </button>
       </div>
 
+      {/* Tabs */}
       <div className={styles["tabs-container"]}>
-        <button
-          className={`${styles["tab-btn"]} ${activeTab === "details" ? styles.active : ""}`}
-          onClick={() => setActiveTab("details")}
-        >
-          My Details
-        </button>
-        <button
-          className={`${styles["tab-btn"]} ${activeTab === "addresses" ? styles.active : ""}`}
-          onClick={() => setActiveTab("addresses")}
-        >
-          My Addresses
-        </button>
-        <button
-          className={`${styles["tab-btn"]} ${activeTab === "plans" ? styles.active : ""}`}
-          onClick={() => setActiveTab("plans")}
-        >
-          My Meal Plans
-        </button>
+        {(["details", "addresses", "plans"] as const).map((tab) => (
+          <button
+            key={tab}
+            className={`${styles["tab-btn"]} ${activeTab === tab ? styles.active : ""}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab === "details" ? "My Details" : tab === "addresses" ? "My Addresses" : "My Meal Plans"}
+          </button>
+        ))}
       </div>
 
+      {/* ── My Details ── */}
       {activeTab === "details" && (
         <div className={styles["address-card"]} style={{ marginTop: "16px" }}>
           {profileLoading ? (
@@ -162,15 +176,9 @@ export default function Profile() {
                 <span className={styles["profile-name"]}>{profileData.name}</span>
               </div>
               <div className={styles["profile-details"]}>
-                <span>
-                  <Phone size={14} /> {profileData.phone}
-                </span>
-                <span>
-                  <Mail size={14} /> {profileData.email}
-                </span>
-                <span>
-                  <Wallet size={14} /> ₹{profileData.customerProfile?.walletAmount || "0"}
-                </span>
+                <span><Phone size={14} /> {profileData.phone}</span>
+                <span><Mail size={14} /> {profileData.email}</span>
+                <span><Wallet size={14} /> ₹{profileData.customerProfile?.walletAmount || "0"}</span>
               </div>
             </>
           ) : (
@@ -179,15 +187,14 @@ export default function Profile() {
                 <span className={styles["profile-name"]}>{user.name}</span>
               </div>
               <div className={styles["profile-details"]}>
-                <span>
-                  <Phone size={14} /> +91 {user.phone}
-                </span>
+                <span><Phone size={14} /> +91 {user.phone}</span>
               </div>
             </>
           )}
         </div>
       )}
 
+      {/* ── My Addresses ── */}
       {activeTab === "addresses" && (
         <div className={styles["address-list"]}>
           {addressesLoading ? (
@@ -207,15 +214,11 @@ export default function Profile() {
                   </div>
                 </div>
               ))}
-              <button
-                className={styles["add-address-btn"]}
-                onClick={() => setIsAddressModalOpen(true)}
-              >
+              <button className={styles["add-address-btn"]} onClick={() => setIsAddressModalOpen(true)}>
                 <Plus size={18} /> Add New Address
               </button>
             </>
           )}
-
           <AddressModal
             isOpen={isAddressModalOpen}
             onClose={() => setIsAddressModalOpen(false)}
@@ -224,104 +227,100 @@ export default function Profile() {
         </div>
       )}
 
+      {/* ── My Meal Plans ── */}
       {activeTab === "plans" && (
-        <>
-          {loading ? (
-            <p className={styles["profile-loading"]}>Loading your plans...</p>
-          ) : subs.length === 0 ? (
+        <div className={styles["plans-section"]}>
+          {subsLoading ? (
+            <div className={styles["plans-loader"]}>
+              <Loader2 size={28} className={styles["spin"]} />
+              <span>Loading your plans…</span>
+            </div>
+          ) : subsError ? (
+            <div className={styles["plans-error"]}>
+              <p>{subsError}</p>
+              <button onClick={fetchSubs}><RotateCcw size={14} /> Retry</button>
+            </div>
+          ) : mySubs.length === 0 ? (
             <div className={styles["profile-empty"]}>
+              <UtensilsCrossed size={40} strokeWidth={1.4} color="#b3bab3" />
               <p>You haven't booked any mess plans yet.</p>
               <button onClick={() => navigate("/view-all-listings")}>Browse Messes</button>
             </div>
           ) : (
             <div className={styles["sub-list"]}>
-              {subs.map((sub) => (
-                <div className={styles["sub-card"]} key={sub.id}>
-                  <div className={styles["sub-card-top"]}>
-                    <div>
-                      <h3>{sub.messName}</h3>
-                      <p className={styles["sub-plan-name"]}>{sub.planName}</p>
+              {mySubs.map((sub) => {
+                const sm = statusMeta(sub.status);
+                const img = sub.plan.images?.[0]?.url;
+                return (
+                  <div className={styles["sub-card"]} key={sub.id}>
+                    {/* Top row: image + title + status */}
+                    <div className={styles["sub-card-top"]}>
+                      {img && (
+                        <img
+                          src={img}
+                          alt={sub.plan.name}
+                          className={styles["sub-plan-img"]}
+                        />
+                      )}
+                      <div className={styles["sub-card-info"]}>
+                        <div className={styles["sub-card-title-row"]}>
+                          <div>
+                            <h3 className={styles["sub-plan-name"]}>{sub.plan.name}</h3>
+                            <span className={styles["sub-price"]}>
+                              ₹{Number(sub.discountedPrice).toLocaleString("en-IN")}
+                              <small> total</small>
+                            </span>
+                          </div>
+                          <span className={`${styles["sub-status"]} ${sm.cls}`}>
+                            {sm.icon}{sm.label}
+                          </span>
+                        </div>
+
+                        {/* Meta chips */}
+                        <div className={styles["sub-meta"]}>
+                          <span>
+                            <CalendarDays size={13} />
+                            {fmt(sub.start_date)}
+                            {sub.end_date && <> → {fmt(sub.end_date)}</>}
+                          </span>
+                          <span>
+                            <CalendarCheck2 size={13} />
+                            {scheduleLabel(sub)}
+                          </span>
+                          <span>
+                            <MapPin size={13} />
+                            {sub.address.townOrcity}, {sub.address.postcode}
+                          </span>
+                        </div>
+
+                        {/* Selected days pills */}
+                        {sub.selectedDays && sub.selectedDays.length > 0 && (
+                          <div className={styles["sub-days"]}>
+                            {sub.selectedDays.map((d) => (
+                              <span key={d} className={styles["sub-day-chip"]}>{DAY_SHORT[d] ?? d}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <span className={`${styles["sub-status"]} ${styles[sub.status] || ""}`}>{sub.status}</span>
+
+                    {/* Footer: address + plan per-day price */}
+                    <div className={styles["sub-card-footer"]}>
+                      <span className={styles["sub-address-line"]}>
+                        <MapPin size={12} />
+                        {sub.address.name} · {sub.address.street}, {sub.address.townOrcity}
+                      </span>
+                      <span className={styles["sub-per-day"]}>
+                        ₹{Number(sub.plan.price).toLocaleString("en-IN")}/{sub.plan.isMonthlyPlan ? "month" : "day"}
+                        <ChevronRight size={14} />
+                      </span>
+                    </div>
                   </div>
-
-                  <div className={styles["sub-meta"]}>
-                    <span>
-                      <CalendarDays size={14} />
-                      {sub.planType === "monthly"
-                        ? `From ${sub.startDate} · ${sub.months} month${sub.months !== 1 ? "s" : ""}`
-                        : `${sub.startDate} → ${sub.endDate}`}
-                    </span>
-                    <span>
-                      <MapPin size={14} />
-                      {sub.address.city}, {sub.address.pincode}
-                    </span>
-                  </div>
-
-                  {sub.planType === "daily" && sub.weekdays && (
-                    <div className={styles["sub-weekdays"]}>
-                      {sub.weekdays.map((d) => (
-                        <span key={d}>{d}</span>
-                      ))}
-                    </div>
-                  )}
-
-                  {sub.pausedRanges.length > 0 && (
-                    <div className={styles["sub-tags"]}>
-                      {sub.pausedRanges.map((p) => (
-                        <span key={p.id} className={`${styles.tag} ${styles.paused}`}>
-                          Paused {p.start} → {p.end}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {sub.skippedDates.length > 0 && (
-                    <div className={styles["sub-tags"]}>
-                      {sub.skippedDates.map((d) => (
-                        <span key={d} className={`${styles.tag} ${styles.skipped}`}>
-                          Skipped {d}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {sub.status !== "cancelled" && (
-                    <div className={styles["sub-actions"]}>
-                      <button onClick={() => setActiveModal({ mode: "pause", sub })}>
-                        <PauseCircle size={15} /> Pause a week
-                      </button>
-                      <button onClick={() => setActiveModal({ mode: "skip", sub })}>
-                        <CalendarX2 size={15} /> Skip a day
-                      </button>
-                      <button
-                        className={styles.danger}
-                        onClick={() => setActiveModal({ mode: "cancel", sub })}
-                      >
-                        <XCircle size={15} /> Cancel plan
-                      </button>
-                    </div>
-                  )}
-
-                  {sub.status === "cancelled" && (
-                    <div className={styles["sub-cancelled-note"]}>
-                      <PlayCircle size={14} /> This plan has been cancelled.
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
-
-          {activeModal && (
-            <SubscriptionActionModal
-              mode={activeModal.mode}
-              messName={activeModal.sub.messName}
-              onClose={() => setActiveModal(null)}
-              onConfirm={handleAction}
-            />
-          )}
-        </>
+        </div>
       )}
     </div>
   );

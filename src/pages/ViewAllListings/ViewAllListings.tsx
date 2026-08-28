@@ -385,7 +385,7 @@ export default function ViewAllListings() {
                             <small>STARTING FROM</small>
                             <strong>
                               ₹{mess.plans?.[0]?.price ?? "N/A"}
-                              <span>/mo</span>
+                              <span>/{mess.plans?.[0]?.isMonthlyPlan ? "month" : "day"}</span>
                             </strong>
                           </div>
 

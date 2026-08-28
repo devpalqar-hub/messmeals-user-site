@@ -3,6 +3,8 @@ import type {
   Subscription,
   ChoosePlanPayload,
   ChoosePlanResponse,
+  PlanPriceResponse,
+  MySubscriptionsResponse,
 } from "../types/booking";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
@@ -33,7 +35,50 @@ export const choosePlan = async (
 };
 
 /**
- * MOCK booking service — persists to localStorage so the booking + profile
+ * POST /customer/choose/plan/price
+ * Fetches the estimated price for the chosen schedule before payment.
+ */
+export const getPlanPrice = async (
+  token: string,
+  payload: ChoosePlanPayload
+): Promise<PlanPriceResponse> => {
+  const response = await fetch(`${API_BASE_URL}/customer/choose/plan/price`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const resData = await response.json();
+  if (!response.ok) {
+    throw new Error(resData.message || "Failed to fetch price");
+  }
+  return resData as PlanPriceResponse;
+};
+
+/**
+ * GET /customer/my/subscriptions?status=all
+ * Fetches all subscriptions for the current customer.
+ */
+export const getMySubscriptions = async (
+  token: string
+): Promise<MySubscriptionsResponse> => {
+  const response = await fetch(
+    `${API_BASE_URL}/customer/my/subscriptions?status=all`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  const resData = await response.json();
+  if (!response.ok) {
+    throw new Error(resData.message || "Failed to fetch subscriptions");
+  }
+  return resData as MySubscriptionsResponse;
+};
+
+/** MOCK booking service — persists to localStorage so the booking + profile
  * (pause / cancel) flows can be exercised end-to-end in the UI.
  */
 

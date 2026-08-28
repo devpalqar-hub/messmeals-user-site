@@ -59,7 +59,7 @@ export type Subscription = BookingDraft & {
 // ─── New API types ─────────────────────────────────────────────────────────────
 
 /** Schedule types accepted by POST /customer/choose/plan */
-export type ScheduleType = "DAILY" | "WEEKLY" | "MONTHLY" | "CUSTOM";
+export type ScheduleType = "DAILY" | "WEEKLY" | "MONTHLY" | "CUSTOM" | "EVERYDAY";
 
 /** Full-name weekday values accepted by the API */
 export type ApiWeekday =
@@ -88,23 +88,31 @@ export interface SubscriptionResult {
   id: string;
   start_date: string;
   end_date: string | null;
+  pause_start_date: string | null;
+  pause_end_date: string | null;
+  cancellation_start_date: string | null;
+  cancellation_end_date: string | null;
   scheduleType: ScheduleType;
   selectedDays: ApiWeekday[];
   totalPrice: string;
   discount: string;
   discountedPrice: string;
+  deliveryPartnerProfileId: string | null;
+  userAddressId: string;
   planId: string;
   messId: string;
   is_active: boolean;
+  isActive: boolean;
+  cancelled_on: string | null;
   customerProfileId: string;
-  userAddressId: string;
+  deliveryPriority: string | null;
   createdAt: string;
 }
 
 /** Payment shape returned inside the response */
 export interface PaymentResult {
   orderId: string;
-  sessionUrl: string;
+  paymentUrl: string;
   amount: number;
   currency: string;
   paymentId: string;
@@ -120,4 +128,59 @@ export interface ChoosePlanResponse {
     subscription: SubscriptionResult;
     payment: PaymentResult;
   };
+}
+
+/** Response from POST /customer/choose/plan/price */
+export interface PlanPriceResponse {
+  price: number;
+  chargeableDays: number;
+  start_date: string;
+  end_date: string;
+}
+
+// ─── My Subscriptions API ──────────────────────────────────────────────────────
+
+export interface MySubscriptionPlan {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  isMonthlyPlan: boolean;
+  isDailyPlan: boolean;
+  images: { url: string; altText: string | null }[];
+}
+
+export interface MySubscriptionAddress {
+  id: string;
+  name: string;
+  street: string;
+  townOrcity: string;
+  postcode: string;
+}
+
+export interface MySubscription {
+  id: string;
+  messId: string;
+  start_date: string;
+  end_date: string | null;
+  selectedDays: ApiWeekday[] | null;
+  scheduleType: ScheduleType;
+  totalPrice: number;
+  discount: number;
+  discountedPrice: number;
+  deliveryPartnerProfileId: string | null;
+  pause_start_date: string | null;
+  pause_end_date: string | null;
+  cancellation_start_date: string | null;
+  cancellation_end_date: string | null;
+  cancelled_on: string | null;
+  status: string; // "ACTIVE" | "INACTIVE" | "PAUSED" | "CANCELLED"
+  createdAt: string;
+  plan: MySubscriptionPlan;
+  address: MySubscriptionAddress;
+}
+
+export interface MySubscriptionsResponse {
+  data: MySubscription[];
+  meta: { total: number };
 }

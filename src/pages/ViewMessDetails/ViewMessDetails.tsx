@@ -438,7 +438,7 @@ export default function ViewMessDetails() {
                     <span className={styles["plan-card-currency"]}>₹</span>
                     <span className={styles["plan-card-amount"]}>{plan.price}</span>
                     <span className={styles["plan-card-period"]}>
-                      /{plan.isMonthlyPlan ? "mo" : "meal"}
+                      /{plan.isMonthlyPlan ? "month" : "day"}
                     </span>
                   </div>
                   {plan.minPrice && (
@@ -763,7 +763,7 @@ export default function ViewMessDetails() {
                     <span className={styles.currency}>₹</span>
                     <span className={styles.amount}>{viewPlan.price}</span>
                     <span className={styles.period}>
-                      /{viewPlan.isMonthlyPlan ? "month" : "meal"}
+                      /{viewPlan.isMonthlyPlan ? "month" : "day"}
                     </span>
                   </div>
                   {viewPlan.minPrice && (

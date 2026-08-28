@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { CreditCard, Wifi, ShieldAlert, ArrowLeft } from "lucide-react";
 import styles from "./BookingCancel.module.css";
 
 export default function BookingCancel() {
@@ -40,15 +41,15 @@ export default function BookingCancel() {
 
           <div className={styles["bc-tips"]}>
             <div className={styles["bc-tip"]}>
-              <span>💳</span>
+              <CreditCard size={18} strokeWidth={1.8} />
               <span>Make sure your card details are correct</span>
             </div>
             <div className={styles["bc-tip"]}>
-              <span>📶</span>
+              <Wifi size={18} strokeWidth={1.8} />
               <span>Check your internet connection</span>
             </div>
             <div className={styles["bc-tip"]}>
-              <span>🔒</span>
+              <ShieldAlert size={18} strokeWidth={1.8} />
               <span>Ensure your bank hasn't blocked the transaction</span>
             </div>
           </div>
@@ -58,7 +59,7 @@ export default function BookingCancel() {
               className={styles["bc-primary-btn"]}
               onClick={() => navigate(-1 as any)}
             >
-              ← Try Again
+              Try Again
             </button>
             <button
               className={styles["bc-secondary-btn"]}

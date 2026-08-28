@@ -1,11 +1,9 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Truck, UserCircle, PartyPopper } from "lucide-react";
 import styles from "./BookingSuccess.module.css";
 
 export default function BookingSuccess() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const paymentId = searchParams.get("razorpay_payment_id");
-  const orderId = searchParams.get("razorpay_order_id");
 
   return (
     <div className={styles["bs-page"]}>
@@ -36,42 +34,20 @@ export default function BookingSuccess() {
           </svg>
         </div>
 
-        {/* Confetti dots */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className={`${styles["bs-dot"]} ${styles[`bs-dot-${i + 1}`]}`} />
-        ))}
-
         <div className={styles["bs-content"]}>
           <h1>Payment Successful!</h1>
           <p className={styles["bs-subtitle"]}>
             Your meal subscription is now <strong>confirmed</strong>. Sit back and
-            let the food come to you! 🎉
+            let the food come to you! <PartyPopper size={16} style={{ display: "inline", verticalAlign: "middle", color: "#f59e0b" }} />
           </p>
-
-          {(paymentId || orderId) && (
-            <div className={styles["bs-ref"]}>
-              {paymentId && (
-                <div className={styles["bs-ref-row"]}>
-                  <span>Payment ID</span>
-                  <code>{paymentId}</code>
-                </div>
-              )}
-              {orderId && (
-                <div className={styles["bs-ref-row"]}>
-                  <span>Order ID</span>
-                  <code>{orderId}</code>
-                </div>
-              )}
-            </div>
-          )}
 
           <div className={styles["bs-info-cards"]}>
             <div className={styles["bs-info-card"]}>
-              <span className={styles["bs-info-icon"]}>🍱</span>
+              <Truck size={22} className={styles["bs-info-icon"]} />
               <span>Deliveries will start on your scheduled date</span>
             </div>
             <div className={styles["bs-info-card"]}>
-              <span className={styles["bs-info-icon"]}>📍</span>
+              <UserCircle size={22} className={styles["bs-info-icon"]} />
               <span>Track and manage from your profile</span>
             </div>
           </div>

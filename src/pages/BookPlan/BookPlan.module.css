@@ -1,6 +1,5 @@
 /* ─── Page shell ────────────────────────────────────────────────────────────── */
 .bp-page {
-  max-width: 1180px;
   margin: 0 auto;
   padding: 36px 80px 100px;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
@@ -244,6 +243,127 @@
   color: #e05c5c;
   margin: 6px 0 0;
 }
+
+/* ─── Price estimate ────────────────────────────────────────────────────────── */
+/* ─── Price estimate card ────────────────────────────────────────────────────── */
+.bp-price-estimate {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-top: 8px;
+  animation: fadeInUp 0.3s ease;
+  overflow: hidden;
+}
+
+.bp-price-fetching {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  width: 100%;
+}
+
+/* Left side */
+.bp-pe-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bp-pe-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.bp-pe-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bp-pe-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #166534;
+  white-space: nowrap;
+}
+
+.bp-pe-days-sub {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #4b7a57;
+}
+
+/* Divider */
+.bp-pe-divider {
+  width: 1px;
+  align-self: stretch;
+  background: #bbf7d0;
+  border: none;
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+/* Right side */
+.bp-pe-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.bp-pe-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: #166534;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.bp-pe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #7a5e10;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* ─── Schedule toggle ────────────────────────────────────────────────────────── */
 .bp-schedule-toggle {
