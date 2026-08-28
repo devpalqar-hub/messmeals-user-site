@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Wifi, ShieldAlert, ArrowLeft } from "lucide-react";
+import { CreditCard, Wifi, ShieldAlert } from "lucide-react";
 import styles from "./BookingCancel.module.css";
 
 export default function BookingCancel() {
