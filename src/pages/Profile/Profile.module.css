@@ -1,0 +1,557 @@
+.profile-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 36px 80px 80px;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ---------- HEADER ---------- */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(135deg, #f2f9ee 0%, #e9f8e3 100%);
+  border-radius: 22px;
+  padding: 26px 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 24px rgba(20, 40, 20, 0.06);
+}
+
+.profile-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(20, 40, 20, 0.08);
+}
+
+.profile-logout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid #dbe6d8;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #37403a;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.profile-logout:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* ---------- TABS ---------- */
+.tabs-container {
+  display: flex;
+  gap: 4px;
+  background: #f4f6f4;
+  padding: 5px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 11px 22px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #7a837b;
+  cursor: pointer;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tab-btn:hover {
+  color: #37403a;
+}
+
+.tab-btn.active {
+  background: #1f3d1f;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(31, 61, 31, 0.25);
+}
+
+/* ---------- SHARED CARD ---------- */
+.address-card {
+  background: #ffffff;
+  border: 1px solid #f0f2f0;
+  border-radius: 18px;
+  padding: 22px 26px;
+  box-shadow: 0 4px 16px rgba(20, 40, 20, 0.04);
+}
+
+/* ---------- MY DETAILS TAB ---------- */
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #14181a;
+}
+
+.profile-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.profile-details span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #f4f6f4;
+  color: #37403a;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.profile-details span svg {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.profile-loading {
+  color: #7a837b;
+  font-size: 14.5px;
+}
+
+/* ---------- EMPTY STATE ---------- */
+.profile-empty {
+  background: #ffffff;
+  border: 1.5px dashed #d7ded4;
+  border-radius: 20px;
+  padding: 48px 24px;
+  text-align: center;
+  color: #7a837b;
+  font-size: 15px;
+}
+
+.profile-empty button {
+  margin-top: 16px;
+  background: #4cd00f;
+  color: #0f2f0f;
+  border: none;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-empty button:hover {
+  background: #3cb800;
+  transform: translateY(-1px);
+}
+
+/* ---------- PLANS SECTION ---------- */
+.plans-section {
+  margin-top: 4px;
+}
+
+.plans-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 24px;
+  color: #7a837b;
+  font-size: 15px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.plans-error {
+  text-align: center;
+  padding: 40px 24px;
+  color: #e05c5c;
+  font-size: 14px;
+}
+
+.plans-error button {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff0f0;
+  border: 1.5px solid #fecaca;
+  color: #dc2626;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.plans-error button:hover { background: #fecaca; }
+
+/* ---------- SUBSCRIPTION CARDS ---------- */
+.sub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sub-card {
+  background: #ffffff;
+  border: 1px solid #eef1ee;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(20, 40, 20, 0.05);
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.sub-card:hover {
+  box-shadow: 0 10px 32px rgba(20, 40, 20, 0.10);
+  transform: translateY(-2px);
+}
+
+/* Top section */
+.sub-card-top {
+  display: flex;
+  gap: 16px;
+  padding: 20px 20px 0;
+}
+
+.sub-plan-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #f0f2f0;
+}
+
+.sub-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sub-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sub-plan-name {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.sub-price {
+  font-size: 17px;
+  font-weight: 800;
+  color: #166534;
+  letter-spacing: -0.3px;
+}
+
+.sub-price small {
+  font-size: 11px;
+  font-weight: 500;
+  color: #4b7a57;
+  margin-left: 2px;
+}
+
+/* Status badge */
+.sub-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-active    { background: #ecfdf3; color: #16a34a; }
+.status-paused    { background: #fff7ed; color: #c2740a; }
+.status-cancelled { background: #fef2f2; color: #dc2626; }
+.status-inactive  { background: #f3f4f6; color: #6b7280; }
+
+/* Meta chips */
+.sub-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sub-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #57604f;
+  font-weight: 600;
+  background: #f4f6f4;
+  padding: 5px 11px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.sub-meta span svg {
+  color: #4cd00f;
+  flex-shrink: 0;
+}
+
+/* Day chips */
+.sub-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.sub-day-chip {
+  background: #ecfdf3;
+  color: #15803d;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #bbf7d0;
+}
+
+/* Footer */
+.sub-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 14px 20px 0;
+  padding: 14px 0;
+  border-top: 1px solid #f0f2f0;
+}
+
+.sub-address-line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #7a837b;
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sub-address-line svg {
+  flex-shrink: 0;
+  color: #9ca3af;
+}
+
+.sub-per-day {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #166534;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sub-per-day svg { color: #9ca3af; }
+
+/* ---------- ADDRESSES ---------- */
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.address-name {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 8px;
+}
+
+.address-details {
+  font-size: 14px;
+  color: #57604f;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.address-contact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.address-contact span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f4f6f4;
+  color: #57604f;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.address-contact span svg {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.add-address-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px dashed #c3ccc3;
+  border-radius: 18px;
+  padding: 22px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #4b7a4b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-address-btn:hover {
+  background: #f9fbf9;
+  border-color: #4cd00f;
+  color: #2f7d32;
+  transform: translateY(-1px);
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+/* Desktop */
+/* default styles above */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .profile-page { padding: 32px 40px 64px; }
+  .profile-header { padding: 22px 24px; }
+  .address-card { padding: 20px 22px; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .profile-page { padding: 24px 20px 56px; }
+
+  .profile-header {
+    padding: 20px;
+    border-radius: 18px;
+    gap: 14px;
+  }
+
+  .profile-avatar { width: 50px; height: 50px; }
+  .profile-logout { padding: 9px 15px; font-size: 13px; }
+
+  .tabs-container { width: 100%; margin-bottom: 20px; }
+  .tab-btn { padding: 10px 16px; font-size: 13.5px; }
+  .profile-name { font-size: 18px; }
+  .profile-details span { font-size: 12.5px; padding: 7px 12px; }
+
+  .address-card { padding: 18px 20px; border-radius: 16px; }
+
+  .sub-plan-img { width: 68px; height: 68px; }
+  .sub-plan-name { font-size: 14.5px; }
+  .sub-price { font-size: 15.5px; }
+  .sub-meta span { font-size: 11.5px; }
+  .add-address-btn { padding: 18px; font-size: 14px; }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .profile-page { padding: 20px 16px 48px; }
+
+  .profile-header {
+    flex-wrap: wrap;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .profile-avatar { width: 44px; height: 44px; }
+  .profile-logout { margin-left: auto; padding: 8px 13px; font-size: 12px; }
+  .tabs-container { padding: 4px; }
+  .tab-btn { padding: 9px 14px; font-size: 13px; }
+  .profile-name { font-size: 16.5px; }
+
+  .address-card { padding: 16px; border-radius: 14px; }
+
+  .sub-card-top { gap: 12px; padding: 16px 16px 0; }
+  .sub-plan-img { width: 58px; height: 58px; border-radius: 10px; }
+  .sub-plan-name { font-size: 13.5px; }
+  .sub-price { font-size: 14px; }
+  .sub-status { font-size: 11px; padding: 4px 10px; }
+  .sub-meta span { font-size: 11px; padding: 4px 9px; }
+  .sub-day-chip { font-size: 10.5px; padding: 3px 8px; }
+  .sub-card-footer { margin: 10px 16px 0; padding: 12px 0; }
+  .sub-address-line { font-size: 11px; }
+  .sub-per-day { font-size: 12px; }
+
+  .address-name { font-size: 15px; }
+  .address-details { font-size: 13px; }
+  .add-address-btn { padding: 16px; font-size: 13.5px; border-radius: 14px; }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .profile-page { padding: 16px 12px 40px; }
+  .profile-header { padding: 14px; gap: 10px; }
+  .profile-avatar { width: 40px; height: 40px; }
+  .profile-name { font-size: 15px; }
+  .tab-btn { padding: 8px 12px; font-size: 12px; }
+
+  .sub-card-top { flex-direction: column; padding: 14px 14px 0; }
+  .sub-plan-img { width: 100%; height: 120px; border-radius: 10px; }
+  .sub-card-footer { margin: 10px 14px 0; }
+  .address-card { padding: 14px; }
+}
+

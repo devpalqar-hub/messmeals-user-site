@@ -1,0 +1,151 @@
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.toast-item {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 400px;
+  animation: slideInRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  padding: 16px 44px 16px 16px;
+  gap: 12px;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+}
+
+.success-icon {
+  color: #63e100;
+}
+
+.error-icon {
+  color: #dc2626;
+}
+
+.warning-icon {
+  color: #f59e0b;
+}
+
+.info-icon {
+  color: #3b82f6;
+}
+
+.toast-message {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f3d1f;
+  line-height: 1.4;
+}
+
+.toast-close {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.toast-close:hover {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  animation: progressShrink 4s linear forwards;
+}
+
+.toast-progress-success {
+  background: #63e100;
+}
+
+.toast-progress-error {
+  background: #dc2626;
+}
+
+.toast-progress-warning {
+  background: #f59e0b;
+}
+
+.toast-progress-info {
+  background: #3b82f6;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes progressShrink {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .toast-container {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    align-items: center;
+  }
+  
+  .toast-item {
+    width: 100%;
+    max-width: 100%;
+    animation: slideInDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -5,11 +5,36 @@ export type MessImage = {
   sortOrder: number;
 };
 
+export type PlanVariation = {
+  id: string;
+  title: string;
+  description: string | null;
+  isActive: boolean;
+};
+
 export type MessPlan = {
   id: string;
   planName: string;
   price: string;
+  minPrice?: string;
   description?: string;
+  isMonthlyPlan?: boolean;
+  isDailyPlan?: boolean;
+  isActive?: boolean;
+  images?: MessImage[];
+  Variation?: PlanVariation[];
+};
+
+export type MessFoodType = {
+  id: string;
+  messId: string;
+  foodType: "VEG" | "NON_VEG" | "MIXED" | string;
+};
+
+export type MessTag = {
+  id: string;
+  messId: string;
+  tag: string;
 };
 
 export type Mess = {
@@ -25,6 +50,7 @@ export type Mess = {
   location: string | null;
   plans: MessPlan[];
   images?: MessImage[];
+  Testimonials?: MessTestimonial[];
 };
 
 export type MessMeta = {
@@ -73,7 +99,32 @@ export type MessDetails = {
   plans: MessPlan[];
   messAdmins: MessAdmin[];
   Testimonials: MessTestimonial[];
-  DeliveryPartnerProfile: any[]; 
-  UserSubscriptions: any[]; 
+  DeliveryPartnerProfile: any[];
+  UserSubscriptions: any[];
   images: MessImage[];
+  foodTypes?: MessFoodType[];
+  tags?: MessTag[];
 };
+
+/** Full plan detail returned by GET /plans/:id */
+export type PlanDetail = {
+  id: string;
+  planName: string;
+  price: string;
+  minPrice?: string;
+  description?: string;
+  messId: string;
+  isMonthlyPlan: boolean;
+  isDailyPlan: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  images: MessImage[];
+  mess: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+  };
+  Variation: PlanVariation[];
+};

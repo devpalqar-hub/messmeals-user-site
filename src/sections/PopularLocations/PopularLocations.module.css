@@ -1,0 +1,154 @@
+/* SECTION */
+.popular-locations {
+  max-width: 1232px;
+  margin: 10px auto 80px;
+  padding: 0 20px;
+   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f3d1f;
+  margin-bottom: 28px;
+}
+
+/* GRID */
+.locations-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.location-card {
+  position: relative;
+  height: 200px;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+/* IMAGE */
+.location-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 0;
+  transition: transform 0.4s ease;
+}
+
+/* GRADIENT OVERLAY */
+.location-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+/* TEXT OVER IMAGE */
+.location-overlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 2;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.location-overlay h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.location-overlay span {
+  font-size: 14px;
+  opacity: 0.9;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.location-card:hover .location-overlay span {
+  color: #22c55e;
+  opacity: 1;
+}
+
+.location-card:hover img {
+  transform: scale(1.06);
+}
+
+.location-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+.location-card:hover .location-overlay {
+  transform: translateY(-4px);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .popular-locations {
+    margin: 40px auto 70px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .locations-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .location-card {
+    height: 180px;
+  }
+
+  .location-overlay h3 {
+    font-size: 18px;
+  }
+
+  .location-overlay span {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .popular-locations {
+    margin: 30px auto 60px;
+    padding: 0 14px;
+  }
+
+  .section-title {
+    font-size: 19px;
+    margin-bottom: 20px;
+  }
+
+  .locations-grid {
+    grid-template-columns: repeat(2, 1fr); /* ✅ NOT single column */
+    gap: 14px;
+  }
+
+  .location-card {
+    height: 150px;
+    border-radius: 14px;
+  }
+
+  .location-overlay {
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .location-overlay h3 {
+    font-size: 15px;
+  }
+
+  .location-overlay span {
+    font-size: 12px;
+  }
+}

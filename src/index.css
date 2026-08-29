@@ -15,3 +15,25 @@ body {
   background-color: #fff;
   color: #1b1b1b;
 }
+
+@media (max-width: 768px) {
+
+  /* leave room for the fixed mobile bottom nav */
+  body {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom));
+  }
+
+  /*
+   * iOS Safari auto-zoom prevention.
+   * Safari zooms the viewport when a focused form field has font-size < 16px.
+   * This rule ensures the computed font-size is always exactly 16px on mobile,
+   * regardless of what individual component stylesheets declare.
+   * We intentionally use !important so it wins over scoped CSS Module rules.
+   * Do NOT use user-scalable=no — that breaks accessibility.
+   */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

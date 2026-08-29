@@ -1,0 +1,189 @@
+.am-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 31, 15, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.am-card {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(20, 40, 20, 0.15);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 32px 32px 24px;
+}
+
+/* Hide scrollbar for neatness */
+.am-card::-webkit-scrollbar {
+  width: 6px;
+}
+.am-card::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.am-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: #f4f6f4;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #57604f;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.am-close:hover {
+  background: #e6efe6;
+  color: #14181a;
+}
+
+.am-header {
+  margin-bottom: 24px;
+}
+
+.am-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0 0 4px;
+}
+
+.am-header p {
+  font-size: 14px;
+  color: #7a837b;
+  margin: 0;
+}
+
+.am-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.am-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.am-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.am-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #37403a;
+}
+
+.am-field input {
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #14181a;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.am-field input:focus {
+  border-color: #4cd00f;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(76, 208, 15, 0.1);
+}
+
+.am-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px dashed #eef1ee;
+}
+
+.am-cancel-btn {
+  flex: 1;
+  background: #f4f6f4;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #57604f;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.am-cancel-btn:hover {
+  background: #e6efe6;
+  color: #14181a;
+}
+
+.am-submit-btn {
+  flex: 1;
+  background: #4cd00f;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.am-submit-btn:hover:not(:disabled) {
+  background: #3eb50c;
+}
+
+.am-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .am-card {
+    padding: 24px 20px 20px;
+  }
+  .am-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
