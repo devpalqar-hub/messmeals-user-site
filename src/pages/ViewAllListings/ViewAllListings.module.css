@@ -545,42 +545,73 @@
   transform: translateY(0);
 }
 
-/* PAGINATION */
-.pagination {
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
+/* SENTINEL (invisible element watched by IntersectionObserver) */
+.sentinel {
+  height: 1px;
+  width: 100%;
+  margin-top: 24px;
 }
 
-.pagination button {
-  padding: 10px 14px;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+/* END OF LIST */
+.end-of-list {
+  text-align: center;
+  color: #aaa;
+  font-size: 13.5px;
+  margin-top: 32px;
+  padding: 12px 0;
+  letter-spacing: 0.3px;
+}
+
+/* ── SKELETON CARD ────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton-card {
   background: #fff;
-  cursor: pointer;
-  font-weight: 600;
-  min-width: 40px;
-  transition: all 0.2s ease;
-  color: #333;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #eef1ee;
+  box-shadow: 0 4px 14px rgba(20, 40, 20, 0.05);
 }
 
-.pagination button:hover:not(:disabled) {
-  border-color: #63e100;
-  background: #f0ffe0;
-  color: #1f3d1f;
+.skeleton-image {
+  height: 180px;
+  width: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
 }
 
-.pagination button.active {
-  background: #63e100;
-  border-color: #63e100;
-  color: #fff;
+.skeleton-body {
+  padding: 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.pagination button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeleton-divider {
+  height: 1px;
+  background: #e8e8e8;
+  margin: 4px 0;
+}
+
+.skeleton-btn {
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  margin-top: 4px;
 }
 
 /* EMPTY & LOADING STATES */
@@ -721,7 +752,7 @@
   }
 
   .top-search input {
-    font-size: 13.5px;
+    /* font-size controlled globally in index.css (iOS Safari 16px fix) */
   }
 
   .mobile-filter-toggle {
@@ -888,14 +919,8 @@
     height: 11px;
   }
 
-  .pagination {
-    margin-top: 24px;
-  }
-
-  .pagination button {
-    padding: 7px 10px;
-    min-width: 32px;
-    font-size: 12.5px;
+  .skeleton-image {
+    height: 100px;
   }
 
   .trust-strip {
@@ -944,7 +969,7 @@
   }
 
   .top-search input {
-    font-size: 12.5px;
+    /* font-size controlled globally in index.css (iOS Safari 16px fix) */
   }
 
   /* KEEP TWO CARDS PER ROW, TIGHTER */
@@ -1002,10 +1027,8 @@
     border-radius: 12px;
   }
 
-  .pagination button {
-    padding: 6px 8px;
-    min-width: 28px;
-    font-size: 11.5px;
+  .skeleton-image {
+    height: 88px;
   }
 }
 

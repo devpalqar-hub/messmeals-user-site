@@ -26,6 +26,10 @@ function App() {
   const fullPagePaths = ["/login", "/booking/success", "/booking/cancel"];
   const isFullPage = fullPagePaths.some((p) => location.pathname.startsWith(p));
 
+  // Pages that hide the footer (but keep navbar + bottom nav)
+  const noFooterPaths = ["/profile"];
+  const hideFooter = noFooterPaths.some((p) => location.pathname.startsWith(p));
+
   return (
     <>
     {!isFullPage && <Navbar />}
@@ -60,7 +64,7 @@ function App() {
       <Route path="/booking/success" element={<BookingSuccess />} />
       <Route path="/booking/cancel" element={<BookingCancel />} />
     </Routes>
-      {!isFullPage && <Footer />}
+      {!isFullPage && !hideFooter && <Footer />}
       {!isFullPage && <MobileBottomNav />}
     </>
   );

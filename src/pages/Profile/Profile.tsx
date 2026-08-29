@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   User,
   Phone,
@@ -63,8 +63,16 @@ function scheduleLabel(sub: MySubscription) {
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [activeTab, setActiveTab] = useState<"details" | "addresses" | "plans">("details");
+  // Resolve initial tab from ?tab= query param
+  const tabParam = new URLSearchParams(location.search).get("tab");
+  const resolvedTab =
+    tabParam === "plans" ? "plans" :
+    tabParam === "addresses" ? "addresses" :
+    "details";
+
+  const [activeTab, setActiveTab] = useState<"details" | "addresses" | "plans">(resolvedTab);
 
   const [mySubs, setMySubs] = useState<MySubscription[]>([]);
   const [subsLoading, setSubsLoading] = useState(false);

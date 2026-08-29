@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { getAllMess } from "../../services/messApi";
 import type { Mess, MessMeta } from "../../types/mess";
 import {
@@ -12,37 +12,13 @@ import {
   Building2,
   ShieldCheck,
   CircleDot,
-  Sprout,
-  CalendarDays,
-  Headphones,
   Check,
   ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
 
-const TRUST_FEATURES = [
-  {
-    icon: ShieldCheck,
-    title: "Verified Messes",
-    desc: "All messes are verified for quality & hygiene",
-  },
-  {
-    icon: Sprout,
-    title: "Hygienic Food",
-    desc: "Fresh, homely and hygienic meals",
-  },
-  {
-    icon: CalendarDays,
-    title: "Flexible Plans",
-    desc: "Daily, monthly or custom plans",
-  },
-  {
-    icon: Headphones,
-    title: "Support 24/7",
-    desc: "We're here to help you anytime",
-  },
-];
+const LIMIT = 6;
 
 type Filters = {
   search?: string;
@@ -58,37 +34,117 @@ type Filters = {
   date2?: string;
 };
 
+function SkeletonCard() {
+  return (
+    <div className={styles["skeleton-card"]}>
+      <div className={styles["skeleton-image"]} />
+      <div className={styles["skeleton-body"]}>
+        <div className={styles["skeleton-line"]} style={{ width: "60%" }} />
+        <div className={styles["skeleton-line"]} style={{ width: "40%" }} />
+        <div className={styles["skeleton-divider"]} />
+        <div className={styles["skeleton-line"]} style={{ width: "80%" }} />
+        <div className={styles["skeleton-btn"]} />
+      </div>
+    </div>
+  );
+}
+
+function MessImage({ src, alt }: { src?: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => setImgSrc("/food-placeholder.png")}
+    />
+  );
+}
+
 export default function ViewAllListings() {
   const [messList, setMessList] = useState<Mess[]>([]);
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState<MessMeta | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-
   const [filters, setFilters] = useState<Filters>({});
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const filtersRef = useRef(filters);
+  filtersRef.current = filters;
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchMess();
-  }, [page, filters]);
-
-  const fetchMess = async () => {
-    setLoading(true);
+  // Initial / filter-reset load
+  const fetchInitial = useCallback(async (activeFilters: Filters) => {
+    setInitialLoading(true);
     try {
-      const res = await getAllMess(page, 6, filters);
-      setMessList(Array.isArray(res) ? res : res?.data ?? []);
-      setMeta(Array.isArray(res) ? null : res?.meta ?? null);
+      const res = await getAllMess(1, LIMIT, activeFilters);
+      const data = Array.isArray(res) ? res : res?.data ?? [];
+      const metaData = Array.isArray(res) ? null : res?.meta ?? null;
+      setMessList(data);
+      setMeta(metaData);
+      setPage(1);
     } catch (err) {
       console.error("Failed to fetch mess", err);
       setMessList([]);
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
     }
-  };
+  }, []);
+
+  // Load next page and append
+  const fetchMore = useCallback(async (nextPage: number, activeFilters: Filters) => {
+    setLoadingMore(true);
+    try {
+      const res = await getAllMess(nextPage, LIMIT, activeFilters);
+      const data = Array.isArray(res) ? res : res?.data ?? [];
+      const metaData = Array.isArray(res) ? null : res?.meta ?? null;
+      setMessList((prev) => [...prev, ...data]);
+      setMeta(metaData);
+    } catch (err) {
+      console.error("Failed to fetch more mess", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, []);
+
+  // Re-fetch from page 1 when filters change
+  useEffect(() => {
+    fetchInitial(filters);
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // IntersectionObserver — fires when sentinel enters viewport
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry.isIntersecting) return;
+        if (loadingMore || initialLoading) return;
+
+        setMeta((currentMeta) => {
+          if (!currentMeta) return currentMeta;
+          const hasMore = page < currentMeta.totalPages;
+          if (hasMore) {
+            const nextPage = page + 1;
+            setPage(nextPage);
+            fetchMore(nextPage, filtersRef.current);
+          }
+          return currentMeta;
+        });
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadingMore, initialLoading, page, fetchMore]);
 
   const updateFilter = (key: keyof Filters, value: string) => {
-    setPage(1);
     setFilters((prev) => ({
       ...prev,
       [key]: value || undefined,
@@ -97,25 +153,13 @@ export default function ViewAllListings() {
 
   const clearAllFilters = () => {
     setFilters({});
-    setPage(1);
   };
 
   const hasActiveFilters = Object.keys(filters).some(
     (key) => key !== "search" && filters[key as keyof Filters]
   );
 
-  function MessImage({ src, alt }: { src?: string; alt: string }) {
-    const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
-
-    return (
-      <img
-        src={imgSrc}
-        alt={alt}
-        loading="lazy"
-        onError={() => setImgSrc("/food-placeholder.png")}
-      />
-    );
-  }
+  const hasMore = meta ? page < meta.totalPages : false;
 
   return (
     <section className={styles["view-all-page"]}>
@@ -221,7 +265,7 @@ export default function ViewAllListings() {
               <option value="">All</option>
               <option value="veg">Vegetarian</option>
               <option value="non-veg">Non-Vegetarian</option>
-              <option value="both">Mixed (Veg & Non-Veg)</option>
+              <option value="both">Mixed (Veg &amp; Non-Veg)</option>
             </select>
           </div>
 
@@ -271,42 +315,6 @@ export default function ViewAllListings() {
             </select>
           </div>
 
-          {/* <div className={styles["filter-group"]}>
-            <label>Category ID</label>
-            <input
-              placeholder="Enter category ID"
-              value={filters.categoryId || ""}
-              onChange={(e) => updateFilter("categoryId", e.target.value)}
-            />
-          </div>
-
-          <div className={styles["filter-group"]}>
-            <label>Variation ID</label>
-            <input
-              placeholder="Enter variation ID"
-              value={filters.variationId || ""}
-              onChange={(e) => updateFilter("variationId", e.target.value)}
-            />
-          </div> */}
-
-          {/* <div className={styles["filter-group"]}>
-            <label>From Date</label>
-            <input
-              type="date"
-              value={filters.date1 || ""}
-              onChange={(e) => updateFilter("date1", e.target.value)}
-            />
-          </div>
-
-          <div className={styles["filter-group"]}>
-            <label>To Date</label>
-            <input
-              type="date"
-              value={filters.date2 || ""}
-              onChange={(e) => updateFilter("date2", e.target.value)}
-            />
-          </div> */}
-
           <button
             className={styles["apply-filters-btn"]}
             onClick={() => setShowMobileFilters(false)}
@@ -318,9 +326,11 @@ export default function ViewAllListings() {
 
         {/* LISTINGS */}
         <div className={styles["listing-container"]}>
-          {loading ? (
-            <div className={styles["loading-state"]}>
-              <p>Loading messes...</p>
+          {initialLoading ? (
+            <div className={styles["listing-grid"]}>
+              {Array.from({ length: LIMIT }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
             </div>
           ) : messList.length === 0 ? (
             <div className={styles["empty-state"]}>
@@ -401,56 +411,26 @@ export default function ViewAllListings() {
                     </div>
                   );
                 })}
+
+                {/* Skeleton rows appended while loading more */}
+                {loadingMore &&
+                  Array.from({ length: LIMIT }).map((_, i) => (
+                    <SkeletonCard key={`skel-${i}`} />
+                  ))}
               </div>
 
-              {/* PAGINATION */}
-              {meta && meta.totalPages > 1 && (
-                <div className={styles.pagination}>
-                  <button
-                    disabled={page === 1}
-                    onClick={() => setPage(page - 1)}
-                    aria-label="Previous page"
-                  >
-                    ‹
-                  </button>
+              {/* Sentinel — watched by IntersectionObserver */}
+              <div ref={sentinelRef} className={styles.sentinel} />
 
-                  {Array.from({ length: meta.totalPages }).map((_, i) => (
-                    <button
-                      key={i}
-                      className={page === i + 1 ? styles.active : ""}
-                      onClick={() => setPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-
-                  <button
-                    disabled={page === meta.totalPages}
-                    onClick={() => setPage(page + 1)}
-                    aria-label="Next page"
-                  >
-                    ›
-                  </button>
-                </div>
+              {/* End-of-list message */}
+              {!hasMore && !loadingMore && (
+                <p className={styles["end-of-list"]}>
+                  You've seen all {meta?.total ?? messList.length} listings
+                </p>
               )}
             </>
           )}
         </div>
-      </div>
-
-      {/* TRUST STRIP */}
-      <div className={styles["trust-strip"]}>
-        {TRUST_FEATURES.map(({ icon: Icon, title, desc }) => (
-          <div className={styles["trust-item"]} key={title}>
-            <div className={styles["trust-icon"]}>
-              <Icon size={22} />
-            </div>
-            <div>
-              <h4>{title}</h4>
-              <p>{desc}</p>
-            </div>
-          </div>
-        ))}
       </div>
     </section>
   );

@@ -91,6 +91,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .how-it-works {
+    display: none;
     padding: 24px 20px;
   }
 

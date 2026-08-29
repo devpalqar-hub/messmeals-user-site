@@ -1,5 +1,5 @@
 import styles from "./Testimonials.module.css";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Star, Quote } from "lucide-react";
 
 const REVIEWS = [
@@ -21,13 +21,39 @@ const REVIEWS = [
 ];
 
 export default function Testimonials() {
-  const [active] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Update active dot based on scroll position
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const scrollLeft = el.scrollLeft;
+      const cardWidth = el.scrollWidth / REVIEWS.length;
+      const index = Math.round(scrollLeft / cardWidth);
+      setActiveIndex(Math.min(index, REVIEWS.length - 1));
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll to card when dot is clicked
+  const scrollToCard = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.scrollWidth / REVIEWS.length;
+    el.scrollTo({ left: cardWidth * index, behavior: "smooth" });
+    setActiveIndex(index);
+  };
 
   return (
     <section className={styles.testimonials}>
       <h2 className={styles["testi-title"]}>What our customers say</h2>
 
-      <div className={styles["testi-grid"]}>
+      <div className={styles["testi-grid"]} ref={scrollRef}>
         {REVIEWS.map((r) => (
           <div className={styles["testi-card"]} key={r.name}>
             <Quote size={28} className={styles["testi-quote"]} />
@@ -50,7 +76,12 @@ export default function Testimonials() {
 
       <div className={styles["testi-dots"]}>
         {REVIEWS.map((_, i) => (
-          <span key={i} className={i === active ? `${styles.dot} ${styles.active}` : styles.dot} />
+          <button
+            key={i}
+            className={`${styles.dot} ${i === activeIndex ? styles.active : ""}`}
+            onClick={() => scrollToCard(i)}
+            aria-label={`Go to review ${i + 1}`}
+          />
         ))}
       </div>
     </section>

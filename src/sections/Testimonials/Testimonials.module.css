@@ -93,6 +93,10 @@
   height: 7px;
   border-radius: 50%;
   background: #dfe6df;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease, border-radius 0.3s ease;
 }
 
 .dot.active {
@@ -123,24 +127,41 @@
   }
 }
 
-/* Mobile */
+/* Mobile — horizontal scroll carousel */
 @media (max-width: 768px) {
   .testimonials {
-    padding: 24px 20px;
+    padding: 24px 0;
   }
 
   .testi-title {
     font-size: 19px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    padding: 0 20px;
   }
 
+  /* Turn grid into horizontal scroll strip */
   .testi-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    padding: 4px 20px 8px;
+  }
+
+  .testi-grid::-webkit-scrollbar {
+    display: none; /* Chrome / Safari */
   }
 
   .testi-card {
+    /* Each card takes up most of the viewport */
+    flex: 0 0 82vw;
+    max-width: 340px;
+    scroll-snap-align: center;
     padding: 22px 20px;
+    border-radius: 18px;
   }
 
   .testi-text {
@@ -164,22 +185,14 @@
   }
 
   .testi-dots {
-    margin-top: 24px;
+    margin-top: 20px;
   }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
-  .testimonials {
-    padding: 20px 16px;
-  }
-
-  .testi-title {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-
   .testi-card {
+    flex: 0 0 88vw;
     padding: 18px 16px;
     border-radius: 16px;
   }
@@ -194,17 +207,20 @@
   }
 }
 
-/* Very small phones — only when necessary */
+/* Very small phones */
 @media (max-width: 360px) {
-  .testimonials {
-    padding: 18px 14px;
-  }
-
   .testi-title {
     font-size: 17px;
+    padding: 0 14px;
+  }
+
+  .testi-grid {
+    padding: 4px 14px 8px;
+    gap: 12px;
   }
 
   .testi-card {
+    flex: 0 0 90vw;
     padding: 16px 14px;
   }
 
