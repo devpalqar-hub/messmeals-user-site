@@ -9,8 +9,9 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  background: linear-gradient(135deg, #f2f9ee 0%, #e9f8e3 100%);
-  border-radius: 24px;
+  background: #EAF7E5;
+  border: 1px solid #E3EAE1;
+  border-radius: 18px;
   padding: 36px 40px;
 }
 
@@ -19,12 +20,12 @@
   height: 64px;
   border-radius: 50%;
   background: #ffffff;
-  color: #22c55e;
+  color: #55C500;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 8px 20px rgba(20, 40, 20, 0.08);
+  box-shadow: 0 8px 20px rgba(28, 58, 28, 0.08);
 }
 
 .oam-text {
@@ -34,22 +35,22 @@
 .oam-text h2 {
   font-size: 26px;
   font-weight: 700;
-  color: #14181a;
+  color: #101C10;
   margin: 0 0 6px;
 }
 
 .oam-text p {
   font-size: 15px;
-  color: #57604f;
+  color: #617061;
   margin: 0;
 }
 
 .oam-btn {
-  background: #1c3a1c;
+  background: #1C3A1C;
   color: #ffffff;
   border: none;
   padding: 14px 26px;
-  border-radius: 14px;
+  border-radius: 12px;
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
@@ -58,9 +59,8 @@
 }
 
 .oam-btn:hover {
-  background: #4cd00f;
-  color: #0f2f0f;
-  transform: translateY(-1px);
+  background: #45A800;
+  color: #ffffff;
 }
 
 /* ===================== RESPONSIVE ===================== */

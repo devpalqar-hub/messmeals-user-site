@@ -1,6 +1,7 @@
 .footer {
   background: #ffffff;
-  padding: 40px 40px 24px; /* ⬅ reduced top & bottom */
+  padding: 40px 40px 24px;
+  /* ⬅ reduced top & bottom */
   border-top: 1px solid #eef2ee;
   font-family: "Inter", sans-serif;
 }
@@ -21,32 +22,17 @@
   margin-bottom: 14px;
 }
 
-.logo-box {
-  background-color: #55c500;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-icon {
-  color: #fff;
-}
-
-.logo-text {
-  font-weight: 800;
-  font-size: 1.25rem;
-  letter-spacing: 0.5px;
-  color: #1f3d1f;
+.logo-image {
+  height: clamp(32px, 5vw, 40px);
+  width: auto;
+  object-fit: contain;
 }
 
 .footer-brand p {
   max-width: 320px;
   font-size: 15px;
   line-height: 1.7;
-  color: #5f7c5f;
+  color: #617061;
 }
 
 /* LINKS */
@@ -61,7 +47,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1f3d1f;
+  color: #1C3A1C;
   margin-bottom: 16px;
 }
 
@@ -69,13 +55,13 @@
   display: block;
   text-decoration: none;
   font-size: 15px;
-  color: #5f7c5f;
+  color: #617061;
   margin-bottom: 12px;
   transition: color 0.2s ease;
 }
 
 .link-group a:hover {
-  color: #22c55e;
+  color: #2E7D32;
 }
 
 /* DIVIDER */
@@ -83,7 +69,7 @@
   max-width: 1400px;
   margin: 50px auto 30px;
   height: 1px;
-  background: #e6efe6;
+  background: #E3EAE1;
 }
 
 /* BOTTOM */
@@ -95,7 +81,7 @@
   align-items: center;
 
   font-size: 12px;
-  color: #6b7f6b;
+  color: #849084;
 }
 
 .legal-links {
@@ -105,27 +91,33 @@
 
 .legal-links a {
   text-decoration: none;
-  color: #6b7f6b;
+  color: #849084;
   transition: color 0.2s ease;
 }
 
 .legal-links a:hover {
-  color: #22c55e;
+  color: #1C3A1C;
 }
 
 .socials {
   display: flex;
-  gap: 16px;
-  color: #6b7f6b;
+  gap: 8px; /* Reduced from 16 to account for svg padding */
+  color: #617061;
+  align-items: center;
 }
 
 .socials svg {
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  padding: 6px;
+  border-radius: 8px;
+  box-sizing: content-box;
 }
 
 .socials svg:hover {
-  color: #22c55e;
+  color: #2E7D32;
+  background: #EAF7E5;
+  transform: translateY(-1px);
 }
 
 /* RESPONSIVE */
@@ -163,6 +155,7 @@
     margin: 40px auto 24px;
   }
 }
+
 @media (max-width: 767px) {
   .footer {
     padding: 32px 16px 20px;
@@ -186,7 +179,7 @@
     line-height: 1.6;
   }
 
-  
+
   .footer-links {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -199,6 +192,7 @@
   .link-group a {
     font-size: 13px;
   }
+
   .footer-divider {
     margin: 32px auto 20px;
   }

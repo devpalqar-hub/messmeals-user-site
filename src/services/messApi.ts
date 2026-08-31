@@ -4,27 +4,24 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-interface MessFilters {
+// ─── Filters for GET /open/messes ─────────────────────────────────────────────
+
+export interface MessListFilters {
   search?: string;
-  categoryId?: string;
-  ratings?: string;
-  is_active?: string;
-  is_verified?: string;
-  location?: string;
-  variationId?: string;
-  foodType?: string;
-  districtName?: string;
-  date1?: string;
-  date2?: string;
+  foodType?: string;   // VEG | NON_VEG | MIXED
+  planType?: string;   // DAILY | MONTHLY
+  featured?: string;   // "true" | "false"
+  isVerified?: string; // "true" | "false"
 }
+
+// ─── GET /open/messes ─────────────────────────────────────────────────────────
 
 export const getAllMess = async (
   page = 1,
   limit = 10,
-  filters: MessFilters = {}
+  filters: MessListFilters = {}
 ) => {
-  // Build query params, only including non-empty values
-  const params: any = { page, limit };
+  const params: Record<string, string | number> = { page, limit };
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value && value.trim() !== "") {
@@ -32,16 +29,20 @@ export const getAllMess = async (
     }
   });
 
-  const res = await api.get("/mess", { params });
+  const res = await api.get("/open/messes", { params });
   return res.data;
 };
 
-export const getMessById = async (messId: string) => {
-  const res = await api.get(`/mess/${messId}`);
+// ─── GET /open/mess/{slug} ────────────────────────────────────────────────────
+
+export const getMessBySlug = async (slug: string) => {
+  const res = await api.get(`/open/mess/${slug}`);
   return res.data;
 };
+
+// ─── GET /plans/:id — unchanged, used by BookPlan ────────────────────────────
 
 export const getPlanById = async (planId: string) => {
   const res = await api.get(`/plans/${planId}`);
   return res.data;
-};
+};

@@ -4,18 +4,18 @@ import { useNavigate } from "react-router-dom";
 import {
   Heart,
   MapPin,
-  Star,
+  // Star, // commented out — new API does not return ratings
   ArrowRight,
   Check,
-  Flame,
-  Sparkles,
-  Wallet,
+  Star as StarIcon,
+  ShieldCheck,
   type LucideIcon,
+  LucideArrowRight,
 } from "lucide-react";
-import { getAllMess } from "../../../services/messApi";
-import type { Mess } from "../../../types/mess";
+import { getAllMess, type MessListFilters } from "../../../services/messApi";
+import type { MessListing } from "../../../types/mess";
 
-export type RowBadgeType = "top-rated" | "affordable" | "popular" | "new";
+export type RowBadgeType = "featured" | "verified" | "top-rated" | "affordable" | "popular" | "new";
 
 type MessListingRowProps = {
   title: string;
@@ -24,10 +24,11 @@ type MessListingRowProps = {
   badgeType?: RowBadgeType;
   limit?: number;
   sectionClassName?: string;
+  apiFilter?: MessListFilters;
 };
 
 /* ---------------- IMAGE COMPONENT ---------------- */
-function MessImage({ src, alt }: { src?: string; alt: string }) {
+function MessImage({ src, alt }: { src?: string | null; alt: string }) {
   const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
 
   return (
@@ -41,33 +42,29 @@ function MessImage({ src, alt }: { src?: string; alt: string }) {
 }
 
 /* ---------------- CORNER BADGE ---------------- */
-function CornerBadge({ type, isVerified }: { type: RowBadgeType; isVerified: boolean }) {
-  if (type === "popular") {
+function CornerBadge({ type, status }: { type: RowBadgeType; status: MessListing["status"] }) {
+  if (type === "featured" && status.isFeatured) {
     return (
       <span className={`${styles.badge} ${styles["badge-popular"]}`}>
-        <Flame size={12} fill="currentColor" /> Popular
+        <StarIcon size={12} fill="currentColor" /> Featured
       </span>
     );
   }
-  if (type === "new") {
-    return (
-      <span className={`${styles.badge} ${styles["badge-new"]}`}>
-        <Sparkles size={12} /> NEW
-      </span>
-    );
-  }
-  if (type === "affordable") {
-    return (
-      <span className={`${styles.badge} ${styles["badge-affordable"]}`}>
-        <Wallet size={12} /> Great value
-      </span>
-    );
-  }
-  if (isVerified) {
+  if (type === "verified" && status.isVerified) {
     return (
       <span className={`${styles.badge} ${styles["badge-verified"]}`}>
         <span className={styles["badge-icon"]}>
           <Check size={11} />
+        </span>
+        Verified
+      </span>
+    );
+  }
+  if (status.isVerified) {
+    return (
+      <span className={`${styles.badge} ${styles["badge-verified"]}`}>
+        <span className={styles["badge-icon"]}>
+          <ShieldCheck size={11} />
         </span>
         Verified
       </span>
@@ -81,13 +78,14 @@ export default function MessListingRow({
   title,
   icon: Icon,
   subtitle,
-  badgeType = "top-rated",
+  badgeType = "featured",
   limit = 8,
   sectionClassName = "",
+  apiFilter = {},
 }: MessListingRowProps) {
   const navigate = useNavigate();
 
-  const [messList, setMessList] = useState<Mess[]>([]);
+  const [messList, setMessList] = useState<MessListing[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -97,7 +95,7 @@ export default function MessListingRow({
 
   const fetchMess = async () => {
     try {
-      const res = await getAllMess(1, limit);
+      const res = await getAllMess(1, limit, apiFilter);
       setMessList(Array.isArray(res) ? res : res?.data ?? []);
     } catch (err) {
       console.error("Failed to fetch mess listings", err);
@@ -137,25 +135,17 @@ export default function MessListingRow({
         <p>Loading messes...</p>
       ) : (
         <div className={styles["listing-row"]}>
-          {messList.map((mess, index) => {
-            const imageUrl =
-              mess.images
-                ?.slice()
-                .sort((a, b) => a.sortOrder - b.sortOrder)[0]
-                ?.url;
-
-            const bookingCount = 40 + ((index * 17) % 160);
-
+          {messList.map((mess) => {
             return (
               <div className={styles["listing-card"]} key={mess.id}>
                 {/* IMAGE */}
                 <div className={styles["image-wrap"]}>
                   <MessImage
-                    src={imageUrl}
-                    alt={`${mess.name} mess at ${mess.address}`}
+                    src={mess.coverImage}
+                    alt={`${mess.messName} mess at ${mess.address.address}`}
                   />
 
-                  <CornerBadge type={badgeType} isVerified={mess.is_verified} />
+                  <CornerBadge type={badgeType} status={mess.status} />
 
                   <button className={styles.wishlist} aria-label="Save mess">
                     <Heart size={14} />
@@ -167,12 +157,13 @@ export default function MessListingRow({
                   <div className={styles["card-name-block"]}>
                     <div className={styles["card-location"]}>
                       <MapPin size={12} />
-                      <span>{mess.address}</span>
+                      <span>{mess.address.address || mess.address.location || "Location not set"}</span>
                     </div>
-                    <h3 className={styles["card-title"]}>{mess.name}</h3>
+                    <h3 className={styles["card-title"]}>{mess.messName}</h3>
                   </div>
 
-                  <div className={styles["rating-row"]}>
+                  {/* Star ratings commented out — new API does not return ratings/reviews */}
+                  {/* <div className={styles["rating-row"]}>
                     <div className={styles.rating}>
                       <Star size={13} fill="currentColor" /> 4.5
                       <span className={styles["rating-divider"]}>|</span>
@@ -180,10 +171,7 @@ export default function MessListingRow({
                         {mess.Testimonials?.length ?? 0} Reviews
                       </span>
                     </div>
-                    {badgeType === "popular" && (
-                      <span className={styles["booking-count"]}>{bookingCount}+ bookings</span>
-                    )}
-                  </div>
+                  </div> */}
 
                   <div className={styles["card-divider"]} />
 
@@ -191,17 +179,19 @@ export default function MessListingRow({
                     <div className={styles["price-info"]}>
                       <small>STARTING FROM</small>
                       <strong>
-                        ₹{mess.plans?.[0]?.price ?? "N/A"}
-                        <span>/mo</span>
+                        {mess.startingPlanPrice != null
+                          ? <>₹{mess.startingPlanPrice}<span>/mo</span></>
+                          : <span className={styles["price-na"]}>Contact for price</span>
+                        }
                       </strong>
                     </div>
 
                     <button
                       className={styles["menu-btn"]}
-                      onClick={() => navigate(`/mess/${mess.id}`)}
+                      onClick={() => navigate(`/mess/${mess.slug}`)}
                     >
                       View Details
-                      <ArrowRight size={16} />
+                      <LucideArrowRight size={16} />
                     </button>
                   </div>
                 </div>

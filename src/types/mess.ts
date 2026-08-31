@@ -1,56 +1,10 @@
+// ─── Shared ───────────────────────────────────────────────────────────────────
+
 export type MessImage = {
   id: string;
   url: string;
   altText: string | null;
   sortOrder: number;
-};
-
-export type PlanVariation = {
-  id: string;
-  title: string;
-  description: string | null;
-  isActive: boolean;
-};
-
-export type MessPlan = {
-  id: string;
-  planName: string;
-  price: string;
-  minPrice?: string;
-  description?: string;
-  isMonthlyPlan?: boolean;
-  isDailyPlan?: boolean;
-  isActive?: boolean;
-  images?: MessImage[];
-  Variation?: PlanVariation[];
-};
-
-export type MessFoodType = {
-  id: string;
-  messId: string;
-  foodType: "VEG" | "NON_VEG" | "MIXED" | string;
-};
-
-export type MessTag = {
-  id: string;
-  messId: string;
-  tag: string;
-};
-
-export type Mess = {
-  id: string;
-  name: string;
-  description: string;
-  ratings?: number;
-  address: string;
-  phone: string;
-  email: string;
-  is_active: boolean;
-  is_verified: boolean;
-  location: string | null;
-  plans: MessPlan[];
-  images?: MessImage[];
-  Testimonials?: MessTestimonial[];
 };
 
 export type MessMeta = {
@@ -60,53 +14,115 @@ export type MessMeta = {
   totalPages: number;
 };
 
-// Extended type for single mess details page
-export type MessAdmin = {
-  id: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    is_active: boolean;
-  };
+// ─── List API: GET /open/messes ───────────────────────────────────────────────
+
+export type MessListingAddress = {
+  address: string;
+  location: string;
+  zipcode: string | null;
+  latitude: number | null;
+  longitude: number | null;
 };
 
-export type MessTestimonial = {
-  id: string;
-  rating: number;
-  comment: string;
-  customerName: string;
-  createdAt: string;
+export type MessListingStatus = {
+  isVerified: boolean;
+  isFeatured: boolean;
+  isActive: boolean;
 };
 
-export type MessDetails = {
+/** Shape returned by GET /open/messes (list item) */
+export type MessListing = {
+  id: string;
+  slug: string;
+  messName: string;
+  logo: string | null;
+  coverImage: string | null;
+  startingPlanPrice: number | null;
+  address: MessListingAddress;
+  status: MessListingStatus;
+  distanceKm: number | null;
+  foodTypes: string[];
+};
+
+// ─── Detail API: GET /open/mess/{slug} ────────────────────────────────────────
+
+export type MessDetailAddress = {
+  address: string;
+  location: string;
+  zipcode: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  district: string | null;
+};
+
+export type MessDetailStatus = {
+  isVerified: boolean;
+  isFeatured: boolean;
+  isPremium: boolean;
+};
+
+/** A single meal item entry inside a day's schedule */
+export type PlanMenuEntry = {
+  items: string;
+  variationId: string;
+};
+
+/** Weekly schedule: day name (uppercased) → list of meal entries */
+export type PlanMenuSchedule = Record<string, PlanMenuEntry[]>;
+
+/** A named menu (e.g. "Basic Veg Plan") with its weekly schedule */
+export type PlanMenu = {
   id: string;
   name: string;
-  description: string;
-  address: string;
-  phone: string;
-  email: string;
-  is_active: boolean;
-  is_verified: boolean;
-  openingHours: Record<string, string>; // { "Monday": "9:30-16:00", ... }
-  location: string | null;
-  createdAt: string;
-  updatedAt: string;
-  plans: MessPlan[];
-  messAdmins: MessAdmin[];
-  Testimonials: MessTestimonial[];
-  DeliveryPartnerProfile: any[];
-  UserSubscriptions: any[];
-  images: MessImage[];
-  foodTypes?: MessFoodType[];
-  tags?: MessTag[];
+  schedule: PlanMenuSchedule;
 };
 
-/** Full plan detail returned by GET /plans/:id */
+export type PlanVariation = {
+  id: string;
+  title: string;
+  description: string | null;
+};
+
+/** Plan returned inside GET /open/mess/{slug} */
+export type NewMessPlan = {
+  id: string;
+  planName: string;
+  description: string;
+  price: string;
+  minPrice: string;
+  isMonthlyPlan: boolean;
+  isDailyPlan: boolean;
+  images: MessImage[];
+  variations: PlanVariation[];
+  menus: PlanMenu[];
+};
+
+/** Full mess detail returned by GET /open/mess/{slug} */
+export type MessDetails = {
+  id: string;
+  slug: string;
+  messName: string;
+  description: string;
+  logo: string | null;
+  coverImage: string | null;
+  gallery: MessImage[];
+  address: MessDetailAddress;
+  phone: string;
+  email: string;
+  openingHours: Record<string, string>;
+  features: string[];
+  status: MessDetailStatus;
+  foodTypes: string[];
+  tags: string[];
+  plans: NewMessPlan[];
+};
+
+// ─── Legacy types (kept for BookPlan page — GET /plans/:id unchanged) ─────────
+
+/** @deprecated Use MessListing instead */
+export type Mess = MessListing;
+
+/** Full plan detail returned by GET /plans/:id (used by BookPlan) */
 export type PlanDetail = {
   id: string;
   planName: string;
@@ -127,4 +143,4 @@ export type PlanDetail = {
     phone: string;
   };
   Variation: PlanVariation[];
-};
+};

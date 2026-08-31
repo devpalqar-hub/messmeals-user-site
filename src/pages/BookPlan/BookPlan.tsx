@@ -44,7 +44,13 @@ const SCHEDULE_LABELS: Record<ScheduleType, string> = {
   EVERYDAY: "Everyday",
 };
 
-const UI_SCHEDULE_TYPES: ScheduleType[] = ["DAILY", "MONTHLY"];
+const addMonthsToDate = (dateStr: string, numMonths: number) => {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  d.setMonth(d.getMonth() + numMonths);
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().slice(0, 10);
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -66,12 +72,15 @@ export default function BookPlan() {
   const [activeImg, setActiveImg] = useState(0);
 
   // ── step-1 schedule ──────────────────────────────────────────────────────
-  const [scheduleType, setScheduleType] = useState<ScheduleType>("MONTHLY");
+  const [scheduleType, setScheduleType] = useState<ScheduleType>("DAILY");
   const [startDate, setStartDate] = useState(today());
   const [endDate, setEndDate] = useState("");
+  const [months, setMonths] = useState(1);
   const [selectedDays, setSelectedDays] = useState<ApiWeekday[]>([
-    "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY",
+    "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
   ]);
+
+  const computedEndDate = scheduleType === "MONTHLY" ? addMonthsToDate(startDate, months) : endDate;
 
   // ── step-2 address ───────────────────────────────────────────────────────
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -113,9 +122,8 @@ export default function BookPlan() {
     getPlanById(planIdParam)
       .then((data: PlanDetail) => {
         setPlan(data);
-        if (data.isMonthlyPlan && !data.isDailyPlan) setScheduleType("MONTHLY");
-        else if (data.isDailyPlan && !data.isMonthlyPlan) setScheduleType("DAILY");
-        else setScheduleType("CUSTOM");
+        if (data.isMonthlyPlan) setScheduleType("MONTHLY");
+        else setScheduleType("DAILY");
       })
       .catch(() => toast.error("Failed to load plan details."))
       .finally(() => setPlanLoading(false));
@@ -125,8 +133,6 @@ export default function BookPlan() {
   // ── fetch price estimate ─────────────────────────────────────────────────
   useEffect(() => {
     if (!plan || !startDate || !user?.token) return;
-    // For MONTHLY, end_date and selectedDays are not required
-    // For DAILY, end_date is optional too but we pass if present
     const pricePayload: ChoosePlanPayload = {
       addressId: selectedAddressId || "00000000-0000-0000-0000-000000000000",
       planId: plan.id,
@@ -135,8 +141,8 @@ export default function BookPlan() {
       successUrl: `${window.location.origin}/booking/success`,
       cancelUrl: `${window.location.origin}/booking/cancel`,
     };
-    if (endDate) pricePayload.end_date = endDate;
-    if (selectedDays.length > 0) pricePayload.selectedDays = selectedDays;
+    if (computedEndDate) pricePayload.end_date = computedEndDate;
+    if (scheduleType === "DAILY" && selectedDays.length > 0) pricePayload.selectedDays = selectedDays;
 
     const timer = setTimeout(async () => {
       setPriceLoading(true);
@@ -153,7 +159,7 @@ export default function BookPlan() {
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan, startDate, endDate, scheduleType, selectedDays, user?.token]);
+  }, [plan, startDate, computedEndDate, scheduleType, selectedDays, user?.token]);
 
   // ── load addresses on step-2 entry ────────────────────────────────────────
   const fetchAddresses = async () => {
@@ -174,7 +180,13 @@ export default function BookPlan() {
 
   const step1Valid = () => {
     if (!plan || !startDate) return false;
-    if (endDate && new Date(endDate) < new Date(startDate)) return false;
+    if (scheduleType === "MONTHLY") {
+      if (!months || months < 1) return false;
+    } else {
+      if (!endDate) return false;
+      if (new Date(endDate) < new Date(startDate)) return false;
+      if (selectedDays.length === 0) return false;
+    }
     return true;
   };
 
@@ -214,8 +226,8 @@ export default function BookPlan() {
         successUrl: `${window.location.origin}/booking/success`,
         cancelUrl: `${window.location.origin}/booking/cancel`,
       };
-      payload.end_date = endDate;
-      payload.selectedDays = selectedDays;
+      if (computedEndDate) payload.end_date = computedEndDate;
+      if (scheduleType === "DAILY") payload.selectedDays = selectedDays;
 
       const res = await choosePlan(user.token, payload);
       const paymentUrl = res.data.payment.paymentUrl;
@@ -359,46 +371,49 @@ export default function BookPlan() {
                 </div>
               </div>
 
-              <div className={styles["bp-field"]}>
-                <label className={styles["bp-label"]}>Schedule type</label>
-                <div className={styles["bp-schedule-toggle"]}>
-                  {UI_SCHEDULE_TYPES.map((type) => (
-                    <button
-                      key={type} type="button"
-                      className={`${styles["bp-toggle-btn"]} ${scheduleType === type ? styles["bp-toggle-btn--active"] : ""}`}
-                      onClick={() => { setScheduleType(type); setPriceData(null); }}
-                    >
-                      {SCHEDULE_LABELS[type]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <div className={styles["bp-grid-2"]}>
                 <div className={styles["bp-field"]}>
                   <label className={styles["bp-label"]}>Start date *</label>
                   <input type="date" className={styles["bp-input"]} min={today()} value={startDate}
                     onChange={(e) => setStartDate(e.target.value)} required />
                 </div>
-                <div className={styles["bp-field"]}>
-                  <label className={styles["bp-label"]}>End date (optional)</label>
-                  <input type="date" className={styles["bp-input"]} min={startDate || today()} value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)} />
-                </div>
+                {scheduleType === "MONTHLY" ? (
+                  <div className={styles["bp-field"]}>
+                    <label className={styles["bp-label"]}>Duration (Months) *</label>
+                    <select
+                      className={styles["bp-input"]}
+                      value={months}
+                      onChange={(e) => setMonths(Number(e.target.value))}
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => (
+                        <option key={m} value={m}>{m} {m === 1 ? 'Month' : 'Months'}</option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className={styles["bp-field"]}>
+                    <label className={styles["bp-label"]}>End date *</label>
+                    <input type="date" className={styles["bp-input"]} min={startDate || today()} value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)} required />
+                  </div>
+                )}
               </div>
 
-              <div className={styles["bp-field"]}>
-                <label className={styles["bp-label"]}>Delivery days (optional)</label>
-                <div className={styles["bp-weekdays"]}>
-                  {API_WEEKDAYS.map((day) => (
-                    <button key={day} type="button"
-                      className={`${styles["bp-day-btn"]} ${selectedDays.includes(day) ? styles["bp-day-btn--active"] : ""}`}
-                      onClick={() => toggleDay(day)}>
-                      {DAY_SHORT[day]}
-                    </button>
-                  ))}
+              {scheduleType === "DAILY" && (
+                <div className={styles["bp-field"]}>
+                  <label className={styles["bp-label"]}>Delivery days *</label>
+                  <div className={styles["bp-weekdays"]}>
+                    {API_WEEKDAYS.map((day) => (
+                      <button key={day} type="button"
+                        className={`${styles["bp-day-btn"]} ${selectedDays.includes(day) ? styles["bp-day-btn--active"] : ""}`}
+                        onClick={() => toggleDay(day)}>
+                        {DAY_SHORT[day]}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedDays.length === 0 && <span style={{ fontSize: 13, color: "#DC3B3B", marginTop: 4 }}>Please select at least one day.</span>}
                 </div>
-              </div>
+              )}
 
               {/* Price estimate */}
               {(priceLoading || priceData) && (
@@ -511,8 +526,8 @@ export default function BookPlan() {
                         </div>
                       </div>
                       <div className={styles["bp-field"]}>
-                        <label className={styles["bp-label"]}>Email</label>
-                        <input className={styles["bp-input"]} type="email" placeholder="email@example.com"
+                        <label className={styles["bp-label"]}>Email *</label>
+                        <input className={styles["bp-input"]} type="email" required placeholder="email@example.com"
                           value={newAddr.email} onChange={(e) => setNewAddr((p) => ({ ...p, email: e.target.value }))} />
                       </div>
                       <div className={styles["bp-field"]}>
@@ -580,8 +595,8 @@ export default function BookPlan() {
                   { label: "Plan", value: plan.planName },
                   { label: "Schedule", value: SCHEDULE_LABELS[scheduleType] },
                   { label: "Start date", value: startDate },
-                  ...(endDate ? [{ label: "End date", value: endDate }] : []),
-                  ...(selectedDays.length > 0 ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", "), full: true as const }] : []),
+                  ...(computedEndDate ? [{ label: "End date", value: computedEndDate }] : []),
+                  ...(scheduleType === "DAILY" && selectedDays.length > 0 ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", "), full: true as const }] : []),
                   ...(priceData
                     ? [
                       { label: "Chargeable days", value: `${priceData.chargeableDays} day${priceData.chargeableDays !== 1 ? "s" : ""}` },
@@ -603,7 +618,7 @@ export default function BookPlan() {
                 <button className={styles["bp-razorpay-btn"]} onClick={handleSubmit} disabled={submitting}>
                   {submitting
                     ? <><Loader2 size={18} className={styles["bp-spin"]} /> Redirecting to payment…</>
-                    : <><span className={styles["bp-rzp-logo"]}>₹</span> Pay with Razorpay</>
+                    : <><span className={styles["bp-rzp-logo"]}>₹</span> Pay</>
                   }
                 </button>
                 <p className={styles["bp-pay-note"]}>
@@ -629,12 +644,12 @@ export default function BookPlan() {
                 <span>Start</span><strong>{startDate}</strong>
               </div>
             )}
-            {endDate && (
+            {computedEndDate && (
               <div className={styles["bp-summary-row"]}>
-                <span>End</span><strong>{endDate}</strong>
+                <span>End</span><strong>{computedEndDate}</strong>
               </div>
             )}
-            {scheduleType === "CUSTOM" && selectedDays.length > 0 && (
+            {scheduleType === "DAILY" && selectedDays.length > 0 && (
               <div className={styles["bp-summary-row"]}>
                 <span>Days</span>
                 <strong>{selectedDays.map((d) => DAY_SHORT[d]).join(", ")}</strong>

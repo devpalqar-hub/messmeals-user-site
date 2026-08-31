@@ -1,10 +1,8 @@
 import Navbar from "./components/shared/Navbar/Navbar";
 import MobileBottomNav from "./components/shared/Navbar/MobileBottomNav";
 import HeroSection from "./sections/HeroSection/HeroSection";
-import AffordableMeals from "./sections/AffordableMeals/AffordableMeals";
-import PopularAroundYou from "./sections/PopularAroundYou/PopularAroundYou";
-import NewOnMessMeals from "./sections/NewOnMessMeals/NewOnMessMeals";
-import HowItWorks from "./sections/HowItWorks/HowItWorks";
+import FeaturedMesses from "./sections/FeaturedMesses/FeaturedMesses";
+import VerifiedMesses from "./sections/VerifiedMesses/VerifiedMesses";
 import Testimonials from "./sections/Testimonials/Testimonials";
 import OwnAMess from "./sections/OwnAMess/OwnAMess";
 import Footer from "./components/shared/Footer/Footer";
@@ -14,7 +12,6 @@ import ViewMessDetails from "./pages/ViewMessDetails/ViewMessDetails";
 import Login from "./pages/Login/Login";
 import BookPlan from "./pages/BookPlan/BookPlan";
 import Profile from "./pages/Profile/Profile";
-import TopRated from "./sections/TopRated/TopRated";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import BookingCancel from "./pages/BookingCancel/BookingCancel";
 import Privacy from "./pages/Privacy/Privacy";
@@ -42,13 +39,10 @@ function App() {
         element={
           <>
            <HeroSection />
-           <TopRated/>
-           <HowItWorks />
-           <PopularAroundYou />
+           <FeaturedMesses />
+           <VerifiedMesses />
            <Testimonials />
-           <AffordableMeals />
            <OwnAMess />
-           <NewOnMessMeals />
           </>
         }
       />
@@ -57,11 +51,11 @@ function App() {
        element={<ViewAllListings/>}
       />
       <Route
-       path="/mess/:messId"
+       path="/mess/:slug"
        element={<ViewMessDetails/>}
       />
       <Route path="/login" element={<Login />} />
-      <Route path="/mess/:messId/book" element={<BookPlan />} />
+      <Route path="/mess/:slug/book" element={<BookPlan />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/booking/success" element={<BookingSuccess />} />
       <Route path="/booking/cancel" element={<BookingCancel />} />

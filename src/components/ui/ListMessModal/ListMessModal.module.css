@@ -14,6 +14,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -36,6 +37,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -93,18 +95,10 @@
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(76, 208, 15, 0.3);
 }
 
 .modal-form button:hover {
   background: linear-gradient(135deg, rgb(60, 180, 10), rgb(50, 160, 8));
-  box-shadow: 0 6px 16px rgba(76, 208, 15, 0.4);
-  transform: translateY(-2px);
-}
-
-.modal-form button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(76, 208, 15, 0.3);
 }
 
 .close-btn {
