@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { User, Utensils } from "lucide-react";
+import { User } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 import { useAuth } from "../../../context/AuthContext";
@@ -43,7 +43,7 @@ export default function Navbar() {
     // small delay to let NavLink apply .active class
     const t = setTimeout(restoreToActive, 30);
     return () => clearTimeout(t);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   return (
@@ -53,10 +53,7 @@ export default function Navbar() {
 
           {/* LEFT — Logo */}
           <div className={styles["navbar-left"]} onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-            <div className={styles["logo-box"]}>
-              <Utensils className={styles["logo-icon"]} size={20} />
-            </div>
-            <span className={styles["logo-text"]}>MESS MEALS</span>
+            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
           </div>
 
           {/* CENTER — Nav links (desktop) */}

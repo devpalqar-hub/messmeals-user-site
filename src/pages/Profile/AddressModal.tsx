@@ -92,12 +92,13 @@ export default function AddressModal({ isOpen, onClose, onSuccess }: Props) {
           </div>
 
           <div className={styles["am-field"]}>
-            <label>Email Address</label>
+            <label>Email Address *</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
+              required
               placeholder="e.g. john@example.com"
             />
           </div>

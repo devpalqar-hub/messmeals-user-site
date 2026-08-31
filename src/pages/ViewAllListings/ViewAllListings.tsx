@@ -1,38 +1,25 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { getAllMess } from "../../services/messApi";
-import type { Mess, MessMeta } from "../../types/mess";
+import { getAllMess, type MessListFilters } from "../../services/messApi";
+import type { MessListing, MessMeta } from "../../types/mess";
 import {
   MapPin,
-  Star,
+  // Star, // commented out — new API does not return ratings
   Heart,
   Search,
   Filter,
   X,
   Utensils,
-  Building2,
   ShieldCheck,
-  CircleDot,
   Check,
   ArrowRight,
+  Star,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
 
 const LIMIT = 6;
 
-type Filters = {
-  search?: string;
-  categoryId?: string;
-  ratings?: string;
-  is_active?: string;
-  is_verified?: string;
-  location?: string;
-  variationId?: string;
-  foodType?: string;
-  districtName?: string;
-  date1?: string;
-  date2?: string;
-};
+type Filters = MessListFilters;
 
 function SkeletonCard() {
   return (
@@ -49,7 +36,7 @@ function SkeletonCard() {
   );
 }
 
-function MessImage({ src, alt }: { src?: string; alt: string }) {
+function MessImage({ src, alt }: { src?: string | null; alt: string }) {
   const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
   return (
     <img
@@ -62,7 +49,7 @@ function MessImage({ src, alt }: { src?: string; alt: string }) {
 }
 
 export default function ViewAllListings() {
-  const [messList, setMessList] = useState<Mess[]>([]);
+  const [messList, setMessList] = useState<MessListing[]>([]);
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState<MessMeta | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -229,30 +216,7 @@ export default function ViewAllListings() {
             </button>
           </div>
 
-          <div className={styles["filter-group"]}>
-            <label>
-              <MapPin size={15} />
-              Location
-            </label>
-            <input
-              placeholder="Enter your location"
-              value={filters.location || ""}
-              onChange={(e) => updateFilter("location", e.target.value)}
-            />
-          </div>
-
-          <div className={styles["filter-group"]}>
-            <label>
-              <Building2 size={15} />
-              District
-            </label>
-            <input
-              placeholder="Enter district name"
-              value={filters.districtName || ""}
-              onChange={(e) => updateFilter("districtName", e.target.value)}
-            />
-          </div>
-
+          {/* Food Type */}
           <div className={styles["filter-group"]}>
             <label>
               <Utensils size={15} />
@@ -263,20 +227,37 @@ export default function ViewAllListings() {
               onChange={(e) => updateFilter("foodType", e.target.value)}
             >
               <option value="">All</option>
-              <option value="veg">Vegetarian</option>
-              <option value="non-veg">Non-Vegetarian</option>
-              <option value="both">Mixed (Veg &amp; Non-Veg)</option>
+              <option value="VEG">Vegetarian</option>
+              <option value="NON_VEG">Non-Vegetarian</option>
+              <option value="MIXED">Mixed (Veg &amp; Non-Veg)</option>
             </select>
           </div>
 
+          {/* Plan Type */}
+          <div className={styles["filter-group"]}>
+            <label>
+              <Star size={15} />
+              Plan Type
+            </label>
+            <select
+              value={filters.planType || ""}
+              onChange={(e) => updateFilter("planType", e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="DAILY">Daily Plans</option>
+              <option value="MONTHLY">Monthly Plans</option>
+            </select>
+          </div>
+
+          {/* Verified */}
           <div className={styles["filter-group"]}>
             <label>
               <ShieldCheck size={15} />
-              Verification Status
+              Verification
             </label>
             <select
-              value={filters.is_verified || ""}
-              onChange={(e) => updateFilter("is_verified", e.target.value)}
+              value={filters.isVerified || ""}
+              onChange={(e) => updateFilter("isVerified", e.target.value)}
             >
               <option value="">All</option>
               <option value="true">Verified Only</option>
@@ -284,34 +265,18 @@ export default function ViewAllListings() {
             </select>
           </div>
 
-          <div className={styles["filter-group"]}>
-            <label>
-              <CircleDot size={15} />
-              Status
-            </label>
-            <select
-              value={filters.is_active || ""}
-              onChange={(e) => updateFilter("is_active", e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
-          </div>
-
+          {/* Featured */}
           <div className={styles["filter-group"]}>
             <label>
               <Star size={15} />
-              Minimum Rating
+              Featured
             </label>
             <select
-              value={filters.ratings || ""}
-              onChange={(e) => updateFilter("ratings", e.target.value)}
+              value={filters.featured || ""}
+              onChange={(e) => updateFilter("featured", e.target.value)}
             >
-              <option value="">Any Rating</option>
-              <option value="4">4+ Stars</option>
-              <option value="3">3+ Stars</option>
-              <option value="2">2+ Stars</option>
+              <option value="">All</option>
+              <option value="true">Featured Only</option>
             </select>
           </div>
 
@@ -345,19 +310,15 @@ export default function ViewAllListings() {
             <>
               <div className={styles["listing-grid"]}>
                 {messList.map((mess) => {
-                  const imageUrl = mess.images
-                    ?.slice()
-                    .sort((a, b) => a.sortOrder - b.sortOrder)[0]?.url;
-
                   return (
                     <div className={styles["listing-card"]} key={mess.id}>
                       <div className={styles["image-wrap"]}>
                         <MessImage
-                          src={imageUrl}
-                          alt={`${mess.name} at ${mess.address}`}
+                          src={mess.coverImage}
+                          alt={`${mess.messName} at ${mess.address.address}`}
                         />
 
-                        {mess.is_verified && (
+                        {mess.status.isVerified && (
                           <span className={`${styles.badge} ${styles.verified}`}>
                             <span className={styles["badge-icon"]}>
                               <Check size={11} />
@@ -375,19 +336,20 @@ export default function ViewAllListings() {
                         <div className={styles["card-name-block"]}>
                           <div className={styles["card-location"]}>
                             <MapPin size={12} />
-                            <span>{mess.address}</span>
+                            <span>{mess.address.address || mess.address.location || "Location not set"}</span>
                           </div>
-                          <h3 className={styles["card-title"]}>{mess.name}</h3>
+                          <h3 className={styles["card-title"]}>{mess.messName}</h3>
                         </div>
 
-                        <div className={styles["rating-badge"]}>
+                        {/* Star ratings commented out — new API does not return ratings/reviews */}
+                        {/* <div className={styles["rating-badge"]}>
                           <Star size={14} fill="#ffa500" stroke="#ffa500" />
                           <span>{mess.ratings ?? 4.5}</span>
                           <span className={styles["rating-divider"]}>|</span>
                           <span className={styles["review-count"]}>
                             {mess.Testimonials?.length ?? 0} Reviews
                           </span>
-                        </div>
+                        </div> */}
 
                         <div className={styles["card-divider"]} />
 
@@ -395,14 +357,16 @@ export default function ViewAllListings() {
                           <div className={styles["price-info"]}>
                             <small>STARTING FROM</small>
                             <strong>
-                              ₹{mess.plans?.[0]?.price ?? "N/A"}
-                              <span>/{mess.plans?.[0]?.isMonthlyPlan ? "month" : "day"}</span>
+                              {mess.startingPlanPrice != null
+                                ? <>₹{mess.startingPlanPrice}<span>/month</span></>
+                                : <span>Contact for price</span>
+                              }
                             </strong>
                           </div>
 
                           <button
                             className={styles["view-btn"]}
-                            onClick={() => navigate(`/mess/${mess.id}`)}
+                            onClick={() => navigate(`/mess/${mess.slug}`)}
                           >
                             View Details
                             <ArrowRight size={16} />

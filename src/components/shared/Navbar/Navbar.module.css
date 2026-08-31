@@ -1,11 +1,12 @@
 /* ===== WRAPPER ===== */
 :global(body) {
-  background: #f3f4f2;
+  background: #fafcf9;
 }
 
 .navbar-wrapper {
   width: 100%;
   background: #fff;
+  border-bottom: 1px solid #E3EAE1;
   position: sticky;
   top: 0;
   left: 0;
@@ -32,30 +33,10 @@
   min-width: 0;
 }
 
-.logo-box {
-  width: clamp(32px, 5vw, 38px);
-  height: clamp(32px, 5vw, 38px);
-  border-radius: 10px;
-  background: #55c500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.logo-icon {
-  font-size: clamp(15px, 2.4vw, 18px);
-  color: #fff;
-}
-
-.logo-text {
-  font-size: clamp(14px, 2.4vw, 17px);
-  font-weight: 700;
-  color: #1f3d1f;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.logo-image {
+  height: clamp(32px, 5vw, 40px);
+  width: auto;
+  object-fit: contain;
 }
 
 /* ===== CENTER — Nav links ===== */
@@ -64,13 +45,12 @@
   align-items: center;
   gap: clamp(2px, 0.6vw, 6px);
   position: relative;
-  /* anchor for the sliding underline */
 }
 
 .nav-link {
   font-size: clamp(13px, 1.1vw, 15px);
   font-weight: 500;
-  color: #6d7f67;
+  color: #617061;
   text-decoration: none;
   padding: 4px clamp(8px, 1.2vw, 14px);
   border-radius: 6px;
@@ -80,12 +60,12 @@
 }
 
 .nav-link:hover {
-  color: #1b1b1b;
+  color: #1C3A1C;
 }
 
 .nav-link.active {
   font-weight: 650;
-  color: #1b1b1b;
+  color: #1C3A1C;
 }
 
 /* ===== SLIDING UNDERLINE ===== */
@@ -94,7 +74,7 @@
   bottom: -6px;
   height: 2.5px;
   border-radius: 99px;
-  background: #4cd00f;
+  background: #55C500;
   pointer-events: none;
   transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1),
     width 0.28s cubic-bezier(0.4, 0, 0.2, 1),
@@ -109,35 +89,38 @@
   justify-self: end;
 }
 
+/* Sign In button */
 .signin-btn {
   padding: clamp(7px, 1.2vw, 9px) clamp(12px, 2vw, 20px);
   background: transparent;
-  color: #1b1b1b;
+  color: #101C10;
   font-size: clamp(13px, 1.1vw, 14px);
   font-weight: 600;
-  border: 1px solid #d7ded4;
-  border-radius: 999px;
+  border: 1px solid #E3EAE1;
+  border-radius: 10px;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.22s ease, background 0.22s ease;
+  transition: border-color 0.22s ease, background 0.22s ease, color 0.22s ease;
 }
 
 .signin-btn:hover {
-  background: #ffffff;
-  border-color: #1b1b1b;
+  background: #FAFCF9;
+  border-color: #1C3A1C;
+  color: #1C3A1C;
 }
 
+/* Profile chip */
 .profile-chip {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 16px 8px 10px;
-  background: #ecfdf3;
-  color: #16a34a;
+  padding: 7px 14px 7px 10px;
+  background: #EAF7E5;
+  color: #2E7D32;
   font-size: clamp(13px, 1.1vw, 14px);
   font-weight: 600;
   border: none;
-  border-radius: 999px;
+  border-radius: 10px;
   cursor: pointer;
   max-width: 160px;
   white-space: nowrap;
@@ -147,27 +130,26 @@
 }
 
 .profile-chip:hover {
-  background: #dcfce7;
+  background: #d4f0ca;
 }
 
+/* List Your Mess / CTA button */
 .cta-btn {
   padding: clamp(7px, 1.2vw, 9px) clamp(12px, 2vw, 20px);
-  background: #1c3a1c;
+  background: #1C3A1C;
   color: #ffffff;
   font-size: clamp(13px, 1.1vw, 14px);
   font-weight: 600;
   border: none;
-  border-radius: 999px;
+  border-radius: 10px;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, color 0.22s ease;
+  transition: background 0.22s ease, color 0.22s ease;
 }
 
 .cta-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-  background: #4cd00f;
-  color: #1b1b1b;
+  background: #45A800;
+  color: #fff;
 }
 
 /* ===== MOBILE TOGGLE ===== */
@@ -177,7 +159,7 @@
   border: none;
   font-size: 22px;
   cursor: pointer;
-  color: #1b1b1b;
+  color: #101C10;
   padding: 4px 8px;
   border-radius: 8px;
   transition: background 0.2s;
@@ -185,7 +167,7 @@
 }
 
 .navbar-toggler:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(28, 58, 28, 0.06);
 }
 
 /* ===== MOBILE DROPDOWN ===== */
@@ -216,7 +198,7 @@
 .mobile-nav-link {
   font-size: 15px;
   font-weight: 500;
-  color: #444;
+  color: #617061;
   text-decoration: none;
   padding: 10px 12px;
   border-radius: 10px;
@@ -225,8 +207,8 @@
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
-  background: #f0fce8;
-  color: #2a7a10;
+  background: #EAF7E5;
+  color: #1C3A1C;
   font-weight: 600;
 }
 

@@ -52,7 +52,6 @@
   background: #fef2f2;
   border-color: #fecaca;
   color: #dc2626;
-  transform: translateY(-1px);
 }
 
 /* ---------- TABS ---------- */
@@ -174,7 +173,6 @@
 
 .profile-empty button:hover {
   background: #3cb800;
-  transform: translateY(-1px);
 }
 
 /* ---------- PLANS SECTION ---------- */
@@ -197,7 +195,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .plans-error {
@@ -223,7 +223,9 @@
   transition: background 0.2s;
 }
 
-.plans-error button:hover { background: #fecaca; }
+.plans-error button:hover {
+  background: #fecaca;
+}
 
 /* ---------- SUBSCRIPTION CARDS ---------- */
 .sub-list {
@@ -243,7 +245,6 @@
 
 .sub-card:hover {
   box-shadow: 0 10px 32px rgba(20, 40, 20, 0.10);
-  transform: translateY(-2px);
 }
 
 /* Top section */
@@ -310,10 +311,25 @@
   flex-shrink: 0;
 }
 
-.status-active    { background: #ecfdf3; color: #16a34a; }
-.status-paused    { background: #fff7ed; color: #c2740a; }
-.status-cancelled { background: #fef2f2; color: #dc2626; }
-.status-inactive  { background: #f3f4f6; color: #6b7280; }
+.status-active {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.status-paused {
+  background: #fff7ed;
+  color: #c2740a;
+}
+
+.status-cancelled {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status-inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+}
 
 /* Meta chips */
 .sub-meta {
@@ -398,7 +414,9 @@
   flex-shrink: 0;
 }
 
-.sub-per-day svg { color: #9ca3af; }
+.sub-per-day svg {
+  color: #9ca3af;
+}
 
 /* ---------- ADDRESSES ---------- */
 .address-list {
@@ -465,7 +483,6 @@
   background: #f9fbf9;
   border-color: #4cd00f;
   color: #2f7d32;
-  transform: translateY(-1px);
 }
 
 /* ===================== RESPONSIVE ===================== */
@@ -475,14 +492,24 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .profile-page { padding: 32px 40px 64px; }
-  .profile-header { padding: 22px 24px; }
-  .address-card { padding: 20px 22px; }
+  .profile-page {
+    padding: 32px 40px 64px;
+  }
+
+  .profile-header {
+    padding: 22px 24px;
+  }
+
+  .address-card {
+    padding: 20px 22px;
+  }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  .profile-page { padding: 24px 20px 56px; }
+  .profile-page {
+    padding: 24px 20px 56px;
+  }
 
   .profile-header {
     padding: 20px;
@@ -490,26 +517,68 @@
     gap: 14px;
   }
 
-  .profile-avatar { width: 50px; height: 50px; }
-  .profile-logout { padding: 9px 15px; font-size: 13px; }
+  .profile-avatar {
+    width: 50px;
+    height: 50px;
+  }
 
-  .tabs-container { width: 100%; margin-bottom: 20px; }
-  .tab-btn { padding: 10px 16px; font-size: 13.5px; }
-  .profile-name { font-size: 18px; }
-  .profile-details span { font-size: 12.5px; padding: 7px 12px; }
+  .profile-logout {
+    padding: 9px 15px;
+    font-size: 13px;
+  }
 
-  .address-card { padding: 18px 20px; border-radius: 16px; }
+  .tabs-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 
-  .sub-plan-img { width: 68px; height: 68px; }
-  .sub-plan-name { font-size: 14.5px; }
-  .sub-price { font-size: 15.5px; }
-  .sub-meta span { font-size: 11.5px; }
-  .add-address-btn { padding: 18px; font-size: 14px; }
+  .tab-btn {
+    padding: 10px 16px;
+    font-size: 13.5px;
+  }
+
+  .profile-name {
+    font-size: 18px;
+  }
+
+  .profile-details span {
+    font-size: 12.5px;
+    padding: 7px 12px;
+  }
+
+  .address-card {
+    padding: 18px 20px;
+    border-radius: 16px;
+  }
+
+  .sub-plan-img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .sub-plan-name {
+    font-size: 14.5px;
+  }
+
+  .sub-price {
+    font-size: 15.5px;
+  }
+
+  .sub-meta span {
+    font-size: 11.5px;
+  }
+
+  .add-address-btn {
+    padding: 18px;
+    font-size: 14px;
+  }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
-  .profile-page { padding: 20px 16px 48px; }
+  .profile-page {
+    padding: 20px 16px 48px;
+  }
 
   .profile-header {
     flex-wrap: wrap;
@@ -517,41 +586,138 @@
     border-radius: 16px;
   }
 
-  .profile-avatar { width: 44px; height: 44px; }
-  .profile-logout { margin-left: auto; padding: 8px 13px; font-size: 12px; }
-  .tabs-container { padding: 4px; }
-  .tab-btn { padding: 9px 14px; font-size: 13px; }
-  .profile-name { font-size: 16.5px; }
+  .profile-avatar {
+    width: 44px;
+    height: 44px;
+  }
 
-  .address-card { padding: 16px; border-radius: 14px; }
+  .profile-logout {
+    margin-left: auto;
+    padding: 8px 13px;
+    font-size: 12px;
+  }
 
-  .sub-card-top { gap: 12px; padding: 16px 16px 0; }
-  .sub-plan-img { width: 58px; height: 58px; border-radius: 10px; }
-  .sub-plan-name { font-size: 13.5px; }
-  .sub-price { font-size: 14px; }
-  .sub-status { font-size: 11px; padding: 4px 10px; }
-  .sub-meta span { font-size: 11px; padding: 4px 9px; }
-  .sub-day-chip { font-size: 10.5px; padding: 3px 8px; }
-  .sub-card-footer { margin: 10px 16px 0; padding: 12px 0; }
-  .sub-address-line { font-size: 11px; }
-  .sub-per-day { font-size: 12px; }
+  .tabs-container {
+    padding: 4px;
+  }
 
-  .address-name { font-size: 15px; }
-  .address-details { font-size: 13px; }
-  .add-address-btn { padding: 16px; font-size: 13.5px; border-radius: 14px; }
+  .tab-btn {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  .profile-name {
+    font-size: 16.5px;
+  }
+
+  .address-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .sub-card-top {
+    gap: 12px;
+    padding: 16px 16px 0;
+  }
+
+  .sub-plan-img {
+    width: 58px;
+    height: 58px;
+    border-radius: 10px;
+  }
+
+  .sub-plan-name {
+    font-size: 13.5px;
+  }
+
+  .sub-price {
+    font-size: 14px;
+  }
+
+  .sub-status {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .sub-meta span {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+
+  .sub-day-chip {
+    font-size: 10.5px;
+    padding: 3px 8px;
+  }
+
+  .sub-card-footer {
+    margin: 10px 16px 0;
+    padding: 12px 0;
+  }
+
+  .sub-address-line {
+    font-size: 11px;
+  }
+
+  .sub-per-day {
+    font-size: 12px;
+  }
+
+  .address-name {
+    font-size: 15px;
+  }
+
+  .address-details {
+    font-size: 13px;
+  }
+
+  .add-address-btn {
+    padding: 16px;
+    font-size: 13.5px;
+    border-radius: 14px;
+  }
 }
 
 /* Very small phones */
 @media (max-width: 360px) {
-  .profile-page { padding: 16px 12px 40px; }
-  .profile-header { padding: 14px; gap: 10px; }
-  .profile-avatar { width: 40px; height: 40px; }
-  .profile-name { font-size: 15px; }
-  .tab-btn { padding: 8px 12px; font-size: 12px; }
+  .profile-page {
+    padding: 16px 12px 40px;
+  }
 
-  .sub-card-top { flex-direction: column; padding: 14px 14px 0; }
-  .sub-plan-img { width: 100%; height: 120px; border-radius: 10px; }
-  .sub-card-footer { margin: 10px 14px 0; }
-  .address-card { padding: 14px; }
+  .profile-header {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .profile-name {
+    font-size: 15px;
+  }
+
+  .tab-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .sub-card-top {
+    flex-direction: column;
+    padding: 14px 14px 0;
+  }
+
+  .sub-plan-img {
+    width: 100%;
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .sub-card-footer {
+    margin: 10px 14px 0;
+  }
+
+  .address-card {
+    padding: 14px;
+  }
 }
-

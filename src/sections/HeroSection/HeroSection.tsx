@@ -30,7 +30,7 @@ const stagger: Variants = {
   },
 };
 
-const POPULAR_SEARCHES = ["Kochi", "Trivandrum", "Calicut", "Ernakulam", "Thrissur"];
+const POPULAR_SEARCHES = ["Kerala", "Tamilnadu", "Pondicherry", "Bangalore"];
 
 /* ---------------- COMPONENT ---------------- */
 

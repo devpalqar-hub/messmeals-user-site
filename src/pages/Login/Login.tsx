@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail, Utensils } from "lucide-react";
+import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail } from "lucide-react";
 import { sendLoginOtp, sendRegOtp, verifyOtp, OTP_LENGTH } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
@@ -52,7 +52,7 @@ export default function Login() {
       toast.warning("Please fill in all required fields correctly.");
       return;
     }
-    
+
     setLoading(true);
     try {
       let res;
@@ -101,7 +101,7 @@ export default function Login() {
     e.preventDefault();
     const code = otp.join("");
     if (code.length !== OTP_LENGTH) return;
-    
+
     setLoading(true);
     try {
       const res = await verifyOtp(phone, code);
@@ -142,154 +142,151 @@ export default function Login() {
           Made simple.
         </h2>
         <p className={styles["login-visual-sub"]}>
-          {mode === "login" 
-            ? "Login to your account and discover the best mess around you." 
+          {mode === "login"
+            ? "Login to your account and discover the best mess around you."
             : "Create an account to discover and book the best mess around you."}
         </p>
       </div>
 
       <div className={styles["login-card-wrap"]}>
-      <div className={styles["login-card"]}>
-        <div className={styles["login-brand"]}>
-          <div className={styles["logo-box"]}>
-            <Utensils className={styles["logo-icon"]} size={20} />
+        <div className={styles["login-card"]}>
+          <div className={styles["login-brand"]}>
+            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
           </div>
-          <span className={styles["logo-text"]}>MESS MEALS</span>
-        </div>
 
-        {step === "phone" ? (
-          <>
-            <h1>{mode === "login" ? "Login with your phone" : "Create an account"}</h1>
-            <p className={styles["login-sub"]}>
-              We'll send a one-time password to verify it's you.
-            </p>
+          {step === "phone" ? (
+            <>
+              <h1>{mode === "login" ? "Login with your phone" : "Create an account"}</h1>
+              <p className={styles["login-sub"]}>
+                We'll send a one-time password to verify it's you.
+              </p>
 
-            <form onSubmit={handleSendOtp} className={styles["login-form"]}>
-              {mode === "register" && (
-                <>
-                  <label className={styles["login-label"]}>Full Name</label>
-                  <div className={styles["phone-input-wrap"]}>
-                    <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
-                      <User size={16} />
-                    </span>
-                    <input
-                      type="text"
-                      placeholder="Sai Sandeep"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      style={{ paddingLeft: 0 }}
-                    />
-                  </div>
+              <form onSubmit={handleSendOtp} className={styles["login-form"]}>
+                {mode === "register" && (
+                  <>
+                    <label className={styles["login-label"]}>Full Name</label>
+                    <div className={styles["phone-input-wrap"]}>
+                      <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
+                        <User size={16} />
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="John Doe"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        style={{ paddingLeft: 0 }}
+                      />
+                    </div>
 
-                  <label className={styles["login-label"]} style={{ marginTop: "4px" }}>Email Address</label>
-                  <div className={styles["phone-input-wrap"]}>
-                    <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
-                      <Mail size={16} />
-                    </span>
-                    <input
-                      type="email"
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      style={{ paddingLeft: 0 }}
-                    />
-                  </div>
-                </>
-              )}
+                    <label className={styles["login-label"]} style={{ marginTop: "4px" }}>Email Address</label>
+                    <div className={styles["phone-input-wrap"]}>
+                      <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
+                        <Mail size={16} />
+                      </span>
+                      <input
+                        type="email"
+                        placeholder="name@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        style={{ paddingLeft: 0 }}
+                      />
+                    </div>
+                  </>
+                )}
 
-              <label className={styles["login-label"]} style={{ marginTop: mode === "register" ? "4px" : "0" }}>Phone number</label>
-              <div className={styles["phone-input-wrap"]}>
-                <span className={styles["phone-prefix"]}>
-                  <Phone size={16} /> +91
-                </span>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="98765 43210"
-                  value={phone}
-                  onChange={(e) =>
-                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
-                  }
-                  autoFocus={mode === "login"}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className={styles["login-btn"]}
-                disabled={!isFormValid || loading}
-              >
-                {loading ? "Sending OTP..." : "Send OTP"}
-              </button>
-            </form>
-
-            <div className={styles["login-mode-toggle"]}>
-              {mode === "login" ? (
-                <p>Don't have an account? <button type="button" onClick={() => setMode("register")}>Register here</button></p>
-              ) : (
-                <p>Already have an account? <button type="button" onClick={() => setMode("login")}>Login here</button></p>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <button className={styles["login-back"]} onClick={() => setStep("phone")}>
-              <ArrowLeft size={16} /> Change {mode === "login" ? "number" : "details"}
-            </button>
-
-            <h1>Enter OTP</h1>
-            <p className={styles["login-sub"]}>
-              We've sent a {OTP_LENGTH}-digit code to +91 {phone}
-            </p>
-
-            <form onSubmit={handleVerify} className={styles["login-form"]}>
-              <div className={styles["otp-input-wrap"]}>
-                {otp.map((digit, i) => (
+                <label className={styles["login-label"]} style={{ marginTop: mode === "register" ? "4px" : "0" }}>Phone number</label>
+                <div className={styles["phone-input-wrap"]}>
+                  <span className={styles["phone-prefix"]}>
+                    <Phone size={16} /> +91
+                  </span>
                   <input
-                    key={i}
-                    ref={(el) => {
-                      otpRefs.current[i] = el;
-                    }}
-                    type="text"
+                    type="tel"
                     inputMode="numeric"
-                    maxLength={1}
-                    className={styles["otp-box"]}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(i, e.target.value)}
-                    onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                    maxLength={10}
+                    placeholder="98765 43210"
+                    value={phone}
+                    onChange={(e) =>
+                      setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                    }
+                    autoFocus={mode === "login"}
+                    required
                   />
-                ))}
+                </div>
+
+                <button
+                  type="submit"
+                  className={styles["login-btn"]}
+                  disabled={!isFormValid || loading}
+                >
+                  {loading ? "Sending OTP..." : "Send OTP"}
+                </button>
+              </form>
+
+              <div className={styles["login-mode-toggle"]}>
+                {mode === "login" ? (
+                  <p>Don't have an account? <button type="button" onClick={() => setMode("register")}>Register here</button></p>
+                ) : (
+                  <p>Already have an account? <button type="button" onClick={() => setMode("login")}>Login here</button></p>
+                )}
               </div>
-
-              <button
-                type="submit"
-                className={styles["login-btn"]}
-                disabled={otp.some((d) => !d) || loading}
-              >
-                {loading ? "Verifying..." : "Verify & Continue"}
+            </>
+          ) : (
+            <>
+              <button className={styles["login-back"]} onClick={() => setStep("phone")}>
+                <ArrowLeft size={16} /> Change {mode === "login" ? "number" : "details"}
               </button>
 
-              <button
-                type="button"
-                className={styles["resend-btn"]}
-                disabled={resendIn > 0}
-                onClick={handleResend}
-              >
-                {resendIn > 0 ? `Resend OTP in ${resendIn}s` : "Resend OTP"}
-              </button>
-            </form>
-          </>
-        )}
+              <h1>Enter OTP</h1>
+              <p className={styles["login-sub"]}>
+                We've sent a {OTP_LENGTH}-digit code to +91 {phone}
+              </p>
 
-        <div className={styles["login-trust"]}>
-          <ShieldCheck size={14} />
-          Your information is safe with us and used only for booking updates.
+              <form onSubmit={handleVerify} className={styles["login-form"]}>
+                <div className={styles["otp-input-wrap"]}>
+                  {otp.map((digit, i) => (
+                    <input
+                      key={i}
+                      ref={(el) => {
+                        otpRefs.current[i] = el;
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      className={styles["otp-box"]}
+                      value={digit}
+                      onChange={(e) => handleOtpChange(i, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="submit"
+                  className={styles["login-btn"]}
+                  disabled={otp.some((d) => !d) || loading}
+                >
+                  {loading ? "Verifying..." : "Verify & Continue"}
+                </button>
+
+                <button
+                  type="button"
+                  className={styles["resend-btn"]}
+                  disabled={resendIn > 0}
+                  onClick={handleResend}
+                >
+                  {resendIn > 0 ? `Resend OTP in ${resendIn}s` : "Resend OTP"}
+                </button>
+              </form>
+            </>
+          )}
+
+          <div className={styles["login-trust"]}>
+            <ShieldCheck size={14} />
+            Your information is safe with us and used only for booking updates.
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );

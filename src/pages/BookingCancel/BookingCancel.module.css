@@ -176,7 +176,7 @@
   font-weight: 500;
 }
 
-.bc-tip > svg {
+.bc-tip>svg {
   color: #e05c5c;
   flex-shrink: 0;
 }
@@ -206,7 +206,6 @@
 .bc-primary-btn:hover {
   background: #4cd00f;
   color: #0f2f0f;
-  transform: translateY(-1px);
 }
 
 .bc-secondary-btn {

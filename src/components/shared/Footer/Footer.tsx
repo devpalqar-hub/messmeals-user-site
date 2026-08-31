@@ -1,5 +1,5 @@
 import styles from "./Footer.module.css";
-import { Facebook, Instagram, Utensils } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 
 
@@ -10,10 +10,7 @@ export default function Footer() {
         {/* LEFT BRAND */}
         <div className={styles["footer-brand"]}>
           <div className={styles.brand}>
-            <div className={styles["logo-box"]}>
-              <Utensils className={styles["logo-icon"]} size={20} />
-            </div>
-            <span className={styles["logo-text"]}>MESS MEALS</span>
+            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
           </div>
 
           <p>

@@ -284,7 +284,6 @@
 .inquiry-banner-btn:hover {
   background: #63e100;
   color: white;
-  transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(99, 225, 0, 0.3);
 }
 
@@ -410,7 +409,7 @@
 .plan-card:hover {
   border-color: #63e100;
   box-shadow: 0 8px 28px rgba(99, 225, 0, 0.15);
-  transform: translateY(-4px);
+  transform: translateY(-1px);
 }
 
 .plan-card-type-badge {
@@ -435,25 +434,73 @@
   line-height: 1.3;
 }
 
-.plan-card-meta {
+.plan-includes {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   margin-bottom: 12px;
 }
 
-.plan-card-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
-  color: #555;
-  font-weight: 500;
+.plan-includes-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
 }
 
-.plan-card-meta-item svg {
-  color: #63e100;
-  flex-shrink: 0;
+.plan-includes-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.plan-includes-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.pill-breakfast {
+  background: #F3F6F2;
+  color: #617061;
+}
+
+.pill-lunch {
+  background: #EAF7E5;
+  color: #2E7D32;
+}
+
+.pill-dinner {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.pill-snack {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.pill-default {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.plan-duration-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  width: fit-content;
 }
 
 .plan-card-desc {
@@ -462,7 +509,6 @@
   line-height: 1.55;
   margin: 0 0 16px;
   flex: 1;
-  /* Clamp to 3 lines */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -528,7 +574,6 @@
 .plan-card-btn.primary:hover {
   background: #63e100;
   color: #0f2f0f;
-  transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(99, 225, 0, 0.3);
 }
 
@@ -556,7 +601,6 @@
 
 .plan-action-btn:hover {
   background: #56c700;
-  transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(99, 225, 0, 0.3);
 }
 
@@ -619,7 +663,6 @@
 
 /* ── Gallery ────────────────────────────────────────────── */
 
-/* Header row */
 .gallery-header {
   display: flex;
   align-items: center;
@@ -672,7 +715,6 @@
   outline-offset: 2px;
 }
 
-/* ── Desktop Preview ── */
 .gallery-preview {
   display: grid;
   grid-template-columns: 3fr 2fr;
@@ -750,7 +792,6 @@
   outline-offset: -3px;
 }
 
-/* "View all" overlay on last tile */
 .gallery-view-all-overlay {
   position: absolute;
   inset: 0;
@@ -783,7 +824,6 @@
   opacity: 0.9;
 }
 
-/* Mobile preview — hidden on desktop */
 .gallery-preview-mobile {
   display: none;
 }
@@ -824,16 +864,16 @@
   font-weight: 800;
   color: #fff;
   line-height: 1;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .gallery-mobile-label {
   font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.88);
+  color: rgba(255, 255, 255, 0.88);
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .no-gallery {
@@ -879,7 +919,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -891,7 +931,7 @@
   width: 40px;
   height: 40px;
   border: none;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border-radius: 50%;
   cursor: pointer;
@@ -900,7 +940,7 @@
 }
 
 .gallery-modal-close:hover {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .gallery-modal-close:focus-visible {
@@ -908,7 +948,6 @@
   outline-offset: 2px;
 }
 
-/* Main image area */
 .gallery-modal-main {
   flex: 1;
   min-height: 0;
@@ -937,7 +976,6 @@
   border-radius: 8px;
 }
 
-/* Nav buttons */
 .gallery-modal-nav {
   flex-shrink: 0;
   display: flex;
@@ -946,7 +984,7 @@
   width: 48px;
   height: 48px;
   border: none;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border-radius: 50%;
   cursor: pointer;
@@ -955,7 +993,7 @@
 }
 
 .gallery-modal-nav:hover {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.22);
   transform: scale(1.08);
 }
 
@@ -964,7 +1002,6 @@
   outline-offset: 2px;
 }
 
-/* Thumbnail strip */
 .gallery-modal-thumbs {
   display: flex;
   gap: 8px;
@@ -972,7 +1009,7 @@
   padding: 10px 0 4px;
   flex-shrink: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.2) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 .gallery-modal-thumbs::-webkit-scrollbar {
@@ -980,7 +1017,7 @@
 }
 
 .gallery-modal-thumbs::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
 }
 
@@ -1049,25 +1086,29 @@
 }
 
 .modal-close-btn {
-  position: absolute;
+  position: sticky;
   top: 16px;
-  right: 16px;
+  margin-left: auto;
+  margin-top: -16px;
+  margin-right: -16px;
+  margin-bottom: -16px;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: none;
-  background: #f3f4f6;
-  color: #555;
+  border: 1px solid #E3EAE1;
+  background: #ffffff;
+  color: #617061;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .modal-close-btn:hover {
-  background: #e5e7eb;
-  color: #111;
+  background: #EAF7E5;
+  color: #1C3A1C;
 }
 
 /* Plan Details Modal */
@@ -1077,13 +1118,18 @@
 }
 
 .plan-modal-card .modal-close-btn {
+  margin-top: 16px;
+  margin-right: 16px;
+  margin-bottom: -48px;
   background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  border: 1px solid #E3EAE1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 20;
 }
 
 .plan-modal-card .modal-close-btn:hover {
-  background: #f3f4f6;
+  background: #EAF7E5;
+  color: #1C3A1C;
 }
 
 .plan-modal-gallery {
@@ -1134,7 +1180,7 @@
 }
 
 .plan-modal-thumb.active {
-  border-color: #63e100;
+  border-color: #55C500;
 }
 
 .plan-modal-body {
@@ -1143,10 +1189,9 @@
 
 .plan-modal-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   margin-bottom: 10px;
 }
 
@@ -1156,18 +1201,88 @@
 
 .plan-modal-type-badge {
   flex-shrink: 0;
-  background: #f0fdf0;
-  color: #1f3d1f;
+  background: #EAF7E5;
+  color: #2E7D32;
   font-size: 0.7rem;
   font-weight: 700;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+/* ===================== WHATSAPP BANNER ===================== */
+
+.whatsapp-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #EAF7E5;
+  border: 1.5px solid #55C500;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 16px 0 14px;
+  flex-wrap: wrap;
+}
+
+.whatsapp-banner-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.whatsapp-icon-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #18864B;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatsapp-banner-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1C3A1C;
+  margin: 0 0 2px;
+}
+
+.whatsapp-banner-sub {
+  font-size: 0.75rem;
+  color: #1C3A1C;
+  margin: 0;
+}
+
+.whatsapp-enquire-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #25d366;
+  color: #fff;
+  text-decoration: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.whatsapp-enquire-btn:hover {
+  background: #128c4a;
 }
 
 .plan-modal-description {
-  color: #555;
+  color: #617061;
   line-height: 1.6;
   margin: 0 0 16px 0;
 }
@@ -1183,7 +1298,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0 0 8px 0;
-  color: #111;
+  color: #101C10;
 }
 
 .inquiry-subtitle {
@@ -1247,8 +1362,217 @@
 .send-message-btn:hover {
   background: #63e100;
   color: #0f2f0f;
-  transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(99, 225, 0, 0.3);
+}
+
+/* ===================== PLAN MODAL — PRICE & ACTIONS ===================== */
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 12px 0 4px;
+  flex-wrap: wrap;
+}
+
+.plan-price .currency {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1C3A1C;
+}
+
+.plan-price .amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1C3A1C;
+}
+
+.plan-price .period {
+  font-size: 0.9rem;
+  color: #617061;
+}
+
+.plan-min-price {
+  font-size: 0.8rem;
+  color: #849084;
+  margin: 0 0 16px;
+}
+
+.plan-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #fff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+}
+
+.plan-action-btn.full-width {
+  width: 100%;
+}
+
+.plan-action-btn:hover {
+  background: #45A800;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(69, 168, 0, 0.3);
+}
+
+/* ===================== PLAN MODAL — WEEKLY MENU ===================== */
+
+.plan-menu-section {
+  margin: 20px 0 16px;
+  border: 1.5px solid #E3EAE1;
+  background: #FAFCF9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.plan-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #EAF7E5;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #1C3A1C;
+  border-bottom: 1px solid #E3EAE1;
+}
+
+.plan-menu-day-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid #E3EAE1;
+  scrollbar-width: none;
+}
+
+.plan-menu-day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.plan-menu-day-tab {
+  flex: 1;
+  min-width: 44px;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #617061;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  position: relative;
+}
+
+.plan-menu-day-tab:hover {
+  color: #1C3A1C;
+  background: #FAFCF9;
+}
+
+.plan-menu-day-tab.active {
+  color: #1C3A1C;
+  border-bottom-color: #55C500;
+  background: #EAF7E5;
+}
+
+.plan-menu-day-tab.empty {
+  opacity: 0.55;
+  color: #9aa39a;
+}
+
+.plan-menu-day-tab.empty::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 25px;
+  height: 1px;
+  background: #b7c0b5;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  pointer-events: none;
+}
+
+.plan-menu-day-tab.empty.active::after {
+  background: #8a9c88;
+}
+
+.plan-menu-day-content {
+  padding: 16px;
+  min-height: 90px;
+}
+
+.plan-menu-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.plan-menu-variation-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-menu-variation-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2E7D32;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-menu-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.plan-menu-item {
+  background: #EAF7E5;
+  color: #1C3A1C;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.plan-menu-holiday {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+  color: #849084;
+}
+
+.plan-menu-holiday span:first-child {
+  font-size: 1.5rem;
+}
+
+.plan-menu-holiday p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.price-na {
+  font-size: 0.8rem;
+  color: #849084;
+  font-weight: 500;
 }
 
 /* ===================== RESPONSIVE ===================== */
@@ -1279,12 +1603,12 @@
     font-size: 2rem;
   }
 
-  .gallery-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .content-block {
     padding: 28px;
+  }
+
+  .plan-modal-card {
+    max-width: 560px;
   }
 }
 
@@ -1320,15 +1644,6 @@
     border-top: 1px solid rgba(0, 0, 0, 0.08);
   }
 
-  .plan-row-card {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .plan-row-main-image {
-    height: 200px;
-  }
-
-  /* Gallery — tablet */
   .gallery-preview {
     height: 320px;
   }
@@ -1399,6 +1714,10 @@
     width: 100%;
   }
 
+  .plan-menu-day-tab.empty::after {
+    width: 22px;
+  }
+
   .plan-tabs button {
     flex: 1;
     padding: 7px 12px;
@@ -1414,8 +1733,18 @@
     font-size: 0.9rem;
   }
 
-  .plan-card-meta-item {
+  .plan-includes-label {
     font-size: 0.74rem;
+  }
+
+  .plan-includes-pill {
+    font-size: 0.7rem;
+    padding: 5px 9px;
+  }
+
+  .plan-duration-chip {
+    font-size: 0.7rem;
+    padding: 3px 7px;
   }
 
   .plan-card-desc {
@@ -1502,10 +1831,6 @@
     border-radius: 12px;
   }
 
-  .plan-modal-main-image {
-    height: 200px;
-  }
-
   .tag-pill {
     font-size: 0.74rem;
     padding: 6px 12px;
@@ -1517,6 +1842,27 @@
   }
 
   /* Gallery modal — mobile */
+  .gallery-modal-content {
+    padding: 0 6px 8px;
+  }
+
+  .gallery-modal-header {
+    padding: 12px 4px 8px;
+  }
+
+  .gallery-modal-counter {
+    font-size: 0.82rem;
+  }
+
+  .gallery-modal-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gallery-modal-image {
+    padding: 0 4px;
+  }
+
   .gallery-modal-nav {
     width: 40px;
     height: 40px;
@@ -1526,6 +1872,78 @@
     flex: 0 0 58px;
     width: 58px;
     height: 44px;
+  }
+
+  /* Plan modal — mobile */
+  .plan-modal-main-image {
+    height: 200px;
+  }
+
+  .plan-modal-body {
+    padding: 18px;
+  }
+
+  .plan-modal-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .plan-price .amount {
+    font-size: 1.7rem;
+  }
+
+  .plan-action-btn {
+    padding: 13px 18px;
+    font-size: 0.9rem;
+  }
+
+  /* WhatsApp banner — mobile */
+  .whatsapp-banner {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .whatsapp-icon-wrap {
+    width: 32px;
+    height: 32px;
+  }
+
+  .whatsapp-banner-title {
+    font-size: 0.78rem;
+  }
+
+  .whatsapp-banner-sub {
+    font-size: 0.72rem;
+  }
+
+  .whatsapp-enquire-btn {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+  }
+
+  /* Weekly menu — mobile */
+  .plan-menu-header {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+  }
+
+  .plan-menu-day-tab {
+    min-width: 38px;
+    padding: 7px 3px;
+    font-size: 0.7rem;
+  }
+
+  .plan-menu-day-content {
+    padding: 14px;
+  }
+
+  .plan-menu-variation-title {
+    font-size: 0.7rem;
+  }
+
+  .plan-menu-item {
+    font-size: 0.76rem;
+    padding: 3px 9px;
   }
 }
 
@@ -1615,13 +2033,23 @@
     margin-bottom: 8px;
   }
 
-  .plan-card-meta {
-    gap: 4px;
+  .plan-includes {
     margin-bottom: 8px;
   }
 
-  .plan-card-meta-item {
+  .plan-includes-label {
     font-size: 0.7rem;
+  }
+
+  .plan-includes-pill {
+    font-size: 0.66rem;
+    padding: 4px 8px;
+  }
+
+  .plan-duration-chip {
+    font-size: 0.66rem;
+    padding: 3px 6px;
+    margin-bottom: 8px;
   }
 
   .plan-card-desc {
@@ -1661,8 +2089,21 @@
     font-size: 0.75rem;
   }
 
-  .plan-modal-card {
-    padding: 0;
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .plan-modal-card .modal-close-btn {
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: -44px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .modal-close-btn {
+    width: 30px;
+    height: 30px;
   }
 
   .plan-modal-main-image {
@@ -1675,6 +2116,28 @@
 
   .plan-modal-header h3 {
     font-size: 1rem;
+  }
+
+  .plan-modal-type-badge {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  .plan-price .amount {
+    font-size: 1.5rem;
+  }
+
+  .plan-price .currency {
+    font-size: 0.95rem;
+  }
+
+  .plan-price .period {
+    font-size: 0.78rem;
+  }
+
+  .plan-action-btn {
+    padding: 12px 16px;
+    font-size: 0.85rem;
   }
 
   /* Gallery — small mobile */
@@ -1709,15 +2172,128 @@
   }
 
   /* Gallery modal — small mobile */
+  .gallery-modal-header {
+    padding: 10px 2px 6px;
+  }
+
+  .gallery-modal-counter {
+    font-size: 0.76rem;
+    gap: 6px;
+  }
+
+  .gallery-modal-close {
+    width: 32px;
+    height: 32px;
+  }
+
   .gallery-modal-nav {
     width: 36px;
     height: 36px;
+  }
+
+  .gallery-modal-image {
+    padding: 0 2px;
   }
 
   .gallery-modal-thumb {
     flex: 0 0 50px;
     width: 50px;
     height: 38px;
+  }
+
+  /* WhatsApp banner — small mobile */
+  .whatsapp-banner {
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin: 12px 0 10px;
+  }
+
+  .whatsapp-icon-wrap {
+    width: 28px;
+    height: 28px;
+  }
+
+  .whatsapp-icon-wrap svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .whatsapp-banner-title {
+    font-size: 0.74rem;
+  }
+
+  .whatsapp-banner-sub {
+    font-size: 0.68rem;
+  }
+
+  .whatsapp-enquire-btn {
+    padding: 9px 12px;
+    font-size: 0.76rem;
+  }
+
+  /* Weekly menu — small mobile */
+  .plan-menu-section {
+    margin: 16px 0 12px;
+    border-radius: 10px;
+  }
+
+  .plan-menu-header {
+    padding: 9px 12px;
+    font-size: 0.78rem;
+    gap: 6px;
+  }
+
+  .plan-menu-day-tab {
+    min-width: 34px;
+    padding: 6px 2px;
+    font-size: 0.66rem;
+  }
+
+  .plan-menu-day-tab.empty::after {
+    width: 20px;
+  }
+
+  .plan-menu-day-content {
+    padding: 12px;
+    min-height: 76px;
+  }
+
+  .plan-menu-entries {
+    gap: 10px;
+  }
+
+  .plan-menu-variation-title {
+    font-size: 0.66rem;
+  }
+
+  .plan-menu-item {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+
+  .plan-menu-holiday span:first-child {
+    font-size: 1.3rem;
+  }
+
+  .plan-menu-holiday p {
+    font-size: 0.8rem;
+  }
+
+  /* Send inquiry modal — small mobile */
+  .inquiry-subtitle {
+    font-size: 0.8rem;
+    margin: 0 0 18px;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 10px;
+    font-size: 0.875rem;
+  }
+
+  .send-message-btn {
+    padding: 12px;
+    font-size: 0.88rem;
   }
 }
 
@@ -1768,6 +2344,15 @@
 
   .plan-card-name {
     font-size: 0.8rem;
+  }
+
+  .plan-includes-pill {
+    font-size: 0.62rem;
+    padding: 3px 7px;
+  }
+
+  .plan-duration-chip {
+    font-size: 0.62rem;
   }
 
   .plan-card-amount {
@@ -1824,5 +2409,73 @@
     flex: 0 0 44px;
     width: 44px;
     height: 34px;
+  }
+
+  /* Plan modal — tiny mobile */
+  .modal-overlay {
+    padding: 8px;
+  }
+
+  .plan-modal-card .modal-close-btn {
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: -40px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .modal-close-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .plan-modal-main-image {
+    height: 140px;
+  }
+
+  .plan-modal-body {
+    padding: 10px;
+  }
+
+  .plan-modal-header h3 {
+    font-size: 0.92rem;
+  }
+
+  .plan-price .amount {
+    font-size: 1.35rem;
+  }
+
+  .plan-action-btn {
+    padding: 11px 14px;
+    font-size: 0.8rem;
+  }
+
+  /* WhatsApp banner — tiny mobile */
+  .whatsapp-banner-title {
+    font-size: 0.7rem;
+  }
+
+  .whatsapp-banner-sub {
+    font-size: 0.65rem;
+  }
+
+  .whatsapp-enquire-btn {
+    font-size: 0.72rem;
+    padding: 8px 10px;
+  }
+
+  /* Weekly menu — tiny mobile */
+  .plan-menu-day-tab {
+    min-width: 30px;
+    font-size: 0.62rem;
+  }
+
+  .plan-menu-day-tab.empty::after {
+    width: 18px;
+  }
+
+  .plan-menu-item {
+    font-size: 0.68rem;
+    padding: 2px 7px;
   }
 }
