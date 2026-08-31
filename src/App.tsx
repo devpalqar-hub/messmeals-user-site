@@ -17,6 +17,8 @@ import Profile from "./pages/Profile/Profile";
 import TopRated from "./sections/TopRated/TopRated";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import BookingCancel from "./pages/BookingCancel/BookingCancel";
+import Privacy from "./pages/Privacy/Privacy";
+import Terms from "./pages/Terms/Terms";
 
 
 function App() {
@@ -63,6 +65,8 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/booking/success" element={<BookingSuccess />} />
       <Route path="/booking/cancel" element={<BookingCancel />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
     </Routes>
       {!isFullPage && !hideFooter && <Footer />}
       {!isFullPage && <MobileBottomNav />}

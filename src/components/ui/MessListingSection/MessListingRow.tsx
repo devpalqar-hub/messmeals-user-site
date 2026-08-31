@@ -160,22 +160,22 @@ export default function MessListingRow({
                   <button className={styles.wishlist} aria-label="Save mess">
                     <Heart size={14} />
                   </button>
-
-                  {/* IMAGE TEXT */}
-                  <div className={styles["image-info"]}>
-                    <div className={styles.location}>
-                      <MapPin size={14} />
-                      <span>{mess.address}</span>
-                    </div>
-                    <h3>{mess.name}</h3>
-                  </div>
                 </div>
 
                 {/* BODY */}
                 <div className={styles["card-body"]}>
+                  <div className={styles["card-name-block"]}>
+                    <div className={styles["card-location"]}>
+                      <MapPin size={12} />
+                      <span>{mess.address}</span>
+                    </div>
+                    <h3 className={styles["card-title"]}>{mess.name}</h3>
+                  </div>
+
                   <div className={styles["rating-row"]}>
                     <div className={styles.rating}>
                       <Star size={13} fill="currentColor" /> 4.5
+                      <span className={styles["rating-divider"]}>|</span>
                       <span className={styles["review-count"]}>
                         {mess.Testimonials?.length ?? 0} Reviews
                       </span>

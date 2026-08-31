@@ -150,35 +150,7 @@
   z-index: 1;
 }
 
-.image-info {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  z-index: 2;
-  color: #ffffff;
-}
-
-.image-info .location {
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  opacity: 0.9;
-  margin-bottom: 6px;
-}
-
-.image-info .location span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.image-info h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin: 0;
-}
+/* image-info removed — name+location now render below the image in card-body */
 
 .listing-card:hover .image-wrap img {
   transform: scale(1.08);
@@ -286,7 +258,42 @@
 }
 
 .card-body {
-  padding: 14px 14px 16px;
+  padding: 10px 14px 16px;
+}
+
+/* Name + location block below image */
+.card-name-block {
+  margin-bottom: 8px;
+  min-width: 0;
+}
+
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #667066;
+  font-weight: 500;
+  margin-bottom: 3px;
+  min-width: 0;
+}
+
+.card-location span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #14181a;
+  margin: 0;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-divider {
@@ -357,16 +364,22 @@
 .rating {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 5px;
+  font-size: 13px;
   font-weight: 600;
   color: #b8860b;
 }
 
+.rating-divider {
+  color: #d1d5db;
+  font-weight: 400;
+  font-size: 13px;
+}
+
 .review-count {
   font-weight: 500;
-  color: #9ca3af;
-  margin-left: 2px;
+  font-size: 13px;
+  color: #667066;
 }
 
 .booking-count {

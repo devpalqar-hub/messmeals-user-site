@@ -369,20 +369,21 @@ export default function ViewAllListings() {
                         <button className={styles.wishlist} aria-label="Add to wishlist">
                           <Heart size={14} />
                         </button>
-
-                        <div className={styles["image-overlay"]}>
-                          <div className={styles["location-badge"]}>
-                            <MapPin size={14} />
-                            <span>{mess.address}</span>
-                          </div>
-                          <h3 className={styles["mess-name"]}>{mess.name}</h3>
-                        </div>
                       </div>
 
                       <div className={styles["card-body"]}>
+                        <div className={styles["card-name-block"]}>
+                          <div className={styles["card-location"]}>
+                            <MapPin size={12} />
+                            <span>{mess.address}</span>
+                          </div>
+                          <h3 className={styles["card-title"]}>{mess.name}</h3>
+                        </div>
+
                         <div className={styles["rating-badge"]}>
                           <Star size={14} fill="#ffa500" stroke="#ffa500" />
                           <span>{mess.ratings ?? 4.5}</span>
+                          <span className={styles["rating-divider"]}>|</span>
                           <span className={styles["review-count"]}>
                             {mess.Testimonials?.length ?? 0} Reviews
                           </span>
