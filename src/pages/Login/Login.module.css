@@ -5,7 +5,7 @@
   display: flex;
   align-items: stretch;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  background-image: url("/loginbg.png");
+  background-image: url("/loginbgdesktop.png");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -19,14 +19,12 @@
   z-index: 0;
   pointer-events: none;
 
-  background: linear-gradient(
-    90deg,
-    rgba(248, 250, 246, 0.58) 0%,
-    rgba(248, 250, 246, 0.42) 25%,
-    rgba(248, 250, 246, 0.20) 45%,
-    rgba(248, 250, 246, 0.05) 65%,
-    rgba(248, 250, 246, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(248, 250, 246, 0.58) 0%,
+      rgba(248, 250, 246, 0.42) 25%,
+      rgba(248, 250, 246, 0.20) 45%,
+      rgba(248, 250, 246, 0.05) 65%,
+      rgba(248, 250, 246, 0) 100%);
 }
 
 /* ---------- Left visual panel ---------- */
@@ -263,6 +261,7 @@
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
+
 .login-btn:hover:not(:disabled) {
   background: #256629;
 
@@ -270,6 +269,7 @@
 
   box-shadow: 0 8px 20px rgba(47, 125, 50, 0.18);
 }
+
 .login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -347,7 +347,7 @@
 @media (max-width: 768px) {
   .login-page {
     background-attachment: scroll;
-    background-image: url("/loginmbbg.png");
+    background-image: url("/loginbgmobile.png");
   }
 
   .login-visual {
@@ -358,7 +358,7 @@
     flex: 1 1 100%;
     min-height: 100vh;
     padding: 24px 16px;
-      transform: translateX(-0px);
+    transform: translateX(-0px);
 
   }
 }

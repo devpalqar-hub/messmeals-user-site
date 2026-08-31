@@ -1,7 +1,7 @@
 import styles from "./HeroSection.module.css";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Utensils, CalendarDays } from "lucide-react";
+import { Search, MapPin, Utensils, CalendarDays, LocateFixed, ChevronDown } from "lucide-react";
 
 /* ---------------- ANIMATION VARIANTS ---------------- */
 
@@ -71,18 +71,21 @@ export default function HeroSection() {
         >
           {/* Location */}
           <div className={styles["hls-item"]}>
-            <MapPin size={18} className={styles["hls-icon"]} />
+            <div className={styles["hls-icon-wrapper"]}>
+              <MapPin size={18} className={styles["hls-icon"]} />
+            </div>
             <div className={styles["hls-field"]}>
               <label>Enter location</label>
               <input type="text" placeholder="e.g. Kochi, Kerala" />
             </div>
+            <LocateFixed size={18} className={styles["hls-right-icon"]} />
           </div>
-
-          <div className={styles["hls-divider"]} />
 
           {/* Meal preference */}
           <div className={`${styles["hls-item"]} ${styles["hls-select"]}`}>
-            <Utensils size={18} className={styles["hls-icon"]} />
+            <div className={styles["hls-icon-wrapper"]}>
+              <Utensils size={18} className={styles["hls-icon"]} />
+            </div>
             <div className={styles["hls-field"]}>
               <label>Meal preference</label>
               <select defaultValue="">
@@ -91,13 +94,14 @@ export default function HeroSection() {
                 <option value="non-veg">Non-Veg</option>
               </select>
             </div>
+            <ChevronDown size={18} className={styles["hls-right-icon"]} />
           </div>
-
-          <div className={styles["hls-divider"]} />
 
           {/* Plan type */}
           <div className={`${styles["hls-item"]} ${styles["hls-select"]}`}>
-            <CalendarDays size={18} className={styles["hls-icon"]} />
+            <div className={styles["hls-icon-wrapper"]}>
+              <CalendarDays size={18} className={styles["hls-icon"]} />
+            </div>
             <div className={styles["hls-field"]}>
               <label>Plan type</label>
               <select defaultValue="">
@@ -107,6 +111,7 @@ export default function HeroSection() {
                 <option value="custom">Custom</option>
               </select>
             </div>
+            <ChevronDown size={18} className={styles["hls-right-icon"]} />
           </div>
 
           <button type="submit" className={styles["hls-btn"]}>

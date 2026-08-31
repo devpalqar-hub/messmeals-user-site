@@ -98,6 +98,21 @@
   color: #6b7f6b;
 }
 
+.legal-links {
+  display: flex;
+  gap: 20px;
+}
+
+.legal-links a {
+  text-decoration: none;
+  color: #6b7f6b;
+  transition: color 0.2s ease;
+}
+
+.legal-links a:hover {
+  color: #22c55e;
+}
+
 .socials {
   display: flex;
   gap: 16px;

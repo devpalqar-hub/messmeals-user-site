@@ -1,0 +1,64 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1b1b1b;
+}
+
+.lastUpdated {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.paragraph {
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.list {
+  margin-left: 20px;
+  margin-bottom: 15px;
+  list-style-type: disc;
+}
+
+.listItem {
+  margin-bottom: 8px;
+}
+
+.link {
+  color: #f15a29; /* typical brand color or generic blue, let's use a nice orange or primary color */
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 15px;
+  }
+  .title {
+    font-size: 2rem;
+  }
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+}

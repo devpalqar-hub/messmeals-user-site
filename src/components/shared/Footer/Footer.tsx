@@ -1,5 +1,7 @@
 import styles from "./Footer.module.css";
 import { Facebook, Instagram, Utensils } from "lucide-react";
+import { Link } from "react-router-dom";
+
 
 export default function Footer() {
   return (
@@ -53,6 +55,11 @@ export default function Footer() {
       {/* BOTTOM */}
       <div className={styles["footer-bottom"]}>
         <span>© 2026 MESS MEALS. All rights reserved.</span>
+
+        <div className={styles["legal-links"]}>
+          <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/terms">Terms & Conditions</Link>
+        </div>
 
         <div className={styles.socials}>
           <Facebook size={20} />
