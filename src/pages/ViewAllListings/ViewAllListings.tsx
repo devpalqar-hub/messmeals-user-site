@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
+import SEO from "../../components/shared/SEO/SEO";
 import { getAllMess, type MessListFilters } from "../../services/messApi";
 import type { MessListing, MessMeta } from "../../types/mess";
 import {
@@ -14,7 +15,7 @@ import {
   ArrowRight,
   Star,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
 
 const LIMIT = 6;
@@ -60,8 +61,6 @@ export default function ViewAllListings() {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
-
-  const navigate = useNavigate();
 
   // Initial / filter-reset load
   const fetchInitial = useCallback(async (activeFilters: Filters) => {
@@ -149,7 +148,13 @@ export default function ViewAllListings() {
   const hasMore = meta ? page < meta.totalPages : false;
 
   return (
-    <section className={styles["view-all-page"]}>
+    <main className={styles["view-all-page"]}>
+      <SEO 
+        title="Top Messes & Meal Plans | MessMeals"
+        description="Browse top-rated messes and homely food providers. Compare meal plans, menus, and prices to find the right meals on MessMeals."
+        image="/seo/og-listings.png"
+        url="/view-all-listings"
+      />
       {/* PAGE HEADER */}
       <div className={styles["page-header"]}>
         <div>
@@ -189,9 +194,9 @@ export default function ViewAllListings() {
       <button
         className={styles["mobile-filter-toggle"]}
         onClick={() => setShowMobileFilters(!showMobileFilters)}
+        title="Filters"
       >
         <Filter size={18} />
-        Filters
         {hasActiveFilters && <span className={styles["filter-badge"]} />}
       </button>
 
@@ -199,10 +204,10 @@ export default function ViewAllListings() {
         {/* FILTER SIDEBAR */}
         <aside className={`${styles.filters} ${showMobileFilters ? styles.show : ""}`}>
           <div className={styles["filter-header"]}>
-            <h3>
+            <h2>
               <Filter size={18} />
               Filters
-            </h3>
+            </h2>
             {hasActiveFilters && (
               <button className={styles["clear-all-btn"]} onClick={clearAllFilters}>
                 Clear All
@@ -311,11 +316,11 @@ export default function ViewAllListings() {
               <div className={styles["listing-grid"]}>
                 {messList.map((mess) => {
                   return (
-                    <div className={styles["listing-card"]} key={mess.id}>
+                    <article className={styles["listing-card"]} key={mess.id}>
                       <div className={styles["image-wrap"]}>
                         <MessImage
                           src={mess.coverImage}
-                          alt={`${mess.messName} at ${mess.address.address}`}
+                          alt={mess.messName}
                         />
 
                         {mess.status.isVerified && (
@@ -338,7 +343,7 @@ export default function ViewAllListings() {
                             <MapPin size={12} />
                             <span>{mess.address.address || mess.address.location || "Location not set"}</span>
                           </div>
-                          <h3 className={styles["card-title"]}>{mess.messName}</h3>
+                          <h2 className={styles["card-title"]}>{mess.messName}</h2>
                         </div>
 
                         {/* Star ratings commented out — new API does not return ratings/reviews */}
@@ -364,16 +369,16 @@ export default function ViewAllListings() {
                             </strong>
                           </div>
 
-                          <button
+                          <Link
                             className={styles["view-btn"]}
-                            onClick={() => navigate(`/mess/${mess.slug}`)}
+                            to={`/mess/${mess.slug}`}
                           >
                             View Details
                             <ArrowRight size={16} />
-                          </button>
+                          </Link>
                         </div>
                       </div>
-                    </div>
+                    </article>
                   );
                 })}
 
@@ -397,6 +402,6 @@ export default function ViewAllListings() {
           )}
         </div>
       </div>
-    </section>
+    </main>
   );
 }

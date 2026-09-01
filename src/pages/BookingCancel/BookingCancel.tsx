@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import SEO from "../../components/shared/SEO/SEO";
 import { CreditCard, Wifi, ShieldAlert } from "lucide-react";
 import styles from "./BookingCancel.module.css";
 
@@ -6,7 +7,8 @@ export default function BookingCancel() {
   const navigate = useNavigate();
 
   return (
-    <div className={styles["bc-page"]}>
+    <main className={styles["bc-page"]}>
+      <SEO title="Booking Cancelled | MessMeals" noindex={true} />
       {/* Background blobs */}
       <div className={styles["bc-blob-1"]} />
       <div className={styles["bc-blob-2"]} />
@@ -70,6 +72,6 @@ export default function BookingCancel() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

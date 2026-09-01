@@ -10,7 +10,7 @@ export default function Footer() {
         {/* LEFT BRAND */}
         <div className={styles["footer-brand"]}>
           <div className={styles.brand}>
-            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
+            <img src="/logo.png" alt="MessMeals" className={styles["logo-image"]} />
           </div>
 
           <p>

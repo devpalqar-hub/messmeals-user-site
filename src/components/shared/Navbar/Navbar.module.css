@@ -96,6 +96,8 @@
   color: #101C10;
   font-size: clamp(13px, 1.1vw, 14px);
   font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
   border: 1px solid #E3EAE1;
   border-radius: 10px;
   cursor: pointer;
@@ -119,6 +121,7 @@
   color: #2E7D32;
   font-size: clamp(13px, 1.1vw, 14px);
   font-weight: 600;
+  text-decoration: none;
   border: none;
   border-radius: 10px;
   cursor: pointer;

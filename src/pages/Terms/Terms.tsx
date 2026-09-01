@@ -1,8 +1,14 @@
 import styles from "./Terms.module.css";
+import SEO from "../../components/shared/SEO/SEO";
 
 export default function Terms() {
   return (
     <main className={styles.container}>
+      <SEO 
+        title="Terms of Service | MessMeals"
+        description="Read the MessMeals Terms of Service to understand the rules, responsibilities, and conditions for using our platform."
+        url="/terms"
+      />
       <h1 className={styles.title}>Terms and Conditions</h1>
       <p className={styles.lastUpdated}>Last Updated: October 31, 2025</p>
 

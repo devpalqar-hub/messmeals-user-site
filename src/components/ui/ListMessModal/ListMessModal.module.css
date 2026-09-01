@@ -1,7 +1,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(16, 28, 16, 0.60);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -28,8 +28,14 @@
   border-radius: 20px;
   position: relative;
   font-family: "Be Vietnam Pro", sans-serif;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(28, 58, 28, 0.15);
   animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-title {
+  color: #101C10;
+  margin-top: 0;
+  margin-bottom: 24px;
 }
 
 @keyframes slideUp {
@@ -55,26 +61,27 @@
 .modal-form textarea {
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1.5px solid #e5e7eb;
+  border: 1.5px solid #E3EAE1;
   font-size: 15px;
   font-family: inherit;
   transition: all 0.2s ease;
-  background: #fafafa;
+  background: #FAFCF9;
+  color: #101C10;
 }
 
 .modal-form input:focus,
 .modal-form select:focus,
 .modal-form textarea:focus {
   outline: none;
-  border-color: rgb(76, 208, 15);
+  border-color: #55C500;
   background: white;
-  box-shadow: 0 0 0 3px rgba(76, 208, 15, 0.1);
+  box-shadow: 0 0 0 3px #EAF7E5;
 }
 
 .modal-form input:hover,
 .modal-form select:hover,
 .modal-form textarea:hover {
-  border-color: #d1d5db;
+  border-color: #D7DED4;
   background: white;
 }
 
@@ -87,8 +94,8 @@
 .modal-form button {
   margin-top: 12px;
   padding: 15px 24px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgb(76, 208, 15), rgb(60, 180, 10));
+  border-radius: 12px;
+  background: #1C3A1C;
   border: none;
   font-weight: 600;
   font-size: 15px;
@@ -97,8 +104,16 @@
   transition: all 0.2s ease;
 }
 
-.modal-form button:hover {
-  background: linear-gradient(135deg, rgb(60, 180, 10), rgb(50, 160, 8));
+.modal-form button:hover:not(:disabled) {
+  background: #45A800;
+  box-shadow: 0 4px 12px rgba(28, 58, 28, 0.2);
+}
+
+.modal-form button:disabled {
+  background: #D7DED4;
+  color: #849084;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .close-btn {
@@ -113,29 +128,29 @@
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.2s ease;
-  color: #6b7280;
+  color: #617061;
   background: transparent;
 }
 
 .close-btn:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: #EAF7E5;
+  color: #1C3A1C;
 }
 
 .close-btn:active {
-  background: #e5e7eb;
+  background: #D5E8CF;
 }
 
 /* Placeholder styling */
 .modal-form input::placeholder,
 .modal-form textarea::placeholder {
-  color: #9ca3af;
+  color: #849084;
 }
 
 /* Select arrow enhancement */
 .modal-form select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23617061' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
   padding-right: 40px;

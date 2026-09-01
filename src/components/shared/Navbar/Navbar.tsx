@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
 import { User } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
@@ -53,7 +53,7 @@ export default function Navbar() {
 
           {/* LEFT — Logo */}
           <div className={styles["navbar-left"]} onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
+            <img src="/logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
           </div>
 
           {/* CENTER — Nav links (desktop) */}
@@ -90,14 +90,14 @@ export default function Navbar() {
               List Your Mess
             </button>
             {isAuthenticated ? (
-              <button className={styles["profile-chip"]} onClick={() => navigate("/profile")}>
+              <Link className={styles["profile-chip"]} to="/profile">
                 <User size={15} />
                 {user?.name || "My Account"}
-              </button>
+              </Link>
             ) : (
-              <button className={styles["signin-btn"]} onClick={() => navigate("/login")}>
+              <Link className={styles["signin-btn"]} to="/login">
                 Sign In
-              </button>
+              </Link>
             )}
           </div>
 
@@ -136,19 +136,21 @@ export default function Navbar() {
               List Your Mess
             </button>
             {isAuthenticated ? (
-              <button
+              <Link
                 className={`${styles["signin-btn"]} ${styles["mobile-signin"]}`}
-                onClick={() => { navigate("/profile"); closeNavbar(); }}
+                to="/profile"
+                onClick={closeNavbar}
               >
                 My Account
-              </button>
+              </Link>
             ) : (
-              <button
+              <Link
                 className={`${styles["signin-btn"]} ${styles["mobile-signin"]}`}
-                onClick={() => { navigate("/login"); closeNavbar(); }}
+                to="/login"
+                onClick={closeNavbar}
               >
                 Sign In
-              </button>
+              </Link>
             )}
           </div>
         )}

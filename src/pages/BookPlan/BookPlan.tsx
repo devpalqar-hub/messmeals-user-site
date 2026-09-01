@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SEO from "../../components/shared/SEO/SEO";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import {
   MapPin,
@@ -243,20 +244,22 @@ export default function BookPlan() {
 
   if (planLoading) {
     return (
-      <div className={styles["bp-page"]}>
+      <main className={styles["bp-page"]}>
+        <SEO title="Book a Meal Plan | MessMeals" noindex={true} />
         <div className={styles["bp-loader"]}>
           <Loader2 size={32} className={styles["bp-spin"]} />
           <span>Loading plan details…</span>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (!plan) {
     return (
-      <div className={styles["bp-page"]}>
+      <main className={styles["bp-page"]}>
+        <SEO title="Book a Meal Plan | MessMeals" noindex={true} />
         <div className={styles["bp-loader"]}>Plan not found.</div>
-      </div>
+      </main>
     );
   }
 
@@ -266,7 +269,8 @@ export default function BookPlan() {
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div className={styles["bp-page"]}>
+    <main className={styles["bp-page"]}>
+      <SEO title="Book a Meal Plan | MessMeals" noindex={true} />
 
       {/* Back */}
       <button className={styles["bp-back"]} onClick={goBack}>
@@ -303,7 +307,7 @@ export default function BookPlan() {
           <div className={styles["bp-plan-detail-card"]}>
             {plan.images.length > 0 && (
               <div className={styles["bp-img-carousel"]}>
-                <img src={plan.images[activeImg]?.url} alt={plan.images[activeImg]?.altText || plan.planName}
+                <img src={plan.images[activeImg]?.url} alt={plan.images[activeImg]?.altText || `${plan.planName} meal`}
                   className={styles["bp-img"]} />
                 {plan.images.length > 1 && (
                   <>
@@ -686,6 +690,6 @@ export default function BookPlan() {
         </aside>
 
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,6 +1,6 @@
 import styles from "./MessListingRow.module.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Heart,
   MapPin,
@@ -137,12 +137,12 @@ export default function MessListingRow({
         <div className={styles["listing-row"]}>
           {messList.map((mess) => {
             return (
-              <div className={styles["listing-card"]} key={mess.id}>
+              <article className={styles["listing-card"]} key={mess.id}>
                 {/* IMAGE */}
                 <div className={styles["image-wrap"]}>
                   <MessImage
                     src={mess.coverImage}
-                    alt={`${mess.messName} mess at ${mess.address.address}`}
+                    alt={mess.messName}
                   />
 
                   <CornerBadge type={badgeType} status={mess.status} />
@@ -186,16 +186,16 @@ export default function MessListingRow({
                       </strong>
                     </div>
 
-                    <button
+                    <Link
                       className={styles["menu-btn"]}
-                      onClick={() => navigate(`/mess/${mess.slug}`)}
+                      to={`/mess/${mess.slug}`}
                     >
                       View Details
                       <LucideArrowRight size={16} />
-                    </button>
+                    </Link>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

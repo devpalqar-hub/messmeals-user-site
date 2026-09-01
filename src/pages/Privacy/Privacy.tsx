@@ -1,8 +1,14 @@
 import styles from "./Privacy.module.css";
+import SEO from "../../components/shared/SEO/SEO";
 
 export default function Privacy() {
   return (
     <main className={styles.container}>
+      <SEO 
+        title="Privacy Policy | MessMeals"
+        description="Read the MessMeals Privacy Policy to learn how we collect, use, and protect your personal information."
+        url="/privacy"
+      />
       <h1 className={styles.title}>Privacy Policy</h1>
       <p className={styles.lastUpdated}>Last Updated: October 31, 2025</p>
 

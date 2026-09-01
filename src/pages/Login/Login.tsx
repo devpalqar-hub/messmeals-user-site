@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import SEO from "../../components/shared/SEO/SEO";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail } from "lucide-react";
 import { sendLoginOtp, sendRegOtp, verifyOtp, OTP_LENGTH } from "../../services/authService";
@@ -130,7 +131,8 @@ export default function Login() {
   };
 
   return (
-    <div className={styles["login-page"]}>
+    <main className={styles["login-page"]}>
+      <SEO title="Login | MessMeals" noindex={true} />
       <div className={styles["login-visual"]}>
         <div className={styles["login-badge"]}>
           <BadgeCheck size={16} />
@@ -151,7 +153,7 @@ export default function Login() {
       <div className={styles["login-card-wrap"]}>
         <div className={styles["login-card"]}>
           <div className={styles["login-brand"]}>
-            <img src="/logo.png" alt="Mess Meals Logo" className={styles["logo-image"]} />
+            <img src="/logo.png" alt="MessMeals" className={styles["logo-image"]} />
           </div>
 
           {step === "phone" ? (
@@ -288,6 +290,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
