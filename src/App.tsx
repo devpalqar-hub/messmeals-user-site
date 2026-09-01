@@ -1,5 +1,6 @@
 import Navbar from "./components/shared/Navbar/Navbar";
 import MobileBottomNav from "./components/shared/Navbar/MobileBottomNav";
+import SEO from "./components/shared/SEO/SEO";
 import HeroSection from "./sections/HeroSection/HeroSection";
 import FeaturedMesses from "./sections/FeaturedMesses/FeaturedMesses";
 import VerifiedMesses from "./sections/VerifiedMesses/VerifiedMesses";
@@ -38,6 +39,12 @@ function App() {
         path="/"
         element={
           <>
+           <SEO 
+             title="MessMeals – Find the Best Mess & Homely Food Near You"
+             description="Discover the best verified messes and homely food near you. Explore daily and monthly meal plans, reviews, and menus on MessMeals."
+             image="/seo/og-home.png"
+             url="/"
+           />
            <HeroSection />
            <FeaturedMesses />
            <VerifiedMesses />

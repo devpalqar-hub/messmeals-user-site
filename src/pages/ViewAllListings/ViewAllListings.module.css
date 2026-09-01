@@ -58,7 +58,6 @@
   padding: 14px 18px;
   border-radius: 12px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1px solid #E3EAE1;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -187,7 +186,7 @@
   border-bottom: 2px solid #f0f0f0;
 }
 
-.filter-header h3 {
+.filter-header h2 {
   font-size: 18px;
   font-weight: 700;
   color: #101C10;
@@ -404,8 +403,6 @@
   box-shadow: 0 6px 18px rgba(28, 58, 28, 0.15);
 }
 
-/* removed: image-overlay, location-badge, mess-name are now in card-body */
-
 /* CARD BODY */
 .card-body {
   padding: 10px 12px 14px;
@@ -413,7 +410,6 @@
   box-sizing: border-box;
 }
 
-/* Name + location block (below image) */
 .card-name-block {
   margin-bottom: 8px;
   min-width: 0;
@@ -428,6 +424,10 @@
   font-weight: 500;
   margin-bottom: 3px;
   min-width: 0;
+}
+
+.card-location svg {
+  flex-shrink: 0;
 }
 
 .card-location span {
@@ -446,28 +446,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.rating-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 600;
-  font-size: 13px;
-  color: #b8860b;
-  margin-bottom: 6px;
-}
-
-.rating-divider {
-  color: #d1d5db;
-  font-weight: 400;
-  font-size: 13px;
-}
-
-.review-count {
-  font-weight: 500;
-  font-size: 13px;
-  color: #667066;
 }
 
 .card-divider {
@@ -523,6 +501,7 @@
   background: #1C3A1C;
   color: #ffffff;
   border: none;
+  text-decoration: none;
   padding: 12px 16px;
   border-radius: 10px;
   font-weight: 700;
@@ -544,7 +523,7 @@
   transform: translateY(0);
 }
 
-/* SENTINEL (invisible element watched by IntersectionObserver) */
+/* SENTINEL */
 .sentinel {
   height: 1px;
   width: 100%;
@@ -618,8 +597,7 @@
   margin-top: 4px;
 }
 
-/* EMPTY & LOADING STATES */
-.loading-state,
+/* EMPTY STATE */
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -628,7 +606,6 @@
   color: #617061;
 }
 
-.loading-state p,
 .empty-state p {
   font-size: 16px;
   margin-bottom: 20px;
@@ -648,54 +625,6 @@
 .clear-filters-btn:hover {
   background: #45A800;
   box-shadow: 0 4px 12px rgba(69, 168, 0, 0.3);
-}
-
-/* TRUST STRIP */
-.trust-strip {
-  width: 100%;
-  max-width: 1400px;
-  margin: 40px auto 0;
-  background: #fff;
-  border: 1px solid #E3EAE1;
-  border-radius: 18px;
-  padding: 28px 32px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-  box-sizing: border-box;
-}
-
-.trust-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  min-width: 0;
-}
-
-.trust-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #EAF7E5;
-  color: #2E7D32;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.trust-item h4 {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0 0 3px;
-  color: #101C10;
-}
-
-.trust-item p {
-  font-size: 13px;
-  color: #617061;
-  line-height: 1.4;
-  margin: 0;
 }
 
 /* ===================== RESPONSIVE ===================== */
@@ -749,16 +678,51 @@
     font-size: 13px;
   }
 
+  .results-count {
+    font-size: 12.5px;
+    padding: 7px 12px;
+  }
+
+  /* SEARCH + FILTER ICON IN SAME ROW */
   .top-search {
+    display: inline-flex;
+    width: calc(100% - 56px);
     padding: 11px 14px;
     margin-bottom: 16px;
+    vertical-align: top;
+  }
+
+  .top-search input {
+    font-size: 13px;
+  }
+
+  .top-search input::placeholder {
+    font-size: 13px;
   }
 
   .mobile-filter-toggle {
-    display: flex;
-    padding: 10px 16px;
-    font-size: 13.5px;
-    margin-bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin-left: 8px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    vertical-align: top;
+    flex-shrink: 0;
+  }
+
+  /* hide the "Filters" text label, icon only */
+  .mobile-filter-toggle span:not(.filter-badge) {
+    display: none;
+  }
+
+  .filter-badge {
+    top: 6px;
+    right: 6px;
   }
 
   .layout {
@@ -776,6 +740,15 @@
     transition: left 0.3s ease;
     border-radius: 0;
     max-height: 100vh;
+    background: transparent;
+  }
+
+  .filters::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    z-index: -1;
   }
 
   .filters.show {
@@ -790,7 +763,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
+    z-index: -2;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -803,6 +776,10 @@
 
   .close-filters-btn {
     display: block;
+  }
+
+  .filter-header h2 {
+    font-size: 16.5px;
   }
 
   /* TWO SMALLER CARDS PER ROW, WITH MORE BREATHING ROOM */
@@ -819,42 +796,26 @@
     height: 100px;
   }
 
-  .mess-name {
-    font-size: 12px;
+  .card-title {
+    font-size: 12.5px;
   }
 
-  .location-badge {
-    font-size: 9px;
+  .card-location {
+    font-size: 9.5px;
     gap: 3px;
   }
 
-  .location-badge svg {
+  .card-location svg {
     width: 10px;
     height: 10px;
-    flex-shrink: 0;
   }
 
-  .image-overlay {
-    padding: 7px 9px;
+  .card-name-block {
+    margin-bottom: 6px;
   }
 
   .card-body {
     padding: 8px 8px 10px;
-  }
-
-  .rating-badge {
-    font-size: 10px;
-    gap: 3px;
-    margin-bottom: 4px;
-  }
-
-  .rating-badge svg {
-    width: 11px;
-    height: 11px;
-  }
-
-  .review-count {
-    display: none;
   }
 
   .card-divider {
@@ -922,24 +883,30 @@
     height: 100px;
   }
 
-  .trust-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 18px 16px;
-    gap: 16px;
+  .skeleton-body {
+    padding: 8px 8px 10px;
+    gap: 6px;
+  }
+
+  .skeleton-line {
+    height: 10px;
+  }
+
+  .skeleton-btn {
+    height: 28px;
+  }
+
+  .empty-state {
+    padding: 56px 16px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+  }
+
+  .end-of-list {
+    font-size: 12.5px;
     margin-top: 24px;
-  }
-
-  .trust-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .trust-item h4 {
-    font-size: 13.5px;
-  }
-
-  .trust-item p {
-    font-size: 11.5px;
   }
 }
 
@@ -963,8 +930,40 @@
   }
 
   .top-search {
+    width: calc(100% - 50px);
     padding: 9px 11px;
     gap: 8px;
+  }
+
+  .top-search input,
+  .top-search input::placeholder {
+    font-size: 12.5px;
+  }
+
+  .mobile-filter-toggle {
+    width: 40px;
+    height: 40px;
+    margin-left: 6px;
+    border-radius: 10px;
+  }
+
+  .filter-header h2 {
+    font-size: 15.5px;
+  }
+
+  .filter-group label {
+    font-size: 13px;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .apply-filters-btn {
+    padding: 11px 14px;
+    font-size: 13.5px;
   }
 
   /* KEEP TWO CARDS PER ROW, TIGHTER */
@@ -981,20 +980,16 @@
     height: 88px;
   }
 
-  .mess-name {
-    font-size: 11px;
+  .card-title {
+    font-size: 11.5px;
   }
 
-  .location-badge {
+  .card-location {
     font-size: 8.5px;
   }
 
   .card-body {
     padding: 7px 7px 9px;
-  }
-
-  .rating-badge {
-    font-size: 9.5px;
   }
 
   .price-info strong {
@@ -1010,20 +1005,42 @@
     font-size: 10px;
   }
 
+  .badge {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+
+  .badge-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .wishlist {
+    width: 20px;
+    height: 20px;
+  }
+
   .filters {
     width: 100%;
     max-width: 100%;
   }
 
-  .trust-strip {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-    padding: 14px 12px;
+  .skeleton-image {
+    height: 88px;
+  }
+
+  .empty-state {
+    padding: 44px 14px;
     border-radius: 12px;
   }
 
-  .skeleton-image {
-    height: 88px;
+  .empty-state p {
+    font-size: 13px;
+  }
+
+  .clear-filters-btn {
+    padding: 10px 20px;
+    font-size: 13.5px;
   }
 }
 
@@ -1037,6 +1054,27 @@
     font-size: 17px;
   }
 
+  .results-count {
+    font-size: 11px;
+    padding: 5px 9px;
+  }
+
+  .top-search {
+    width: calc(100% - 46px);
+    padding: 8px 10px;
+  }
+
+  .top-search input,
+  .top-search input::placeholder {
+    font-size: 12px;
+  }
+
+  .mobile-filter-toggle {
+    width: 38px;
+    height: 38px;
+    margin-left: 6px;
+  }
+
   .listing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -1046,8 +1084,12 @@
     height: 78px;
   }
 
-  .mess-name {
+  .card-title {
     font-size: 10.5px;
+  }
+
+  .card-location {
+    font-size: 8px;
   }
 
   .card-body {
@@ -1076,5 +1118,9 @@
   .wishlist svg {
     width: 10px;
     height: 10px;
+  }
+
+  .skeleton-image {
+    height: 78px;
   }
 }

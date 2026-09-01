@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import SEO from "../../components/shared/SEO/SEO";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMessBySlug } from "../../services/messApi";
 import type { MessDetails, NewMessPlan } from "../../types/mess";
@@ -22,21 +23,12 @@ import {
   Utensils,
   Moon,
   Coffee,
+  Tag,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./ViewMessDetails.module.css";
 
 const DESCRIPTION_PREVIEW_LENGTH = 110;
-
-const DAY_ORDER = [
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
-];
 
 const DAY_ORDER_UPPER = [
   "MONDAY",
@@ -78,64 +70,26 @@ const getVariationConfig = (title: string) => {
   return { Icon: Salad, colorClass: styles["pill-default"] };
 };
 
+const sortVariations = <T extends { title: string }>(variations: T[]): T[] => {
+  return [...variations].sort((a, b) => {
+    const getOrder = (t: string) => {
+      const low = t.toLowerCase();
+      if (low.includes("breakfast") || low.includes("bf") || low.includes("morning")) return 1;
+      if (low.includes("lunch") || low.includes("afternoon") || low.includes("noon")) return 2;
+      if (low.includes("snack") || low.includes("tea")) return 3;
+      if (low.includes("dinner") || low.includes("night") || low.includes("dn")) return 4;
+      return 5;
+    };
+    return getOrder(a.title) - getOrder(b.title);
+  });
+};
+
 const humanizeTag = (tag: string) =>
   tag
     .toLowerCase()
     .split("_")
     .map(capitalize)
     .join(" ");
-
-const formatTime12h = (time: string) => {
-  const [hStr, mStr] = time.split(":");
-  const h = parseInt(hStr, 10);
-  const m = mStr || "00";
-  const period = h >= 12 ? "PM" : "AM";
-  const hour12 = h % 12 || 12;
-  return `${String(hour12).padStart(2, "0")}:${m} ${period}`;
-};
-
-const groupOpeningHours = (openingHours: Record<string, string>) => {
-  const groups: { days: string[]; time: string }[] = [];
-  DAY_ORDER.forEach((day) => {
-    const time = openingHours[day];
-    if (!time) return;
-    const last = groups[groups.length - 1];
-    if (last && last.time === time) {
-      last.days.push(day);
-    } else {
-      groups.push({ days: [day], time });
-    }
-  });
-
-  return groups.map((group) => {
-    const label =
-      group.days.length > 1
-        ? `${capitalize(group.days[0]).slice(0, 3)} - ${capitalize(
-          group.days[group.days.length - 1]
-        ).slice(0, 3)}`
-        : capitalize(group.days[0]);
-    const [start, end] = group.time.split("-");
-    return {
-      label,
-      time: `${formatTime12h(start)} - ${formatTime12h(end)}`,
-    };
-  });
-};
-
-const isMessOpenNow = (openingHours?: Record<string, string>) => {
-  if (!openingHours) return false;
-  const now = new Date();
-  const day = now
-    .toLocaleDateString("en-US", { weekday: "long" })
-    .toLowerCase();
-  const range = openingHours[day];
-  if (!range) return false;
-  const [start, end] = range.split("-");
-  const current = `${String(now.getHours()).padStart(2, "0")}:${String(
-    now.getMinutes()
-  ).padStart(2, "0")}`;
-  return current >= start && current <= end;
-};
 
 export default function ViewMessDetails() {
   const { slug } = useParams();
@@ -147,7 +101,6 @@ export default function ViewMessDetails() {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [viewPlan, setViewPlan] = useState<NewMessPlan | null>(null);
   const [activePlanImage, setActivePlanImage] = useState(0);
-  const [activeMenuDay, setActiveMenuDay] = useState<string>("MONDAY");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showGalleryModal, setShowGalleryModal] = useState(false);
   const [activeGalleryImage, setActiveGalleryImage] = useState(0);
@@ -201,11 +154,6 @@ export default function ViewMessDetails() {
   const openPlanModal = (plan: NewMessPlan) => {
     setViewPlan(plan);
     setActivePlanImage(0);
-    // Set active day to first day that has schedule entries
-    const firstDayWithEntries = DAY_ORDER_UPPER.find((day) =>
-      plan.menus.some((menu) => (menu.schedule[day]?.length ?? 0) > 0)
-    );
-    setActiveMenuDay(firstDayWithEntries || "MONDAY");
   };
 
   const closePlanModal = () => setViewPlan(null);
@@ -263,6 +211,7 @@ export default function ViewMessDetails() {
   if (loading) {
     return (
       <div className={styles["mess-details-page"]}>
+        <SEO title="Find Mess Food Near You | MessMeals" />
         <div className={styles["loading-state"]}>Loading mess details...</div>
       </div>
     );
@@ -271,6 +220,7 @@ export default function ViewMessDetails() {
   if (!mess) {
     return (
       <div className={styles["mess-details-page"]}>
+        <SEO title="Mess Not Found | MessMeals" noindex={true} />
         <div className={styles["error-state"]}>Mess not found</div>
       </div>
     );
@@ -279,12 +229,6 @@ export default function ViewMessDetails() {
   // Gallery uses mess.gallery (new API field)
   const sortedImages =
     mess.gallery?.slice().sort((a, b) => a.sortOrder - b.sortOrder) || [];
-
-  const openingHoursList = mess.openingHours
-    ? groupOpeningHours(mess.openingHours)
-    : [];
-
-  const openNow = isMessOpenNow(mess.openingHours);
 
   // Tags is now string[] in new API
   const tags = mess.tags || [];
@@ -306,45 +250,66 @@ export default function ViewMessDetails() {
 
 
   return (
-    <div className={styles["mess-details-page"]}>
+    <main className={styles["mess-details-page"]}>
+      <SEO
+        title={`${mess.messName} – Menu & Meal Plans | MessMeals`}
+        description={`Order homely food from ${mess.messName} in ${mess.address?.location || "your area"}. ${mess.description?.length > 100 ? mess.description.substring(0, 100) + '...' : (mess.description || 'Explore meal plans and pricing on MessMeals.')}`}
+        image={mess.coverImage || undefined}
+        url={`/mess/${mess.slug}`}
+      />
       {/* Details Card */}
-      <div className={styles["details-card"]}>
+      <article className={styles["details-card"]}>
         {/* Hero Section */}
         <div className={styles["hero-card"]}>
           <div className={styles["hero-media"]}>
             <MessImage
               src={mess.coverImage}
-              alt={`${mess.messName} - ${mess.address.location || "Kerala"} Style Homely Food`}
+              alt={mess.messName}
             />
             <div className={styles["hero-gradient-overlay"]} />
-            {openNow && <div className={styles["open-now-badge"]}>Open Now</div>}
           </div>
 
           <div className={styles["hero-content"]}>
-            <div className={styles["hero-badges"]}>
-              {mess.status.isVerified && (
-                <span className={styles["verified-badge"]}>
-                  <span className={styles["verified-badge-icon"]}>
-                    <Check size={11} />
-                  </span>
-                  Verified Mess
-                </span>
+            <div className={styles["hero-header-row"]}>
+              {mess.logo && (
+                <div className={styles["hero-logo-container"]}>
+                  <MessImage
+                    src={mess.logo}
+                    alt=""
+                    className={styles["hero-logo"]}
+                  />
+                </div>
               )}
-            </div>
 
-            <h1>{mess.messName}</h1>
+              <div className={styles["hero-header-info"]}>
+                <div className={styles["hero-badges"]}>
+                  {mess.status.isVerified && (
+                    <span className={styles["verified-badge"]}>
+                      <span className={styles["verified-badge-icon"]}>
+                        <Check size={11} />
+                      </span>
+                      Verified Mess
+                    </span>
+                  )}
+                </div>
 
-            {mess.address.location && (
-              <div className={styles["hero-location"]}>
-                <MapPin size={15} />
-                <span>{mess.address.location}</span>
+                <h1>{mess.messName}</h1>
+
+                {mess.address.location && (
+                  <div className={styles["hero-location"]}>
+                    <MapPin size={15} />
+                    <span>{mess.address.location}</span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
             <p className={`${styles["hero-description"]} ${styles["hero-description-desktop"]}`}>
               {mess.description}
             </p>
+          </div>
 
+          <div className={styles["mobile-description-container"]}>
             {mess.description && (
               <p className={`${styles["hero-description"]} ${styles["hero-description-mobile"]}`}>
                 {showFullDescription || mess.description.length <= DESCRIPTION_PREVIEW_LENGTH
@@ -372,7 +337,12 @@ export default function ViewMessDetails() {
               </span>
               <div>
                 <small>Location</small>
-                <p>{mess.address.address || mess.address.location || "Not available"}</p>
+                <p>
+                  {[
+                    mess.address.address || mess.address.location,
+                    mess.address.zipcode
+                  ].filter(Boolean).join(" - ") || "Not available"}
+                </p>
               </div>
             </div>
             <div className={styles["hero-info-item"]}>
@@ -391,23 +361,6 @@ export default function ViewMessDetails() {
               <div>
                 <small>Email</small>
                 <p>{mess.email || "Not available"}</p>
-              </div>
-            </div>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <Clock size={18} />
-              </span>
-              <div>
-                <small>Opening Hours</small>
-                {openingHoursList.length > 0 ? (
-                  openingHoursList.map((item) => (
-                    <p key={item.label}>
-                      {item.label} : {item.time}
-                    </p>
-                  ))
-                ) : (
-                  <p>Not available</p>
-                )}
               </div>
             </div>
           </div>
@@ -433,7 +386,9 @@ export default function ViewMessDetails() {
         {/* Meal Plans Section */}
         <section className={styles["content-block"]}>
           <div className={styles["plans-section-header"]}>
-            <h2>Our Meal Plans</h2>
+            <h2 className={`${styles["section-title"]} ${styles["no-margin"]}`}>
+              <CalendarDays size={20} /> Our Meal Plans
+            </h2>
             {showPlanTabs && (
               <div className={styles["plan-tabs"]}>
                 <button
@@ -458,7 +413,7 @@ export default function ViewMessDetails() {
           {visiblePlans.length > 0 ? (
             <div className={styles["plans-card-row"]}>
               {visiblePlans.map((plan) => (
-                <div key={plan.id} className={styles["plan-card"]}>
+                <article key={plan.id} className={styles["plan-card"]}>
                   {/* Top badge */}
                   <span className={styles["plan-card-type-badge"]}>
                     {plan.isMonthlyPlan ? "Monthly" : "Daily"}
@@ -472,7 +427,7 @@ export default function ViewMessDetails() {
                     <div className={styles["plan-includes"]}>
                       <span className={styles["plan-includes-label"]}>Plan Includes</span>
                       <div className={styles["plan-includes-pills"]}>
-                        {plan.variations.map((v) => {
+                        {sortVariations(plan.variations).map((v) => {
                           const { Icon: VIcon, colorClass } = getVariationConfig(v.title);
                           return (
                             <span key={v.id} className={`${styles["plan-includes-pill"]} ${colorClass}`}>
@@ -521,7 +476,7 @@ export default function ViewMessDetails() {
                       Book Now
                     </button>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           ) : (
@@ -534,7 +489,9 @@ export default function ViewMessDetails() {
         {/* Food Types Section */}
         {(isVeg || isNonVeg) && (
           <section className={styles["content-block"]}>
-            <h2>Food Types</h2>
+            <h2 className={styles["section-title"]}>
+              <Salad size={20} /> Food Types
+            </h2>
             <div className={styles["food-types-list"]}>
               {isVeg && (
                 <span className={`${styles["food-type-pill"]} ${styles.veg}`}>
@@ -555,7 +512,9 @@ export default function ViewMessDetails() {
         {/* Tags Section */}
         {tags.length > 0 && (
           <section className={styles["content-block"]}>
-            <h2>Tags</h2>
+            <h2 className={styles["section-title"]}>
+              <Tag size={20} /> Tags
+            </h2>
             <div className={styles["tags-list"]}>
               {tags.map((tag, i) => (
                 <span key={i} className={styles["tag-pill"]}>
@@ -581,7 +540,7 @@ export default function ViewMessDetails() {
                 <>
                   {/* Gallery header */}
                   <div className={styles["gallery-header"]}>
-                    <h2>
+                    <h2 className={`${styles["section-title"]} ${styles["no-margin"]}`}>
                       <Images size={20} />
                       Gallery
                       <span className={styles["gallery-photo-count"]}>· {sortedImages.length} Photo{sortedImages.length !== 1 ? "s" : ""}</span>
@@ -604,11 +563,11 @@ export default function ViewMessDetails() {
                     <button
                       className={styles["gallery-main"]}
                       onClick={() => openGallery(0)}
-                      aria-label={`Open gallery at photo 1: ${previewImages[0]?.altText || mess.messName}`}
+                      aria-label={`Open gallery: ${previewImages[0]?.altText || "Photo"}`}
                     >
                       <MessImage
                         src={previewImages[0]?.url}
-                        alt={previewImages[0]?.altText || `${mess.messName} photo 1`}
+                        alt={previewImages[0]?.altText || ""}
                       />
                     </button>
 
@@ -626,12 +585,12 @@ export default function ViewMessDetails() {
                               aria-label={
                                 isLast
                                   ? `View all ${sortedImages.length} photos`
-                                  : `Open gallery at photo ${globalIndex + 1}: ${image.altText || mess.messName}`
+                                  : `Open gallery: ${image.altText || "Photo"}`
                               }
                             >
                               <MessImage
                                 src={image.url}
-                                alt={image.altText || `${mess.messName} photo ${globalIndex + 1}`}
+                                alt={image.altText || ""}
                               />
                               {isLast && (
                                 <span className={styles["gallery-view-all-overlay"]} aria-hidden="true">
@@ -655,7 +614,7 @@ export default function ViewMessDetails() {
                     >
                       <MessImage
                         src={previewImages[0]?.url}
-                        alt={previewImages[0]?.altText || `${mess.messName} photo 1`}
+                        alt={previewImages[0]?.altText || ""}
                       />
                       {sortedImages.length > 1 && (
                         <span className={styles["gallery-mobile-overlay"]} aria-hidden="true">
@@ -671,7 +630,7 @@ export default function ViewMessDetails() {
           ) : (
             <>
               <div className={styles["gallery-header"]}>
-                <h2>
+                <h2 className={`${styles["section-title"]} ${styles["no-margin"]}`}>
                   <Images size={20} />
                   Gallery
                 </h2>
@@ -682,7 +641,7 @@ export default function ViewMessDetails() {
             </>
           )}
         </section>
-      </div>
+      </article>
 
       {/* Send an Inquiry Modal */}
       {showInquiryModal && (
@@ -760,20 +719,7 @@ export default function ViewMessDetails() {
             variationMap[v.id] = v.title;
           });
 
-          // Get the active day's entries for all menus
-          const activeDayEntries = viewPlan.menus.flatMap((menu) =>
-            (menu.schedule[activeMenuDay] || []).map((entry) => ({
-              ...entry,
-              menuName: menu.name,
-            }))
-          );
 
-          // Check which days have any entries (across all menus)
-          const daysWithEntries = new Set(
-            DAY_ORDER_UPPER.filter((day) =>
-              viewPlan.menus.some((menu) => (menu.schedule[day]?.length ?? 0) > 0)
-            )
-          );
 
           return (
             <div className={styles["modal-overlay"]} onClick={closePlanModal}>
@@ -812,7 +758,7 @@ export default function ViewMessDetails() {
                           >
                             <MessImage
                               src={img.url}
-                              alt={`${viewPlan.planName} ${index + 1}`}
+                              alt=""
                             />
                           </button>
                         ))}
@@ -841,7 +787,7 @@ export default function ViewMessDetails() {
                     <div className={styles["plan-includes"]}>
                       <span className={styles["plan-includes-label"]}>Plan Includes</span>
                       <div className={styles["plan-includes-pills"]}>
-                        {viewPlan.variations.map((v) => {
+                        {sortVariations(viewPlan.variations).map((v) => {
                           const { Icon: VIcon, colorClass } = getVariationConfig(v.title);
                           return (
                             <span key={v.id} className={`${styles["plan-includes-pill"]} ${colorClass}`}>
@@ -876,53 +822,80 @@ export default function ViewMessDetails() {
                         <span>Weekly Menu</span>
                       </div>
 
-                      {/* Day tabs */}
-                      <div className={styles["plan-menu-day-tabs"]}>
-                        {DAY_ORDER_UPPER.map((day) => (
-                          <button
-                            key={day}
-                            type="button"
-                            className={`${styles["plan-menu-day-tab"]} ${activeMenuDay === day ? styles.active : ""} ${!daysWithEntries.has(day) ? styles.empty : ""}`}
-                            onClick={() => setActiveMenuDay(day)}
-                          >
-                            {DAY_SHORT[day]}
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Day content */}
-                      <div className={styles["plan-menu-day-content"]}>
-                        {activeDayEntries.length > 0 ? (
-                          <div className={styles["plan-menu-entries"]}>
-                            {/* Group by variation */}
-                            {viewPlan.variations.map((variation) => {
-                              const entriesForVariation = activeDayEntries.filter(
-                                (e) => e.variationId === variation.id
+                      <div className={styles["plan-menu-table-wrapper"]}>
+                        <table className={styles["plan-menu-table"]}>
+                          <thead>
+                            <tr>
+                              <th>Day</th>
+                              {sortVariations(viewPlan.variations).map((variation) => {
+                                const { Icon: VIcon, colorClass } = getVariationConfig(variation.title);
+                                return (
+                                  <th key={variation.id} className={colorClass}>
+                                    <div>
+                                      <VIcon size={14} />
+                                      <span>{variation.title}</span>
+                                    </div>
+                                  </th>
+                                );
+                              })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {DAY_ORDER_UPPER.map((day) => {
+                              const entriesForDay = viewPlan.menus.flatMap((menu) =>
+                                (menu.schedule[day] || []).map((entry) => ({
+                                  ...entry,
+                                  menuName: menu.name,
+                                }))
                               );
-                              if (entriesForVariation.length === 0) return null;
+
+                              const hasAnyEntry = entriesForDay.length > 0;
+
                               return (
-                                <div key={variation.id} className={styles["plan-menu-variation-group"]}>
-                                  <div className={styles["plan-menu-variation-title"]}>
-                                    <Salad size={13} />
-                                    {variation.title}
-                                  </div>
-                                  <div className={styles["plan-menu-items"]}>
-                                    {entriesForVariation.map((e, i) => (
-                                      <span key={i} className={styles["plan-menu-item"]}>
-                                        {e.items}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
+                                <tr key={day}>
+                                  <td className={styles["day-cell"]}>
+                                    <div className={styles["day-cell-content"]}>
+                                      {DAY_SHORT[day]}
+                                    </div>
+                                  </td>
+                                  {hasAnyEntry ? (
+                                    sortVariations(viewPlan.variations).map((variation) => {
+                                      const entriesForVariation = entriesForDay.filter(
+                                        (e) => e.variationId === variation.id
+                                      );
+                                      const { Icon: VIcon, colorClass } = getVariationConfig(variation.title);
+                                      return (
+                                        <td key={variation.id}>
+                                          {entriesForVariation.length > 0 ? (
+                                            <div className={`${styles["plan-menu-table-cell"]} ${colorClass}`}>
+                                              <div className={styles["plan-menu-table-cell-icon"]}>
+                                                <VIcon size={14} />
+                                              </div>
+                                              <div className={styles["plan-menu-table-items"]}>
+                                                {entriesForVariation.map((e, i) => (
+                                                  <span key={i}>{e.items}</span>
+                                                ))}
+                                              </div>
+                                            </div>
+                                          ) : (
+                                            <span className={styles["plan-menu-table-empty"]}>-</span>
+                                          )}
+                                        </td>
+                                      );
+                                    })
+                                  ) : (
+                                    <td colSpan={viewPlan.variations.length + 1} className={styles["holiday-cell"]}>
+                                      <div className={styles["plan-menu-holiday"]}>
+                                        <span>🏖️</span>
+                                        <p>Holiday / No meals on {DAY_SHORT[day]}</p>
+                                      </div>
+                                    </td>
+                                  )}
+                                </tr>
                               );
                             })}
-                          </div>
-                        ) : (
-                          <div className={styles["plan-menu-holiday"]}>
-                            <span>🏖️</span>
-                            <p>Holiday / No meals on {DAY_SHORT[activeMenuDay]}</p>
-                          </div>
-                        )}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   )}
@@ -1025,7 +998,7 @@ export default function ViewMessDetails() {
               <div className={styles["gallery-modal-image"]}>
                 <MessImage
                   src={sortedImages[activeGalleryImage]?.url}
-                  alt={sortedImages[activeGalleryImage]?.altText || `${mess.messName} photo ${activeGalleryImage + 1}`}
+                  alt={sortedImages[activeGalleryImage]?.altText || ""}
                 />
               </div>
 
@@ -1045,11 +1018,11 @@ export default function ViewMessDetails() {
                   key={image.id}
                   className={`${styles["gallery-modal-thumb"]} ${index === activeGalleryImage ? styles.active : ""}`}
                   onClick={() => setActiveGalleryImage(index)}
-                  aria-label={`View photo ${index + 1}${image.altText ? `: ${image.altText}` : ""}`}
+                  aria-label={`View photo ${index + 1}`}
                 >
                   <MessImage
                     src={image.url}
-                    alt={image.altText || `${mess.messName} photo ${index + 1}`}
+                    alt={image.altText || ""}
                   />
                 </button>
               ))}
@@ -1057,6 +1030,6 @@ export default function ViewMessDetails() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

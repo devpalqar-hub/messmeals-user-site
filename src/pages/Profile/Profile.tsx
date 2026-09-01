@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import SEO from "../../components/shared/SEO/SEO";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
   User,
   Phone,
@@ -146,7 +147,8 @@ export default function Profile() {
   if (!isAuthenticated || !user) return null;
 
   return (
-    <div className={styles["profile-page"]}>
+    <main className={styles["profile-page"]}>
+      <SEO title="My Profile | MessMeals" noindex={true} />
       {/* Header */}
       <div className={styles["profile-header"]}>
         <div className={styles["profile-avatar"]}>
@@ -210,7 +212,7 @@ export default function Profile() {
           ) : (
             <>
               {addresses.map((addr) => (
-                <div key={addr.id} className={styles["address-card"]}>
+                <article key={addr.id} className={styles["address-card"]}>
                   <h3 className={styles["address-name"]}>{addr.name}</h3>
                   <p className={styles["address-details"]}>
                     {addr.street}, {addr.townOrcity}, {addr.country} - {addr.postcode}
@@ -220,7 +222,7 @@ export default function Profile() {
                     <span><Phone size={14} /> {addr.phone}</span>
                     {addr.email && <span><Mail size={14} /> {addr.email}</span>}
                   </div>
-                </div>
+                </article>
               ))}
               <button className={styles["add-address-btn"]} onClick={() => setIsAddressModalOpen(true)}>
                 <Plus size={18} /> Add New Address
@@ -252,7 +254,7 @@ export default function Profile() {
             <div className={styles["profile-empty"]}>
               <UtensilsCrossed size={40} strokeWidth={1.4} color="#b3bab3" />
               <p>You haven't booked any mess plans yet.</p>
-              <button onClick={() => navigate("/view-all-listings")}>Browse Messes</button>
+              <Link to="/view-all-listings">Browse Messes</Link>
             </div>
           ) : (
             <div className={styles["sub-list"]}>
@@ -260,7 +262,7 @@ export default function Profile() {
                 const sm = statusMeta(sub.status);
                 const img = sub.plan.images?.[0]?.url;
                 return (
-                  <div className={styles["sub-card"]} key={sub.id}>
+                  <article className={styles["sub-card"]} key={sub.id}>
                     {/* Top row: image + title + status */}
                     <div className={styles["sub-card-top"]}>
                       {img && (
@@ -323,13 +325,13 @@ export default function Profile() {
                         <ChevronRight size={14} />
                       </span>
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
           )}
         </div>
       )}
-    </div>
+    </main>
   );
 }

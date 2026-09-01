@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import SEO from "../../components/shared/SEO/SEO";
 import { Truck, UserCircle, PartyPopper } from "lucide-react";
 import styles from "./BookingSuccess.module.css";
 
@@ -6,7 +7,8 @@ export default function BookingSuccess() {
   const navigate = useNavigate();
 
   return (
-    <div className={styles["bs-page"]}>
+    <main className={styles["bs-page"]}>
+      <SEO title="Booking Successful | MessMeals" noindex={true} />
       {/* Background blobs */}
       <div className={styles["bs-blob-1"]} />
       <div className={styles["bs-blob-2"]} />
@@ -68,6 +70,6 @@ export default function BookingSuccess() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

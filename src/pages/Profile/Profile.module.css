@@ -158,7 +158,7 @@
   font-size: 15px;
 }
 
-.profile-empty button {
+.profile-empty a {
   margin-top: 16px;
   background: #4cd00f;
   color: #0f2f0f;
@@ -169,9 +169,11 @@
   font-size: 14.5px;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.profile-empty button:hover {
+.profile-empty a:hover {
   background: #3cb800;
 }
 
