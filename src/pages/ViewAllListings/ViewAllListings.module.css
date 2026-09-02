@@ -296,7 +296,7 @@
 /* GRID */
 .listing-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   width: 100%;
 }
@@ -631,6 +631,14 @@
 
 /* Desktop */
 /* default styles above */
+@media (max-width: 1380px) {
+  .listing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    width: 100%;
+  }
+}
 
 /* Tablet */
 @media (max-width: 1024px) {

@@ -330,40 +330,7 @@ export default function ViewMessDetails() {
             )}
           </div>
 
-          <div className={styles["hero-info-strip"]}>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <MapPin size={18} />
-              </span>
-              <div>
-                <small>Location</small>
-                <p>
-                  {[
-                    mess.address.address || mess.address.location,
-                    mess.address.zipcode
-                  ].filter(Boolean).join(" - ") || "Not available"}
-                </p>
-              </div>
-            </div>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <Phone size={18} />
-              </span>
-              <div>
-                <small>Phone</small>
-                <p>{mess.phone || "Not available"}</p>
-              </div>
-            </div>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <Mail size={18} />
-              </span>
-              <div>
-                <small>Email</small>
-                <p>{mess.email || "Not available"}</p>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         {/* Inquiry Banner */}
@@ -425,7 +392,7 @@ export default function ViewMessDetails() {
                   {/* Plan Includes — variation pills */}
                   {plan.variations && plan.variations.length > 0 && (
                     <div className={styles["plan-includes"]}>
-                      <span className={styles["plan-includes-label"]}>Plan Includes</span>
+                      <span className={styles["plan-includes-label"]}>Plan Includes:</span>
                       <div className={styles["plan-includes-pills"]}>
                         {sortVariations(plan.variations).map((v) => {
                           const { Icon: VIcon, colorClass } = getVariationConfig(v.title);
@@ -440,14 +407,8 @@ export default function ViewMessDetails() {
                     </div>
                   )}
 
-                  {/* Duration chip */}
-                  <div className={styles["plan-duration-chip"]}>
-                    <Clock size={12} />
-                    {plan.isMonthlyPlan ? "30 Days" : "Per Meal"}
-                  </div>
-
                   {/* Description */}
-                  <p className={styles["plan-card-desc"]}>{plan.description}</p>
+                  {/* <p className={styles["plan-card-desc"]}>{plan.description}</p> */}
 
                   {/* Price */}
                   <div className={styles["plan-card-price"]}>
@@ -457,23 +418,17 @@ export default function ViewMessDetails() {
                       /{plan.isMonthlyPlan ? "month" : "day"}
                     </span>
                   </div>
-                  {plan.minPrice && (
+                  {/* {plan.minPrice && (
                     <p className={styles["plan-card-min-price"]}>Min. ₹{plan.minPrice}</p>
-                  )}
+                  )} */}
 
                   {/* Actions */}
                   <div className={styles["plan-card-actions"]}>
                     <button
-                      className={`${styles["plan-card-btn"]} ${styles.secondary}`}
+                      className={`${styles["plan-card-btn"]} ${styles.primary}`}
                       onClick={() => openPlanModal(plan)}
                     >
-                      Details
-                    </button>
-                    <button
-                      className={`${styles["plan-card-btn"]} ${styles.primary}`}
-                      onClick={() => goToBooking(plan.id)}
-                    >
-                      Book Now
+                      View Menu
                     </button>
                   </div>
                 </article>
@@ -640,6 +595,47 @@ export default function ViewMessDetails() {
               </div>
             </>
           )}
+        </section>
+
+        {/* Contact & Location Section */}
+        <section className={styles["content-block"]}>
+          <h2 className={styles["section-title"]}>
+            <MapPin size={20} /> Contact & Location
+          </h2>
+          <div className={styles["contact-info-grid"]}>
+            <div className={styles["hero-info-item"]}>
+              <span className={styles["hero-info-icon"]}>
+                <MapPin size={18} />
+              </span>
+              <div>
+                <small>Location</small>
+                <p>
+                  {[
+                    mess.address.address || mess.address.location,
+                    mess.address.zipcode
+                  ].filter(Boolean).join(" - ") || "Not available"}
+                </p>
+              </div>
+            </div>
+            <div className={styles["hero-info-item"]}>
+              <span className={styles["hero-info-icon"]}>
+                <Phone size={18} />
+              </span>
+              <div>
+                <small>Phone</small>
+                <p>{mess.phone || "Not available"}</p>
+              </div>
+            </div>
+            <div className={styles["hero-info-item"]}>
+              <span className={styles["hero-info-icon"]}>
+                <Mail size={18} />
+              </span>
+              <div>
+                <small>Email</small>
+                <p>{mess.email || "Not available"}</p>
+              </div>
+            </div>
+          </div>
         </section>
       </article>
 
@@ -929,16 +925,18 @@ export default function ViewMessDetails() {
                     </div>
                   )}
 
-                  <button
-                    className={`${styles["plan-action-btn"]} ${styles["full-width"]}`}
-                    onClick={() => {
-                      const planId = viewPlan.id;
-                      closePlanModal();
-                      goToBooking(planId);
-                    }}
-                  >
-                    Book Now
-                  </button>
+                  <div className={styles["plan-modal-footer"]}>
+                    <button
+                      className={`${styles["plan-action-btn"]} ${styles["full-width"]}`}
+                      onClick={() => {
+                        const planId = viewPlan.id;
+                        closePlanModal();
+                        goToBooking(planId);
+                      }}
+                    >
+                      Book Now
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
