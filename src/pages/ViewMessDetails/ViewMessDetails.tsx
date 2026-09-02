@@ -8,7 +8,7 @@ import {
   // Star, // commented out — new API does not return ratings
   Phone,
   Mail,
-  Clock,
+  // Clock,
   Check,
   Leaf,
   Salad,
