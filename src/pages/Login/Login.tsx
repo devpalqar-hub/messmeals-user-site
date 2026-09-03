@@ -124,16 +124,22 @@ export default function Login() {
 
   const handleResend = async () => {
     let res;
-    if (mode === "login") {
-      res = await sendLoginOtp(phone);
-    } else {
-      res = await sendRegOtp({ name, email, phone });
+    try {
+      if (mode === "login") {
+        res = await sendLoginOtp(phone);
+      } else {
+        res = await sendRegOtp({ name, email, phone });
+      }
+      if (res.success) {
+        if (res.sessionId) setSessionId(res.sessionId);
+        toast.info(res.message || "OTP resent successfully.");
+        startResendTimer();
+      } else {
+        toast.error(res.message || "Could not resend OTP. Try again.");
+      }
+    } catch {
+      toast.error("Could not resend OTP. Try again.");
     }
-    if (res.success && res.sessionId) {
-      setSessionId(res.sessionId);
-    }
-    toast.info("OTP resent successfully.");
-    startResendTimer();
   };
 
   return (
