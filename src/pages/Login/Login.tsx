@@ -26,6 +26,7 @@ export default function Login() {
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [loading, setLoading] = useState(false);
   const [resendIn, setResendIn] = useState(0);
+  const [sessionId, setSessionId] = useState("");
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -65,6 +66,7 @@ export default function Login() {
 
       if (res.success) {
         toast.success(res.message || "OTP sent successfully");
+        if (res.sessionId) setSessionId(res.sessionId);
         setStep("otp");
         startResendTimer();
         setTimeout(() => otpRefs.current[0]?.focus(), 50);
@@ -105,7 +107,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await verifyOtp(phone, code);
+      const res = await verifyOtp(phone, code, sessionId);
       if (res.success && res.user) {
         toast.success("Verified successfully!");
         login(res.user);
@@ -121,10 +123,14 @@ export default function Login() {
   };
 
   const handleResend = async () => {
+    let res;
     if (mode === "login") {
-      await sendLoginOtp(phone);
+      res = await sendLoginOtp(phone);
     } else {
-      await sendRegOtp({ name, email, phone });
+      res = await sendRegOtp({ name, email, phone });
+    }
+    if (res.success && res.sessionId) {
+      setSessionId(res.sessionId);
     }
     toast.info("OTP resent successfully.");
     startResendTimer();
