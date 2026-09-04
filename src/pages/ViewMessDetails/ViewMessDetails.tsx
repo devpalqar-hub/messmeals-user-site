@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import SEO from "../../components/shared/SEO/SEO";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { getMessBySlug } from "../../services/messApi";
 import type { MessDetails, NewMessPlan } from "../../types/mess";
 import {
@@ -95,6 +95,7 @@ export default function ViewMessDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [mess, setMess] = useState<MessDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [planTab, setPlanTab] = useState<"monthly" | "daily">("monthly");
@@ -185,6 +186,20 @@ export default function ViewMessDetails() {
       setLoading(false);
     }
   };
+
+  // Auto-open plan modal when ?planId= is in the URL
+  useEffect(() => {
+    const planId = searchParams.get("planId");
+    if (planId && mess && mess.plans) {
+      const matchedPlan = mess.plans.find((p) => p.id === planId);
+      if (matchedPlan) {
+        openPlanModal(matchedPlan);
+        // Remove planId from URL so refreshing doesn't re-open
+        searchParams.delete("planId");
+        setSearchParams(searchParams, { replace: true });
+      }
+    }
+  }, [mess]);
 
   function MessImage({
     src,
@@ -771,12 +786,6 @@ export default function ViewMessDetails() {
                     </span>
                     <h3>{viewPlan.planName}</h3>
                   </div>
-
-                  {viewPlan.description && (
-                    <p className={styles["plan-modal-description"]}>
-                      {viewPlan.description}
-                    </p>
-                  )}
 
                   {/* Plan Includes — variation pills */}
                   {viewPlan.variations && viewPlan.variations.length > 0 && (

@@ -67,11 +67,27 @@
   flex: 1;
   min-width: 0;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.hls-item:hover {
+  border-color: #cfe8c7;
+  box-shadow: 0 4px 12px rgba(28, 58, 28, 0.05);
 }
 
 .hls-item:focus-within {
   border-color: #55C500;
   box-shadow: 0 0 0 3px #EAF7E5;
+}
+
+.hls-item:focus-visible {
+  outline: 2px solid #55C500;
+  outline-offset: 2px;
+}
+
+.hls-field input,
+.hls-field select {
+  pointer-events: auto;
 }
 
 .hls-icon-wrapper {
