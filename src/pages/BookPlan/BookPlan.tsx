@@ -13,6 +13,10 @@ import {
   Loader2,
   Utensils,
   Wallet,
+  Sun,
+  Moon,
+  Coffee,
+  Salad,
 } from "lucide-react";
 import { getPlanById } from "../../services/messApi";
 import { choosePlan, getPlanPrice } from "../../services/bookingService";
@@ -53,6 +57,24 @@ const addMonthsToDate = (dateStr: string, numMonths: number) => {
   return d.toISOString().slice(0, 10);
 };
 
+/** Map a variation title to a suitable lucide icon and color class */
+const getVariationConfig = (title: string, styles: any) => {
+  const t = title.toLowerCase();
+  if (t.includes("breakfast") || t.includes("bf") || t.includes("morning")) {
+    return { Icon: Sun, colorClass: styles["pill-breakfast"] };
+  }
+  if (t.includes("lunch") || t.includes("afternoon") || t.includes("noon")) {
+    return { Icon: Utensils, colorClass: styles["pill-lunch"] };
+  }
+  if (t.includes("dinner") || t.includes("night") || t.includes("dn")) {
+    return { Icon: Moon, colorClass: styles["pill-dinner"] };
+  }
+  if (t.includes("snack") || t.includes("tea")) {
+    return { Icon: Coffee, colorClass: styles["pill-snack"] };
+  }
+  return { Icon: Salad, colorClass: styles["pill-default"] };
+};
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function BookPlan() {
@@ -73,7 +95,7 @@ export default function BookPlan() {
   const [activeImg, setActiveImg] = useState(0);
 
   // ── step-1 schedule ──────────────────────────────────────────────────────
-  const [scheduleType, setScheduleType] = useState<ScheduleType>("DAILY");
+  const [scheduleType, setScheduleType] = useState<ScheduleType>("EVERYDAY");
   const [startDate, setStartDate] = useState(today());
   const [endDate, setEndDate] = useState("");
   const [months, setMonths] = useState(1);
@@ -124,7 +146,7 @@ export default function BookPlan() {
       .then((data: PlanDetail) => {
         setPlan(data);
         if (data.isMonthlyPlan) setScheduleType("MONTHLY");
-        else setScheduleType("DAILY");
+        else setScheduleType("EVERYDAY");
       })
       .catch(() => toast.error("Failed to load plan details."))
       .finally(() => setPlanLoading(false));
@@ -143,7 +165,11 @@ export default function BookPlan() {
       cancelUrl: `${window.location.origin}/booking/cancel`,
     };
     if (computedEndDate) pricePayload.end_date = computedEndDate;
-    if (scheduleType === "DAILY" && selectedDays.length > 0) pricePayload.selectedDays = selectedDays;
+    if (scheduleType === "EVERYDAY") {
+      pricePayload.selectedDays = API_WEEKDAYS;
+    } else if (scheduleType === "CUSTOM") {
+      pricePayload.selectedDays = selectedDays;
+    }
 
     const timer = setTimeout(async () => {
       setPriceLoading(true);
@@ -186,7 +212,7 @@ export default function BookPlan() {
     } else {
       if (!endDate) return false;
       if (new Date(endDate) < new Date(startDate)) return false;
-      if (selectedDays.length === 0) return false;
+      if (scheduleType === "CUSTOM" && selectedDays.length === 0) return false;
     }
     return true;
   };
@@ -228,7 +254,11 @@ export default function BookPlan() {
         cancelUrl: `${window.location.origin}/booking/cancel`,
       };
       if (computedEndDate) payload.end_date = computedEndDate;
-      if (scheduleType === "DAILY") payload.selectedDays = selectedDays;
+      if (scheduleType === "EVERYDAY") {
+        payload.selectedDays = API_WEEKDAYS;
+      } else if (scheduleType === "CUSTOM") {
+        payload.selectedDays = selectedDays;
+      }
 
       const res = await choosePlan(user.token, payload);
       const paymentUrl = res.data.payment.paymentUrl;
@@ -345,21 +375,22 @@ export default function BookPlan() {
               {plan.Variation.length > 0 && (
                 <div className={styles["bp-variations"]}>
                   <p className={styles["bp-variations-label"]}><Utensils size={13} /> Includes</p>
-                  <div className={styles["bp-variation-chips"]}>
-                    {plan.Variation.map((v) => (
-                      <span key={v.id} className={styles["bp-variation-chip"]}>{v.title}</span>
-                    ))}
+                  <div className={styles["plan-includes-pills"]}>
+                    {plan.Variation.map((v) => {
+                      const { Icon: VIcon, colorClass } = getVariationConfig(v.title, styles);
+                      return (
+                        <span key={v.id} className={`${styles["plan-includes-pill"]} ${colorClass}`}>
+                          <VIcon size={12} />
+                          {v.title}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
               <div className={styles["bp-plan-badges"]}>
                 {plan.isMonthlyPlan && <span className={styles["bp-badge"]}>Monthly</span>}
                 {plan.isDailyPlan && <span className={styles["bp-badge"]}>Daily</span>}
-                {plan.minPrice && (
-                  <span className={`${styles["bp-badge"]} ${styles["bp-badge--muted"]}`}>
-                    From ₹{Number(plan.minPrice).toLocaleString("en-IN")}
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -403,7 +434,25 @@ export default function BookPlan() {
                 )}
               </div>
 
-              {scheduleType === "DAILY" && (
+              {plan && !plan.isMonthlyPlan && (
+                <div className={styles["bp-field"]}>
+                  <label className={styles["bp-label"]}>Schedule Type *</label>
+                  <div className={styles["bp-schedule-toggle"]}>
+                    <button type="button"
+                      className={`${styles["bp-toggle-btn"]} ${scheduleType === "EVERYDAY" ? styles["bp-toggle-btn--active"] : ""}`}
+                      onClick={() => setScheduleType("EVERYDAY")}>
+                      Everyday
+                    </button>
+                    <button type="button"
+                      className={`${styles["bp-toggle-btn"]} ${scheduleType === "CUSTOM" ? styles["bp-toggle-btn--active"] : ""}`}
+                      onClick={() => setScheduleType("CUSTOM")}>
+                      Custom
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {scheduleType === "CUSTOM" && (
                 <div className={styles["bp-field"]}>
                   <label className={styles["bp-label"]}>Delivery days *</label>
                   <div className={styles["bp-weekdays"]}>
@@ -600,7 +649,7 @@ export default function BookPlan() {
                   { label: "Schedule", value: SCHEDULE_LABELS[scheduleType] },
                   { label: "Start date", value: startDate },
                   ...(computedEndDate ? [{ label: "End date", value: computedEndDate }] : []),
-                  ...(scheduleType === "DAILY" && selectedDays.length > 0 ? [{ label: "Days", value: selectedDays.map((d) => DAY_SHORT[d]).join(", "), full: true as const }] : []),
+                  ...((scheduleType === "EVERYDAY" || scheduleType === "CUSTOM") ? [{ label: "Days", value: scheduleType === "EVERYDAY" ? "All days" : selectedDays.map((d) => DAY_SHORT[d]).join(", "), full: true as const }] : []),
                   ...(priceData
                     ? [
                       { label: "Chargeable days", value: `${priceData.chargeableDays} day${priceData.chargeableDays !== 1 ? "s" : ""}` },
@@ -653,10 +702,10 @@ export default function BookPlan() {
                 <span>End</span><strong>{computedEndDate}</strong>
               </div>
             )}
-            {scheduleType === "DAILY" && selectedDays.length > 0 && (
+            {(scheduleType === "EVERYDAY" || scheduleType === "CUSTOM") && (
               <div className={styles["bp-summary-row"]}>
                 <span>Days</span>
-                <strong>{selectedDays.map((d) => DAY_SHORT[d]).join(", ")}</strong>
+                <strong>{scheduleType === "EVERYDAY" ? "All days" : selectedDays.map((d) => DAY_SHORT[d]).join(", ")}</strong>
               </div>
             )}
             {selectedAddr && (

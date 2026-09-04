@@ -3,6 +3,7 @@ import MobileBottomNav from "./components/shared/Navbar/MobileBottomNav";
 import SEO from "./components/shared/SEO/SEO";
 import HeroSection from "./sections/HeroSection/HeroSection";
 import FeaturedMesses from "./sections/FeaturedMesses/FeaturedMesses";
+import PopularPlans from "./sections/PopularPlans/PopularPlans";
 import VerifiedMesses from "./sections/VerifiedMesses/VerifiedMesses";
 import Testimonials from "./sections/Testimonials/Testimonials";
 import OwnAMess from "./sections/OwnAMess/OwnAMess";
@@ -46,6 +47,7 @@ function App() {
              url="/"
            />
            <HeroSection />
+           <PopularPlans />
            <FeaturedMesses />
            <VerifiedMesses />
            <Testimonials />

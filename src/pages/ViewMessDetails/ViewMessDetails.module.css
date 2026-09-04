@@ -1301,12 +1301,6 @@
   background: #128c4a;
 }
 
-.plan-modal-description {
-  color: #617061;
-  line-height: 1.6;
-  margin: 0 0 16px 0;
-}
-
 .modal-card h3 {
   font-size: 1.25rem;
   font-weight: 700;
@@ -2479,7 +2473,7 @@
   }
 
   .plan-includes-pill {
-    font-size: 0.62rem;
+    font-size: 0.45rem;
     padding: 3px 7px;
   }
 
