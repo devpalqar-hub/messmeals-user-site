@@ -105,6 +105,8 @@ export default function MessListingRow({
     }
   };
 
+  if (!loading && messList.length === 0) return null;
+
   return (
     <section className={`${styles.trending} ${sectionClassName}`}>
       {/* HEADER */}
