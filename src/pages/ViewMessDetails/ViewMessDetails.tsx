@@ -28,6 +28,12 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import styles from "./ViewMessDetails.module.css";
 
+const WhatsappIcon = ({ size = 18, color = "currentColor" }: { size?: number, color?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.013 2a9.98 9.98 0 0 0-8.528 15.17l-1.48 4.417 4.542-1.464A9.98 9.98 0 1 0 12.013 2Zm0 18.293a8.318 8.318 0 0 1-4.238-1.157l-.304-.18-3.15.992.996-3.047-.2-.315A8.307 8.307 0 0 1 3.693 12a8.32 8.32 0 1 1 8.32 8.293Zm4.57-6.223c-.25-.125-1.48-.732-1.708-.816-.23-.083-.396-.125-.563.125-.166.25-.644.815-.79.98-.146.167-.292.188-.542.063-.25-.125-1.055-.39-2.01-1.24-.74-.66-1.24-1.47-1.385-1.72-.146-.25-.015-.385.11-.51.112-.113.25-.292.375-.438.125-.145.166-.25.25-.416.083-.166.04-.312-.02-.437-.063-.125-.563-1.355-.77-1.854-.203-.487-.41-.42-.564-.428l-.48-.008c-.166 0-.437.063-.666.313-.23.25-.875.854-.875 2.083 0 1.23.896 2.417 1.02 2.583.125.167 1.76 2.688 4.263 3.77.596.258 1.06.412 1.423.527.597.19 1.14.163 1.57.1.473-.07 1.48-.605 1.688-1.188.208-.583.208-1.082.146-1.187-.062-.105-.228-.167-.478-.292Z" />
+  </svg>
+);
+
 const DESCRIPTION_PREVIEW_LENGTH = 110;
 
 const DAY_ORDER_UPPER = [
@@ -99,11 +105,13 @@ export default function ViewMessDetails() {
   const [mess, setMess] = useState<MessDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [planTab, setPlanTab] = useState<"monthly" | "daily">("monthly");
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [viewPlan, setViewPlan] = useState<NewMessPlan | null>(null);
   const [activePlanImage, setActivePlanImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showGalleryModal, setShowGalleryModal] = useState(false);
+  // const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [showContactMenu, setShowContactMenu] = useState(false);
   const [activeGalleryImage, setActiveGalleryImage] = useState(0);
 
   // Touch swipe tracking for gallery
@@ -348,22 +356,7 @@ export default function ViewMessDetails() {
 
         </div>
 
-        {/* Inquiry Banner */}
-        <div className={styles["inquiry-banner"]}>
-          <div className={styles["inquiry-banner-icon"]}>
-            <MessageCircle size={22} />
-          </div>
-          <div className={styles["inquiry-banner-text"]}>
-            <h3>Have Questions?</h3>
-            <p>We're here to help! Send us an inquiry and we'll get back to you soon.</p>
-          </div>
-          <button
-            className={styles["inquiry-banner-btn"]}
-            onClick={() => setShowInquiryModal(true)}
-          >
-            Send an Inquiry
-          </button>
-        </div>
+
 
         {/* Meal Plans Section */}
         <section className={styles["content-block"]}>
@@ -617,42 +610,84 @@ export default function ViewMessDetails() {
           <h2 className={styles["section-title"]}>
             <MapPin size={20} /> Contact & Location
           </h2>
-          <div className={styles["contact-info-grid"]}>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <MapPin size={18} />
-              </span>
-              <div>
-                <small>Location</small>
-                <p>
-                  {[
-                    mess.address.address || mess.address.location,
-                    mess.address.zipcode
-                  ].filter(Boolean).join(" - ") || "Not available"}
-                </p>
+          <div className={styles["contact-section"]}>
+            <div className={styles["contact-info-grid"]}>
+              <div className={styles["contact-info-item"]}>
+                <span className={styles["contact-info-icon"]}>
+                  <MapPin size={18} />
+                </span>
+                <div className={styles["contact-info-text"]}>
+                  <small>LOCATION</small>
+                  <p>
+                    {[
+                      mess.address.address || mess.address.location,
+                      mess.address.zipcode
+                    ].filter(Boolean).join(" - ") || "Not available"}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <Phone size={18} />
-              </span>
-              <div>
-                <small>Phone</small>
-                <p>{mess.phone || "Not available"}</p>
+
+              <div className={styles["contact-divider"]} />
+
+              <div className={styles["contact-info-item"]}>
+                <span className={styles["contact-info-icon"]}>
+                  <Mail size={18} />
+                </span>
+                <div className={styles["contact-info-text"]}>
+                  <small>EMAIL</small>
+                  <p>{mess.email || "Not available"}</p>
+                </div>
               </div>
-            </div>
-            <div className={styles["hero-info-item"]}>
-              <span className={styles["hero-info-icon"]}>
-                <Mail size={18} />
-              </span>
-              <div>
-                <small>Email</small>
-                <p>{mess.email || "Not available"}</p>
+
+              <div className={styles["contact-divider"]} />
+
+              <div className={styles["contact-info-item"]}>
+                <span className={styles["contact-info-icon"]}>
+                  <MessageCircle size={18} />
+                </span>
+                <div className={styles["contact-info-text"]}>
+                  <h3>Have Questions?</h3>
+                  <p>Send us an inquiry </p>
+                </div>
+                <button
+                  className={styles["contact-inquiry-btn"]}
+                  onClick={() => setShowInquiryModal(true)}
+                >
+                  Send an Inquiry
+                </button>
               </div>
             </div>
           </div>
         </section>
       </article>
+
+      {/* Floating Contact Button & Menu */}
+      <div className={styles["floating-contact-container"]}>
+        {showContactMenu && (
+          <div className={styles["floating-contact-menu"]}>
+            <div className={styles["floating-contact-header"]}>
+              <small>CONTACT US</small>
+            </div>
+            <div className={styles["floating-contact-actions"]}>
+              <a href={`tel:${mess?.phone}`} className={styles["fc-btn-call"]}>
+                <Phone size={18} />
+                Call Now
+              </a>
+              <a href="https://wa.me/919544222468" target="_blank" rel="noreferrer" className={styles["fc-btn-whatsapp"]}>
+                <WhatsappIcon size={18} />
+                Text Us
+              </a>
+            </div>
+          </div>
+        )}
+        <button
+          className={`${styles["floating-contact-toggle"]} ${showContactMenu ? styles["active"] : ""}`}
+          onClick={() => setShowContactMenu(!showContactMenu)}
+          aria-label="Toggle contact menu"
+        >
+          {showContactMenu ? <X size={24} /> : <Phone size={24} />}
+        </button>
+      </div>
 
       {/* Send an Inquiry Modal */}
       {showInquiryModal && (
@@ -813,11 +848,6 @@ export default function ViewMessDetails() {
                       /{viewPlan.isMonthlyPlan ? "month" : "day"}
                     </span>
                   </div>
-                  {viewPlan.minPrice && (
-                    <p className={styles["plan-min-price"]}>
-                      Min. Price: ₹{viewPlan.minPrice}
-                    </p>
-                  )}
 
                   {/* Weekly Menu */}
                   {viewPlan.menus && viewPlan.menus.length > 0 && (
@@ -921,7 +951,7 @@ export default function ViewMessDetails() {
                         </div>
                       </div>
                       <a
-                        href={`https://wa.me/${mess.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi! I'm interested in the "${viewPlan.planName}" plan. Could you please provide more details?`)}`}
+                        href={`https://wa.me/919544222468?text=${encodeURIComponent(`Hi! I'm interested in the "${viewPlan.planName}" plan. Could you please provide more details?`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles["whatsapp-enquire-btn"]}

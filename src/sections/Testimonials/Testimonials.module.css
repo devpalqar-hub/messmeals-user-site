@@ -147,12 +147,14 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
+    /* Firefox */
     padding: 4px 20px 8px;
   }
 
   .testi-grid::-webkit-scrollbar {
-    display: none; /* Chrome / Safari */
+    display: none;
+    /* Chrome / Safari */
   }
 
   .testi-card {

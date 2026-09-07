@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
-import { User } from "lucide-react";
+import { User, Home, Utensils, Info, BookOpen } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 import { useAuth } from "../../../context/AuthContext";
 
 const NAV_LINKS = [
-  { to: "/", label: "Home", end: true },
-  { to: "/view-all-listings", label: "Listings", end: false },
-  { to: "/about", label: "About Us", end: false },
-  { to: "/blog", label: "Blog", end: false },
+  { to: "/", label: "Home", end: true, Icon: Home },
+  { to: "/view-all-listings", label: "Messes", end: false, Icon: Utensils },
+  { to: "/about", label: "About Us", end: false, Icon: Info },
+  { to: "/blog", label: "Blog", end: false, Icon: BookOpen },
 ];
 
 export default function Navbar() {
@@ -20,8 +20,25 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const headerRef = useRef<HTMLElement>(null);
 
   const closeNavbar = () => setIsNavbarOpen(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isNavbarOpen &&
+        headerRef.current &&
+        !headerRef.current.contains(event.target as Node)
+      ) {
+        setIsNavbarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNavbarOpen]);
 
   const moveUnderlineTo = (el: HTMLElement) => {
     if (!navCenterRef.current) return;
@@ -48,7 +65,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={styles["navbar-wrapper"]}>
+      <header className={styles["navbar-wrapper"]} ref={headerRef}>
         <nav className={styles.navbar}>
 
           {/* LEFT — Logo */}
@@ -114,7 +131,7 @@ export default function Navbar() {
         {/* MOBILE DROPDOWN */}
         {isNavbarOpen && (
           <div className={styles["mobile-menu"]}>
-            {NAV_LINKS.map(({ to, label, end }) => (
+            {NAV_LINKS.map(({ to, label, end, Icon }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -126,6 +143,7 @@ export default function Navbar() {
                 }
                 onClick={closeNavbar}
               >
+                <Icon size={18} className={styles["nav-icon"]} />
                 {label}
               </NavLink>
             ))}

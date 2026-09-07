@@ -1,5 +1,4 @@
 .trending {
-  max-width: 1600px;
   margin: 0 auto;
   padding: 36px 80px;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
@@ -566,6 +565,14 @@
   }
 
   .trending-header h2 {
-    font-size: 17px;
+    font-size: 15px;
+  }
+
+  .trending-header p {
+    font-size: 12px;
+  }
+
+  .view-all {
+    font-size: 10px;
   }
 }

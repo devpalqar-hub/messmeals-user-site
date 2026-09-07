@@ -1,15 +1,30 @@
 /* ===================== LIGHT HERO ===================== */
 
 .hero-light {
+  position: relative;
+  z-index: 20;
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  background: #ffffff;
-  padding: 60px 80px 48px;
+  background: url('/herobg.png') center/cover no-repeat;
+  padding: 80px 80px 80px;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
 }
 
+/* Contrast-safety overlay: keeps the dark title/search legible regardless
+   of what's behind them in the photo, without hiding the image entirely */
+.hero-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse 75% 90% at center 30%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.42) 55%, rgba(255, 255, 255, 0) 82%);
+  pointer-events: none;
+}
+
 .hero-light-content {
+  position: relative;
+  z-index: 1;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -43,7 +58,7 @@
 .hero-light-search {
   margin-top: 32px;
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 100px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -61,13 +76,20 @@
   gap: 10px;
   text-align: left;
   border: 1.5px solid #E3EAE1;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 8px 14px;
   background: #ffffff;
   flex: 1;
-  min-width: 0;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+}
+
+.hls-search-item {
+  position: relative;
+  flex: 3;
+  border-radius: 100px 50px 50px 100px;
+  min-width: 0;
 }
 
 .hls-item:hover {
@@ -92,7 +114,7 @@
 
 .hls-icon-wrapper {
   background: #EAF7E5;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 36px;
   height: 36px;
   display: flex;
@@ -101,13 +123,19 @@
   flex-shrink: 0;
 }
 
+.hls-search-icon-wrapper {
+  border-radius: 50%;
+}
+
 .hls-icon {
   color: #2E7D32;
+  display: block;
 }
 
 .hls-right-icon {
   color: #617061;
   flex-shrink: 0;
+  display: block;
 }
 
 /* Specific right icon colors */
@@ -119,8 +147,20 @@
 .hls-field {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   width: 100%;
+  min-width: 0;
+}
+
+/* Search input's own field: force true vertical centering with flex,
+   since a column layout with a single line of text can still sit high
+   due to the input/select's own default line-height */
+.hls-field-center {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hls-field label {
@@ -128,6 +168,7 @@
   font-weight: 600;
   color: #101C10;
   white-space: nowrap;
+  line-height: 1.3;
 }
 
 .hero-light-search input,
@@ -135,12 +176,16 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1;
   color: #617061;
   padding: 0;
+  margin: 0;
   width: 100%;
   cursor: pointer;
   appearance: none;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .hero-light-search input {
@@ -149,16 +194,18 @@
 
 .hero-light-search input::placeholder {
   color: #849084;
+  line-height: 1;
 }
 
 .hls-btn {
   background: #55C500;
   color: #ffffff;
   border: none;
-  padding: 0 24px;
-  border-radius: 12px;
+  padding: 0 32px;
+  border-radius: 50px 100px 100px 50px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,6 +217,99 @@
 
 .hls-btn:hover {
   background: #45A800;
+}
+
+/* DROPDOWN STYLES */
+.hls-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E3EAE1;
+  padding: 8px;
+  z-index: 998;
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.hls-dropdown-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  color: #617061;
+  font-size: 14px;
+}
+
+.hls-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hls-dropdown-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.hls-dropdown-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: #849084;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px 4px;
+}
+
+.hls-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hls-dropdown-item:hover {
+  background: #F3F6F2;
+}
+
+.hls-dropdown-icon {
+  color: #849084;
+  flex-shrink: 0;
+}
+
+.hls-dropdown-text {
+  font-size: 14px;
+  color: #101C10;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hls-dropdown-empty {
+  padding: 16px;
+  text-align: center;
+  color: #849084;
+  font-size: 14px;
 }
 
 /* POPULAR SEARCHES */
@@ -231,55 +371,105 @@
 /* Mobile */
 @media (max-width: 768px) {
   .hero-light {
-    padding: 32px 20px 28px;
+    background: url('/herobgmob.png') center/cover no-repeat;
+    padding: 32px 16px 28px;
+  }
+
+  .hero-light::before {
+    background: radial-gradient(ellipse 92% 82% at center 25%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.5) 55%, rgba(255, 255, 255, 0) 85%);
   }
 
   .hero-light-title {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .hero-light-subtitle {
-    margin-top: 14px;
-    font-size: 15px;
+    margin-top: 10px;
+    font-size: 13.5px;
   }
 
   .hero-light-search {
-    margin-top: 24px;
+    margin-top: 18px;
     flex-direction: column;
     align-items: stretch;
-    border-radius: 18px;
-    padding: 14px;
-    gap: 12px;
+    border-radius: 22px;
+    padding: 8px;
+    gap: 6px;
   }
 
   .hls-item {
-    padding: 10px 16px;
+    padding: 6px 10px;
+    border-radius: 14px;
+    gap: 8px;
+    min-height: 42px;
+  }
+
+  .hls-search-item {
+    border-radius: 14px;
+  }
+
+  .hls-icon-wrapper {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+  }
+
+  .hls-search-icon-wrapper {
+    border-radius: 50%;
+  }
+
+  .hls-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hls-right-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hls-field label {
+    font-size: 10.5px;
+  }
+
+  .hero-light-search input,
+  .hero-light-search select {
+    font-size: 12px !important;
+    line-height: 1;
+  }
+
+  .hero-light-search input::placeholder {
+    font-size: 12px;
+    line-height: 1;
   }
 
   .hls-btn {
-    padding: 16px 20px;
-    margin-top: 4px;
+    padding: 12px 18px;
+    margin-top: 2px;
+    border-radius: 14px;
+    font-size: 14px;
+    gap: 6px;
   }
 
   .hero-light-tags {
-    margin-top: 20px;
-    gap: 8px;
+    margin-top: 16px;
+    gap: 6px;
   }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
   .hero-light {
-    padding: 24px 16px 24px;
+    padding: 24px 14px 22px;
   }
 
   .hero-light-title {
-    font-size: 26px;
+    font-size: 23px;
   }
 
   .hero-light-subtitle {
-    font-size: 14px;
-    margin-top: 12px;
+    font-size: 13px;
+    margin-top: 8px;
   }
 
   .hero-light-subtitle br {
@@ -287,33 +477,52 @@
   }
 
   .hero-light-search {
-    border-radius: 16px;
-    padding: 12px;
-    gap: 10px;
+    margin-top: 16px;
+    border-radius: 20px;
+    padding: 7px;
+    gap: 5px;
   }
 
   .hls-item {
-    padding: 8px 14px;
-    gap: 12px;
+    padding: 6px 9px;
+    gap: 7px;
+    border-radius: 12px;
+    min-height: 38px;
+  }
+
+  .hls-search-item {
+    border-radius: 12px;
   }
 
   .hls-icon-wrapper {
-    width: 38px;
-    height: 38px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
+
+  .hls-icon {
+    width: 13px;
+    height: 13px;
   }
 
   .hls-field label {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .hero-light-search input,
   .hero-light-search select {
-    font-size: 13px;
+    font-size: 11px !important;
+    line-height: 1;
+  }
+
+  .hero-light-search input::placeholder {
+    font-size: 11px;
+    line-height: 1;
   }
 
   .hls-btn {
-    font-size: 15px;
-    padding: 14px;
+    font-size: 13px;
+    padding: 11px 16px;
   }
 
   .hero-light-tags {
@@ -335,23 +544,44 @@
 /* Very small phones — only when necessary */
 @media (max-width: 360px) {
   .hero-light-title {
-    font-size: 22px;
-  }
-
-  .hero-light-title br {
-    display: none;
+    font-size: 20px;
   }
 
   .hero-light-subtitle {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .hero-light-search {
-    padding: 10px;
+    padding: 6px;
+    border-radius: 18px;
+  }
+
+  .hls-item {
+    padding: 5px 8px;
+    min-height: 36px;
+  }
+
+  .hls-icon-wrapper {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hls-field label {
+    font-size: 9.5px;
+  }
+
+  .hero-light-search input,
+  .hero-light-search select {
+    font-size: 10px !important;
+    line-height: 1;
+  }
+
+  .hero-light-search input::placeholder {
+    font-size: 12px;
   }
 
   .hls-btn {
-    font-size: 13px;
-    padding: 11px 16px;
+    font-size: 12.5px;
+    padding: 10px 14px;
   }
 }

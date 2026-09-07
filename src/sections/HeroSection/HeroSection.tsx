@@ -3,14 +3,19 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
-  MapPin,
   Utensils,
   CalendarDays,
-  LocateFixed,
   ChevronDown,
+  ArrowRight,
+  MapPin,
+  Store,
+  Loader2,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import type { Variants } from "framer-motion";
+import { getSearchSuggestions } from "../../services/messApi";
+import type { SearchSuggestionResponse } from "../../services/messApi";
+import { useToast } from "../../context/ToastContext";
 
 /* ---------------- ANIMATION VARIANTS ---------------- */
 
@@ -37,29 +42,136 @@ const stagger: Variants = {
   },
 };
 
-const POPULAR_SEARCHES = [
-  "Kerala",
-  "Tamilnadu",
-  "Pondicherry",
-  "Bangalore",
-];
+// const POPULAR_SEARCHES = [
+//   "Kerala",
+//   "Tamilnadu",
+//   "Pondicherry",
+//   "Bangalore",
+// ];
 
 /* ---------------- COMPONENT ---------------- */
 
 export default function HeroSection() {
   const navigate = useNavigate();
+  const { error } = useToast();
 
   const locationInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const mealSelectRef = useRef<HTMLSelectElement>(null);
   const planSelectRef = useRef<HTMLSelectElement>(null);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SearchSuggestionResponse | null>(null);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const [selectedItem, setSelectedItem] = useState<
+    | { type: "mess"; id: string; name: string }
+    | { type: "location"; name: string; latitude: number; longitude: number }
+    | null
+  >(null);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setSuggestions(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getSearchSuggestions(debouncedQuery, 50);
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      if (isSuggestionsOpen) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isSuggestionsOpen]);
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setSelectedItem(null);
+    setIsSuggestionsOpen(true);
+  };
+
+  const handleSelectMess = (mess: any) => {
+    setSearchQuery(mess.name);
+    setSelectedItem({ type: "mess", id: mess.id, name: mess.name });
+    setIsSuggestionsOpen(false);
+  };
+
+  const handleSelectLocation = (loc: any) => {
+    setSearchQuery(loc.name);
+    setSelectedItem({ type: "location", name: loc.name, latitude: loc.latitude, longitude: loc.longitude });
+    setIsSuggestionsOpen(false);
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/view-all-listings");
+    
+    if (searchQuery.trim().length > 0 && !selectedItem) {
+      error("Please select a suggestion from the dropdown.");
+      setIsSuggestionsOpen(true);
+      locationInputRef.current?.focus();
+      return;
+    }
+
+    const foodType = mealSelectRef.current?.value || "";
+    const planType = planSelectRef.current?.value || "";
+
+    const params = new URLSearchParams();
+
+    if (selectedItem?.type === "mess") {
+      params.append("name", selectedItem.name);
+    } else if (selectedItem?.type === "location") {
+      params.append("latitude", selectedItem.latitude.toString());
+      params.append("longitude", selectedItem.longitude.toString());
+    }
+
+    if (foodType) params.append("foodType", foodType);
+    if (planType) params.append("planType", planType);
+
+    navigate(`/view-all-listings?${params.toString()}`);
   };
 
   const focusLocation = () => {
     locationInputRef.current?.focus();
+    setIsSuggestionsOpen(true);
   };
 
   const openMealDropdown = () => {
@@ -121,9 +233,10 @@ export default function HeroSection() {
           variants={fadeUp}
           onSubmit={handleSearch}
         >
-          {/* LOCATION */}
+          {/* SEARCH INPUT */}
           <div
-            className={styles["hls-item"]}
+            className={`${styles["hls-item"]} ${styles["hls-search-item"]}`}
+            ref={searchContainerRef}
             onClick={focusLocation}
             role="button"
             tabIndex={0}
@@ -134,24 +247,78 @@ export default function HeroSection() {
               }
             }}
           >
-            <div className={styles["hls-icon-wrapper"]}>
-              <MapPin size={18} className={styles["hls-icon"]} />
+            <div className={`${styles["hls-icon-wrapper"]} ${styles["hls-search-icon-wrapper"]}`}>
+              <Search size={18} className={styles["hls-icon"]} />
             </div>
 
-            <div className={styles["hls-field"]}>
-              <label>Enter location</label>
-
+            <div className={`${styles["hls-field"]} ${styles["hls-field-center"]}`}>
               <input
                 ref={locationInputRef}
                 type="text"
-                placeholder="e.g. Kochi, Kerala"
+                value={searchQuery}
+                onChange={handleQueryChange}
+                onFocus={() => setIsSuggestionsOpen(true)}
+                placeholder="Mess or location search"
               />
             </div>
+            
+            {/* AUTOCOMPLETE DROPDOWN */}
+            {isSuggestionsOpen && (searchQuery.trim().length > 0 || isLoading) && (
+              <div className={styles["hls-dropdown"]}>
+                {isLoading ? (
+                  <div className={styles["hls-dropdown-loading"]}>
+                    <Loader2 className={styles["hls-spinner"]} size={20} />
+                    <span>Loading suggestions...</span>
+                  </div>
+                ) : (
+                  <>
+                    {suggestions?.messes && suggestions.messes.length > 0 && (
+                      <div className={styles["hls-dropdown-group"]}>
+                        <div className={styles["hls-dropdown-header"]}>Messes</div>
+                        {suggestions.messes.map((mess) => (
+                          <div
+                            key={`mess-${mess.id}`}
+                            className={styles["hls-dropdown-item"]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSelectMess(mess);
+                            }}
+                          >
+                            <Store size={16} className={styles["hls-dropdown-icon"]} />
+                            <span className={styles["hls-dropdown-text"]}>{mess.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {suggestions?.locations && suggestions.locations.length > 0 && (
+                      <div className={styles["hls-dropdown-group"]}>
+                        <div className={styles["hls-dropdown-header"]}>Locations</div>
+                        {suggestions.locations.map((loc, idx) => (
+                          <div
+                            key={`loc-${idx}`}
+                            className={styles["hls-dropdown-item"]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSelectLocation(loc);
+                            }}
+                          >
+                            <MapPin size={16} className={styles["hls-dropdown-icon"]} />
+                            <span className={styles["hls-dropdown-text"]}>{loc.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-            <LocateFixed
-              size={18}
-              className={styles["hls-right-icon"]}
-            />
+                    {!isLoading && (!suggestions?.messes || suggestions.messes.length === 0) && (!suggestions?.locations || suggestions.locations.length === 0) && (
+                      <div className={styles["hls-dropdown-empty"]}>
+                        No results found for "{searchQuery}"
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* MEAL PREFERENCE */}
@@ -176,8 +343,9 @@ export default function HeroSection() {
 
               <select ref={mealSelectRef} defaultValue="">
                 <option value="">Any</option>
-                <option value="veg">Veg</option>
-                <option value="non-veg">Non-Veg</option>
+                <option value="VEG">Veg</option>
+                <option value="NON_VEG">Non-Veg</option>
+                <option value="MIXED">Mixed</option>
               </select>
             </div>
 
@@ -212,9 +380,8 @@ export default function HeroSection() {
 
               <select ref={planSelectRef} defaultValue="">
                 <option value="">Any</option>
-                <option value="daily">Daily</option>
-                <option value="monthly">Monthly</option>
-                <option value="custom">Custom</option>
+                <option value="DAILY">Daily</option>
+                <option value="MONTHLY">Monthly</option>
               </select>
             </div>
 
@@ -227,12 +394,12 @@ export default function HeroSection() {
           {/* SEARCH BUTTON */}
           <button type="submit" className={styles["hls-btn"]}>
             Search Meals
-            <Search size={17} />
+            <ArrowRight size={17} />
           </button>
         </motion.form>
 
         {/* Popular Searches */}
-        <motion.div
+        {/* <motion.div
           className={styles["hero-light-tags"]}
           variants={fadeUp}
         >
@@ -247,7 +414,7 @@ export default function HeroSection() {
               {city}
             </button>
           ))}
-        </motion.div>
+        </motion.div> */}
       </motion.div>
     </section>
   );

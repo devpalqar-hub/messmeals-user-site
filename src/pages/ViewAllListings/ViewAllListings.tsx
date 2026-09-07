@@ -15,7 +15,7 @@ import {
   ArrowRight,
   Star,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
 
 const LIMIT = 6;
@@ -56,7 +56,20 @@ export default function ViewAllListings() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [filters, setFilters] = useState<Filters>({});
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const getInitialFilters = (): Filters => {
+    const init: Filters = {};
+    if (searchParams.get("name")) init.search = searchParams.get("name")!;
+    if (searchParams.get("latitude")) init.latitude = searchParams.get("latitude")!;
+    if (searchParams.get("longitude")) init.longitude = searchParams.get("longitude")!;
+    if (searchParams.get("foodType")) init.foodType = searchParams.get("foodType")!;
+    if (searchParams.get("planType")) init.planType = searchParams.get("planType")!;
+    return init;
+  };
+
+  const [filters, setFilters] = useState<Filters>(getInitialFilters);
+  const [localFilters, setLocalFilters] = useState<Filters>(getInitialFilters);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
   const filtersRef = useRef(filters);
@@ -130,19 +143,48 @@ export default function ViewAllListings() {
     return () => observer.disconnect();
   }, [loadingMore, initialLoading, page, fetchMore]);
 
-  const updateFilter = (key: keyof Filters, value: string) => {
-    setFilters((prev) => ({
+  const applyFilters = (filtersToApply = localFilters) => {
+    setFilters(filtersToApply);
+    
+    const newParams = new URLSearchParams(searchParams);
+    const keys: (keyof Filters)[] = ["search", "foodType", "planType", "isVerified", "featured", "latitude", "longitude"];
+    
+    keys.forEach((key) => {
+      const val = filtersToApply[key];
+      if (val) {
+        if (key === "search") newParams.set("name", val);
+        else newParams.set(key, val);
+      } else {
+        if (key === "search") newParams.delete("name");
+        else newParams.delete(key);
+      }
+    });
+
+    setSearchParams(newParams, { replace: true });
+    setShowMobileFilters(false);
+  };
+
+  const updateLocalFilter = (key: keyof Filters, value: string) => {
+    setLocalFilters((prev) => ({
       ...prev,
       [key]: value || undefined,
     }));
   };
 
-  const clearAllFilters = () => {
-    setFilters({});
+  const updateAndApplySearch = (value: string) => {
+    const newFilters = { ...localFilters, search: value || undefined };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
   };
 
-  const hasActiveFilters = Object.keys(filters).some(
-    (key) => key !== "search" && filters[key as keyof Filters]
+  const clearAllFilters = () => {
+    setLocalFilters({});
+    setFilters({});
+    setSearchParams({}, { replace: true });
+  };
+
+  const hasActiveFilters = Object.keys(localFilters).some(
+    (key) => key !== "search" && localFilters[key as keyof Filters]
   );
 
   const hasMore = meta ? page < meta.totalPages : false;
@@ -176,13 +218,13 @@ export default function ViewAllListings() {
         <Search size={20} />
         <input
           placeholder="Search mess name or keyword..."
-          value={filters.search || ""}
-          onChange={(e) => updateFilter("search", e.target.value)}
+          value={localFilters.search || ""}
+          onChange={(e) => updateAndApplySearch(e.target.value)}
         />
-        {filters.search && (
+        {localFilters.search && (
           <button
             className={styles["clear-search-btn"]}
-            onClick={() => updateFilter("search", "")}
+            onClick={() => updateAndApplySearch("")}
             aria-label="Clear search"
           >
             <X size={18} />
@@ -208,11 +250,6 @@ export default function ViewAllListings() {
               <Filter size={18} />
               Filters
             </h2>
-            {hasActiveFilters && (
-              <button className={styles["clear-all-btn"]} onClick={clearAllFilters}>
-                Clear All
-              </button>
-            )}
             <button
               className={styles["close-filters-btn"]}
               onClick={() => setShowMobileFilters(false)}
@@ -228,8 +265,8 @@ export default function ViewAllListings() {
               Food Type
             </label>
             <select
-              value={filters.foodType || ""}
-              onChange={(e) => updateFilter("foodType", e.target.value)}
+              value={localFilters.foodType || ""}
+              onChange={(e) => updateLocalFilter("foodType", e.target.value)}
             >
               <option value="">All</option>
               <option value="VEG">Vegetarian</option>
@@ -245,8 +282,8 @@ export default function ViewAllListings() {
               Plan Type
             </label>
             <select
-              value={filters.planType || ""}
-              onChange={(e) => updateFilter("planType", e.target.value)}
+              value={localFilters.planType || ""}
+              onChange={(e) => updateLocalFilter("planType", e.target.value)}
             >
               <option value="">All</option>
               <option value="DAILY">Daily Plans</option>
@@ -261,8 +298,8 @@ export default function ViewAllListings() {
               Verification
             </label>
             <select
-              value={filters.isVerified || ""}
-              onChange={(e) => updateFilter("isVerified", e.target.value)}
+              value={localFilters.isVerified || ""}
+              onChange={(e) => updateLocalFilter("isVerified", e.target.value)}
             >
               <option value="">All</option>
               <option value="true">Verified Only</option>
@@ -277,21 +314,33 @@ export default function ViewAllListings() {
               Featured
             </label>
             <select
-              value={filters.featured || ""}
-              onChange={(e) => updateFilter("featured", e.target.value)}
+              value={localFilters.featured || ""}
+              onChange={(e) => updateLocalFilter("featured", e.target.value)}
             >
               <option value="">All</option>
               <option value="true">Featured Only</option>
             </select>
           </div>
 
-          <button
-            className={styles["apply-filters-btn"]}
-            onClick={() => setShowMobileFilters(false)}
-          >
-            <Filter size={16} />
-            Apply Filters
-          </button>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+            <button
+              className={styles["apply-filters-btn"]}
+              style={{ flex: 1 }}
+              onClick={() => applyFilters()}
+            >
+              <Filter size={16} />
+              Apply Filters
+            </button>
+            {hasActiveFilters && (
+              <button 
+                className={styles["clear-all-btn"]} 
+                style={{ flex: 1, border: '1px solid #E3EAE1', background: 'transparent' }}
+                onClick={clearAllFilters}
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
         </aside>
 
         {/* LISTINGS */}
