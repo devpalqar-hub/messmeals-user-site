@@ -19,6 +19,7 @@ import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import BookingCancel from "./pages/BookingCancel/BookingCancel";
 import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Terms/Terms";
+import Partner from "./pages/Partner/Partner";
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
         <Route path="/booking/cancel" element={<BookingCancel />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/partner" element={<Partner />} />
       </Routes>
       {!isFullPage && !hideFooter && <Footer />}
       {!isFullPage && <MobileBottomNav />}

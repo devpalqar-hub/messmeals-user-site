@@ -83,7 +83,7 @@ export default function PartnerSection() {
           <div className={styles["partner-cta-area"]}>
             <button
               className={styles["partner-btn"]}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/partner")}
             >
               Know More
               <ArrowRight size={18} />

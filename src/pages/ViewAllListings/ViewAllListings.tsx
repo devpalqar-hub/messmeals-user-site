@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import SEO from "../../components/shared/SEO/SEO";
-import { getAllMess, type MessListFilters } from "../../services/messApi";
+import { getAllMess, getSearchSuggestions, type MessListFilters, type SearchSuggestionResponse } from "../../services/messApi";
 import type { MessListing, MessMeta } from "../../types/mess";
 import {
   MapPin,
@@ -14,6 +14,8 @@ import {
   Check,
   ArrowRight,
   Star,
+  Loader2,
+  Store,
 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
@@ -58,6 +60,15 @@ export default function ViewAllListings() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("name") || "");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SearchSuggestionResponse | null>(null);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const locationInputRef = useRef<HTMLInputElement>(null);
+
   const getInitialFilters = (): Filters => {
     const init: Filters = {};
     if (searchParams.get("name")) init.search = searchParams.get("name")!;
@@ -74,6 +85,48 @@ export default function ViewAllListings() {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setSuggestions(null);
+      setIsLoadingSuggestions(false);
+      return;
+    }
+    const fetchSuggestions = async () => {
+      setIsLoadingSuggestions(true);
+      try {
+        const data = await getSearchSuggestions(debouncedQuery, 50);
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    };
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+    const handleScroll = () => {
+      if (isSuggestionsOpen) setIsSuggestionsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isSuggestionsOpen]);
 
   // Initial / filter-reset load
   const fetchInitial = useCallback(async (activeFilters: Filters) => {
@@ -172,9 +225,40 @@ export default function ViewAllListings() {
   };
 
   const updateAndApplySearch = (value: string) => {
-    const newFilters = { ...localFilters, search: value || undefined };
+    setSearchQuery(value);
+    const newFilters = { ...localFilters, search: value || undefined, latitude: undefined, longitude: undefined };
     setLocalFilters(newFilters);
     applyFilters(newFilters);
+  };
+
+  const handleSelectMess = (mess: any) => {
+    setSearchQuery(mess.name);
+    setIsSuggestionsOpen(false);
+    const newFilters = { ...localFilters, search: mess.name, latitude: undefined, longitude: undefined };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
+  const handleSelectLocation = (loc: any) => {
+    setSearchQuery(loc.name);
+    setIsSuggestionsOpen(false);
+    const newFilters = { 
+      ...localFilters, 
+      search: undefined, 
+      latitude: loc.latitude.toString(), 
+      longitude: loc.longitude.toString() 
+    };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setIsSuggestionsOpen(false);
+      const newFilters = { ...localFilters, search: searchQuery || undefined, latitude: undefined, longitude: undefined };
+      setLocalFilters(newFilters);
+      applyFilters(newFilters);
+    }
   };
 
   const clearAllFilters = () => {
@@ -214,14 +298,23 @@ export default function ViewAllListings() {
       </div>
 
       {/* SEARCH BAR */}
-      <div className={styles["top-search"]}>
+      <div 
+        className={styles["top-search"]}
+        ref={searchContainerRef}
+      >
         <Search size={20} />
         <input
-          placeholder="Search mess name or keyword..."
-          value={localFilters.search || ""}
-          onChange={(e) => updateAndApplySearch(e.target.value)}
+          ref={locationInputRef}
+          placeholder="Search mess name or location..."
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setIsSuggestionsOpen(true);
+          }}
+          onFocus={() => setIsSuggestionsOpen(true)}
+          onKeyDown={handleSearchKeyDown}
         />
-        {localFilters.search && (
+        {searchQuery && (
           <button
             className={styles["clear-search-btn"]}
             onClick={() => updateAndApplySearch("")}
@@ -229,6 +322,64 @@ export default function ViewAllListings() {
           >
             <X size={18} />
           </button>
+        )}
+
+        {/* AUTOCOMPLETE DROPDOWN */}
+        {isSuggestionsOpen && (searchQuery.trim().length > 0 || isLoadingSuggestions) && (
+          <div className={styles["hls-dropdown"]}>
+            {isLoadingSuggestions ? (
+              <div className={styles["hls-dropdown-loading"]}>
+                <Loader2 className={styles["hls-spinner"]} size={20} />
+                <span>Loading suggestions...</span>
+              </div>
+            ) : (
+              <>
+                {suggestions?.messes && suggestions.messes.length > 0 && (
+                  <div className={styles["hls-dropdown-group"]}>
+                    <div className={styles["hls-dropdown-header"]}>Messes</div>
+                    {suggestions.messes.map((mess) => (
+                      <div
+                        key={`mess-${mess.id}`}
+                        className={styles["hls-dropdown-item"]}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectMess(mess);
+                        }}
+                      >
+                        <Store size={16} className={styles["hls-dropdown-icon"]} />
+                        <span className={styles["hls-dropdown-text"]}>{mess.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {suggestions?.locations && suggestions.locations.length > 0 && (
+                  <div className={styles["hls-dropdown-group"]}>
+                    <div className={styles["hls-dropdown-header"]}>Locations</div>
+                    {suggestions.locations.map((loc, idx) => (
+                      <div
+                        key={`loc-${idx}`}
+                        className={styles["hls-dropdown-item"]}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectLocation(loc);
+                        }}
+                      >
+                        <MapPin size={16} className={styles["hls-dropdown-icon"]} />
+                        <span className={styles["hls-dropdown-text"]}>{loc.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!isLoadingSuggestions && (!suggestions?.messes || suggestions.messes.length === 0) && (!suggestions?.locations || suggestions.locations.length === 0) && (
+                  <div className={styles["hls-dropdown-empty"]}>
+                    No results found for "{searchQuery}"
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         )}
       </div>
 
