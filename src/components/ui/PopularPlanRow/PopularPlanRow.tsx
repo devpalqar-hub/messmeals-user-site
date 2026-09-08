@@ -33,12 +33,12 @@ function PlanImage({ src, alt }: { src?: string | null; alt: string }) {
 /* ---------------- SUBSCRIBER LABEL ---------------- */
 function formatSubscribers(count: number): string | null {
   if (count <= 0) return null;
-  if (count < 10) return `${count} subscriptions`;
+  if (count < 10) return `${count} subscribers`;
   // Round down to nearest 10/50/100 etc.
-  if (count < 50) return "10+ subscriptions";
-  if (count < 100) return "50+ subscriptions";
-  if (count < 500) return "100+ subscriptions";
-  return "500+ subscriptions";
+  if (count < 50) return "10+ subscribers";
+  if (count < 100) return "50+ subscribers";
+  if (count < 500) return "100+ subscribers";
+  return "500+ subscribers";
 }
 
 /* ---------------- VARIATION CONFIG (matches mess details page) ---------------- */
@@ -154,8 +154,8 @@ export default function PopularPlanRow() {
                   {/* Plan type badge */}
                   <span
                     className={`${styles["badge-type"]} ${plan.isMonthlyPlan
-                        ? styles["badge-monthly"]
-                        : styles["badge-daily"]
+                      ? styles["badge-monthly"]
+                      : styles["badge-daily"]
                       }`}
                   >
                     {plan.isMonthlyPlan ? "Monthly" : "Daily"}

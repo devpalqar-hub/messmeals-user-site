@@ -2,12 +2,12 @@ import { useRef, useState } from "react";
 import SEO from "../../components/shared/SEO/SEO";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail } from "lucide-react";
-import { sendLoginOtp, sendRegOtp, verifyOtp, OTP_LENGTH } from "../../services/authService";
+import { checkPhone, sendRegOtp, verifyLoginOtp, verifyRegOtp, OTP_LENGTH } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import styles from "./Login.module.css";
 
-type Step = "phone" | "otp";
+type Step = "phone" | "register_details" | "otp";
 type Mode = "login" | "register";
 
 export default function Login() {
@@ -33,7 +33,6 @@ export default function Login() {
   const isValidPhone = /^[6-9]\d{9}$/.test(phone);
   const isValidEmail = email ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) : true;
   const isRegisterValid = isValidPhone && name.trim().length > 0 && isValidEmail && email.trim().length > 0;
-  const isFormValid = mode === "login" ? isValidPhone : isRegisterValid;
 
   const startResendTimer = () => {
     setResendIn(30);
@@ -48,22 +47,49 @@ export default function Login() {
     }, 1000);
   };
 
-  const handleSendOtp = async (e: React.FormEvent) => {
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) {
+    if (!isValidPhone) {
+      toast.warning("Please enter a valid phone number.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await checkPhone(phone);
+      if (res.success) {
+        if (res.hasAccount) {
+          toast.success(res.message || "OTP sent successfully");
+          if (res.sessionId) setSessionId(res.sessionId);
+          setMode("login");
+          setStep("otp");
+          startResendTimer();
+          setTimeout(() => otpRefs.current[0]?.focus(), 50);
+        } else {
+          toast.info(res.message || "No account found. Let's get you registered.");
+          setMode("register");
+          setStep("register_details");
+        }
+      } else {
+        toast.error(res.message || "Could not process request. Try again.");
+      }
+    } catch {
+      toast.error("Network error. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendRegOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isRegisterValid) {
       toast.warning("Please fill in all required fields correctly.");
       return;
     }
 
     setLoading(true);
     try {
-      let res;
-      if (mode === "login") {
-        res = await sendLoginOtp(phone);
-      } else {
-        res = await sendRegOtp({ name, email, phone });
-      }
-
+      const res = await sendRegOtp({ name, email, phone });
       if (res.success) {
         toast.success(res.message || "OTP sent successfully");
         if (res.sessionId) setSessionId(res.sessionId);
@@ -107,7 +133,13 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await verifyOtp(phone, code, sessionId);
+      let res;
+      if (mode === "login") {
+        res = await verifyLoginOtp(phone, code, sessionId);
+      } else {
+        res = await verifyRegOtp({ name, email, phone }, code, sessionId);
+      }
+
       if (res.success && res.user) {
         toast.success("Verified successfully!");
         login(res.user);
@@ -124,9 +156,10 @@ export default function Login() {
 
   const handleResend = async () => {
     let res;
+    setLoading(true);
     try {
       if (mode === "login") {
-        res = await sendLoginOtp(phone);
+        res = await checkPhone(phone); // checkPhone sends OTP again for existing users
       } else {
         res = await sendRegOtp({ name, email, phone });
       }
@@ -139,6 +172,8 @@ export default function Login() {
       }
     } catch {
       toast.error("Could not resend OTP. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,49 +203,15 @@ export default function Login() {
             <img src="/logo.png" alt="MessMeals" className={styles["logo-image"]} />
           </div>
 
-          {step === "phone" ? (
+          {step === "phone" && (
             <>
-              <h1>{mode === "login" ? "Login with your phone" : "Create an account"}</h1>
+              <h1>Login or Register</h1>
               <p className={styles["login-sub"]}>
-                We'll send a one-time password to verify it's you.
+                Enter your phone number to get started. We'll check if you have an account.
               </p>
 
-              <form onSubmit={handleSendOtp} className={styles["login-form"]}>
-                {mode === "register" && (
-                  <>
-                    <label className={styles["login-label"]}>Full Name</label>
-                    <div className={styles["phone-input-wrap"]}>
-                      <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
-                        <User size={16} />
-                      </span>
-                      <input
-                        type="text"
-                        placeholder="John Doe"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        style={{ paddingLeft: 0 }}
-                      />
-                    </div>
-
-                    <label className={styles["login-label"]} style={{ marginTop: "4px" }}>Email Address</label>
-                    <div className={styles["phone-input-wrap"]}>
-                      <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
-                        <Mail size={16} />
-                      </span>
-                      <input
-                        type="email"
-                        placeholder="name@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        style={{ paddingLeft: 0 }}
-                      />
-                    </div>
-                  </>
-                )}
-
-                <label className={styles["login-label"]} style={{ marginTop: mode === "register" ? "4px" : "0" }}>Phone number</label>
+              <form onSubmit={handlePhoneSubmit} className={styles["login-form"]}>
+                <label className={styles["login-label"]}>Phone number</label>
                 <div className={styles["phone-input-wrap"]}>
                   <span className={styles["phone-prefix"]}>
                     <Phone size={16} /> +91
@@ -224,7 +225,7 @@ export default function Login() {
                     onChange={(e) =>
                       setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
                     }
-                    autoFocus={mode === "login"}
+                    autoFocus
                     required
                   />
                 </div>
@@ -232,23 +233,87 @@ export default function Login() {
                 <button
                   type="submit"
                   className={styles["login-btn"]}
-                  disabled={!isFormValid || loading}
+                  disabled={!isValidPhone || loading}
+                >
+                  {loading ? "Checking..." : "Continue"}
+                </button>
+              </form>
+            </>
+          )}
+
+          {step === "register_details" && (
+            <>
+              <button className={styles["login-back"]} onClick={() => setStep("phone")}>
+                <ArrowLeft size={16} /> Back
+              </button>
+              <h1>Create an account</h1>
+              <p className={styles["login-sub"]}>
+                Looks like you're new here. Tell us a bit about yourself.
+              </p>
+
+              <form onSubmit={handleSendRegOtp} className={styles["login-form"]}>
+                <label className={styles["login-label"]}>Full Name</label>
+                <div className={styles["phone-input-wrap"]}>
+                  <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
+                    <User size={16} />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    style={{ paddingLeft: 0 }}
+                  />
+                </div>
+
+                <label className={styles["login-label"]} style={{ marginTop: "4px" }}>Email Address</label>
+                <div className={styles["phone-input-wrap"]}>
+                  <span className={styles["phone-prefix"]} style={{ padding: "0 14px", borderRight: "none" }}>
+                    <Mail size={16} />
+                  </span>
+                  <input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    style={{ paddingLeft: 0 }}
+                  />
+                </div>
+
+                <label className={styles["login-label"]} style={{ marginTop: "4px" }}>Phone number</label>
+                <div className={styles["phone-input-wrap"]}>
+                  <span className={styles["phone-prefix"]}>
+                    <Phone size={16} /> +91
+                  </span>
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="98765 43210"
+                    value={phone}
+                    onChange={(e) =>
+                      setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                    }
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className={styles["login-btn"]}
+                  disabled={!isRegisterValid || loading}
                 >
                   {loading ? "Sending OTP..." : "Send OTP"}
                 </button>
               </form>
-
-              <div className={styles["login-mode-toggle"]}>
-                {mode === "login" ? (
-                  <p>Don't have an account? <button type="button" onClick={() => setMode("register")}>Register here</button></p>
-                ) : (
-                  <p>Already have an account? <button type="button" onClick={() => setMode("login")}>Login here</button></p>
-                )}
-              </div>
             </>
-          ) : (
+          )}
+
+          {step === "otp" && (
             <>
-              <button className={styles["login-back"]} onClick={() => setStep("phone")}>
+              <button className={styles["login-back"]} onClick={() => setStep(mode === "login" ? "phone" : "register_details")}>
                 <ArrowLeft size={16} /> Change {mode === "login" ? "number" : "details"}
               </button>
 

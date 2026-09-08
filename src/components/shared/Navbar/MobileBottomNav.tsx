@@ -41,7 +41,7 @@ export default function MobileBottomNav() {
         }
       >
         <ListChecks size={20} />
-        <span>Listings</span>
+        <span>Messes</span>
       </NavLink>
 
       <button
@@ -53,9 +53,8 @@ export default function MobileBottomNav() {
       </button>
 
       <button
-        className={`${styles["mbn-item"]} ${
-          location.pathname === "/profile" && !isMyPlansActive ? styles.active : ""
-        }`}
+        className={`${styles["mbn-item"]} ${location.pathname === "/profile" && !isMyPlansActive ? styles.active : ""
+          }`}
         onClick={() => navigate(isAuthenticated ? "/profile" : "/login")}
       >
         <User size={20} />

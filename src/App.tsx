@@ -5,7 +5,8 @@ import HeroSection from "./sections/HeroSection/HeroSection";
 import FeaturedMesses from "./sections/FeaturedMesses/FeaturedMesses";
 import PopularPlans from "./sections/PopularPlans/PopularPlans";
 import VerifiedMesses from "./sections/VerifiedMesses/VerifiedMesses";
-import Testimonials from "./sections/Testimonials/Testimonials";
+// import Testimonials from "./sections/Testimonials/Testimonials";
+import PartnerSection from "./sections/PartnerSection/PartnerSection";
 import OwnAMess from "./sections/OwnAMess/OwnAMess";
 import Footer from "./components/shared/Footer/Footer";
 import ViewAllListings from "./pages/ViewAllListings/ViewAllListings";
@@ -18,6 +19,7 @@ import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import BookingCancel from "./pages/BookingCancel/BookingCancel";
 import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Terms/Terms";
+import Partner from "./pages/Partner/Partner";
 
 
 function App() {
@@ -33,44 +35,46 @@ function App() {
 
   return (
     <>
-    {!isFullPage && <Navbar />}
+      {!isFullPage && <Navbar />}
 
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-           <SEO 
-             title="MessMeals – Find the Best Mess & Homely Food Near You"
-             description="Discover the best verified messes and homely food near you. Explore daily and monthly meal plans, reviews, and menus on MessMeals."
-             image="/seo/og-home.png"
-             url="/"
-           />
-           <HeroSection />
-           <PopularPlans />
-           <FeaturedMesses />
-           <VerifiedMesses />
-           <Testimonials />
-           <OwnAMess />
-          </>
-        }
-      />
-      <Route
-       path="/view-all-listings"
-       element={<ViewAllListings/>}
-      />
-      <Route
-       path="/mess/:slug"
-       element={<ViewMessDetails/>}
-      />
-      <Route path="/login" element={<Login />} />
-      <Route path="/mess/:slug/book" element={<BookPlan />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/booking/success" element={<BookingSuccess />} />
-      <Route path="/booking/cancel" element={<BookingCancel />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/terms" element={<Terms />} />
-    </Routes>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <SEO
+                title="MessMeals – Find the Best Mess & Homely Food Near You"
+                description="Discover the best verified messes and homely food near you. Explore daily and monthly meal plans, reviews, and menus on MessMeals."
+                image="/seo/og-home.png"
+                url="/"
+              />
+              <HeroSection />
+              <PopularPlans />
+              <FeaturedMesses />
+              <VerifiedMesses />
+              {/* <Testimonials /> */}
+              <PartnerSection />
+              <OwnAMess />
+            </>
+          }
+        />
+        <Route
+          path="/view-all-listings"
+          element={<ViewAllListings />}
+        />
+        <Route
+          path="/mess/:slug"
+          element={<ViewMessDetails />}
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/mess/:slug/book" element={<BookPlan />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/booking/success" element={<BookingSuccess />} />
+        <Route path="/booking/cancel" element={<BookingCancel />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/partner" element={<Partner />} />
+      </Routes>
       {!isFullPage && !hideFooter && <Footer />}
       {!isFullPage && <MobileBottomNav />}
     </>

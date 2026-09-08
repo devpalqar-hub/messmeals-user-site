@@ -12,6 +12,8 @@ export interface MessListFilters {
   planType?: string;   // DAILY | MONTHLY
   featured?: string;   // "true" | "false"
   isVerified?: string; // "true" | "false"
+  latitude?: string;
+  longitude?: string;
 }
 
 // ─── GET /open/messes ─────────────────────────────────────────────────────────
@@ -39,6 +41,32 @@ export const getMessBySlug = async (slug: string) => {
   const res = await api.get(`/open/mess/${slug}`);
   return res.data;
 };
+
+// ─── GET /open/search-suggestions ─────────────────────────────────────────────
+
+export interface SearchSuggestionResponse {
+  messes: {
+    id: string;
+    slug: string;
+    name: string;
+  }[];
+  locations: {
+    name: string;
+    longitude: number;
+    latitude: number;
+  }[];
+}
+
+export const getSearchSuggestions = async (
+  q: string,
+  limit: number = 50
+): Promise<SearchSuggestionResponse> => {
+  const response = await api.get("/open/search-suggestions", {
+    params: { q, limit },
+  });
+  return response.data;
+};
+
 
 // ─── GET /plans/:id — unchanged, used by BookPlan ────────────────────────────
 

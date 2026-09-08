@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import SEO from "../../components/shared/SEO/SEO";
-import { getAllMess, type MessListFilters } from "../../services/messApi";
+import { getAllMess, getSearchSuggestions, type MessListFilters, type SearchSuggestionResponse } from "../../services/messApi";
 import type { MessListing, MessMeta } from "../../types/mess";
 import {
   MapPin,
@@ -14,8 +14,10 @@ import {
   Check,
   ArrowRight,
   Star,
+  Loader2,
+  Store,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
 
 const LIMIT = 6;
@@ -56,11 +58,75 @@ export default function ViewAllListings() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [filters, setFilters] = useState<Filters>({});
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("name") || "");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SearchSuggestionResponse | null>(null);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const locationInputRef = useRef<HTMLInputElement>(null);
+
+  const getInitialFilters = (): Filters => {
+    const init: Filters = {};
+    if (searchParams.get("name")) init.search = searchParams.get("name")!;
+    if (searchParams.get("latitude")) init.latitude = searchParams.get("latitude")!;
+    if (searchParams.get("longitude")) init.longitude = searchParams.get("longitude")!;
+    if (searchParams.get("foodType")) init.foodType = searchParams.get("foodType")!;
+    if (searchParams.get("planType")) init.planType = searchParams.get("planType")!;
+    return init;
+  };
+
+  const [filters, setFilters] = useState<Filters>(getInitialFilters);
+  const [localFilters, setLocalFilters] = useState<Filters>(getInitialFilters);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setSuggestions(null);
+      setIsLoadingSuggestions(false);
+      return;
+    }
+    const fetchSuggestions = async () => {
+      setIsLoadingSuggestions(true);
+      try {
+        const data = await getSearchSuggestions(debouncedQuery, 50);
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    };
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+    const handleScroll = () => {
+      if (isSuggestionsOpen) setIsSuggestionsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isSuggestionsOpen]);
 
   // Initial / filter-reset load
   const fetchInitial = useCallback(async (activeFilters: Filters) => {
@@ -130,19 +196,79 @@ export default function ViewAllListings() {
     return () => observer.disconnect();
   }, [loadingMore, initialLoading, page, fetchMore]);
 
-  const updateFilter = (key: keyof Filters, value: string) => {
-    setFilters((prev) => ({
+  const applyFilters = (filtersToApply = localFilters) => {
+    setFilters(filtersToApply);
+    
+    const newParams = new URLSearchParams(searchParams);
+    const keys: (keyof Filters)[] = ["search", "foodType", "planType", "isVerified", "featured", "latitude", "longitude"];
+    
+    keys.forEach((key) => {
+      const val = filtersToApply[key];
+      if (val) {
+        if (key === "search") newParams.set("name", val);
+        else newParams.set(key, val);
+      } else {
+        if (key === "search") newParams.delete("name");
+        else newParams.delete(key);
+      }
+    });
+
+    setSearchParams(newParams, { replace: true });
+    setShowMobileFilters(false);
+  };
+
+  const updateLocalFilter = (key: keyof Filters, value: string) => {
+    setLocalFilters((prev) => ({
       ...prev,
       [key]: value || undefined,
     }));
   };
 
-  const clearAllFilters = () => {
-    setFilters({});
+  const updateAndApplySearch = (value: string) => {
+    setSearchQuery(value);
+    const newFilters = { ...localFilters, search: value || undefined, latitude: undefined, longitude: undefined };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
   };
 
-  const hasActiveFilters = Object.keys(filters).some(
-    (key) => key !== "search" && filters[key as keyof Filters]
+  const handleSelectMess = (mess: any) => {
+    setSearchQuery(mess.name);
+    setIsSuggestionsOpen(false);
+    const newFilters = { ...localFilters, search: mess.name, latitude: undefined, longitude: undefined };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
+  const handleSelectLocation = (loc: any) => {
+    setSearchQuery(loc.name);
+    setIsSuggestionsOpen(false);
+    const newFilters = { 
+      ...localFilters, 
+      search: undefined, 
+      latitude: loc.latitude.toString(), 
+      longitude: loc.longitude.toString() 
+    };
+    setLocalFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setIsSuggestionsOpen(false);
+      const newFilters = { ...localFilters, search: searchQuery || undefined, latitude: undefined, longitude: undefined };
+      setLocalFilters(newFilters);
+      applyFilters(newFilters);
+    }
+  };
+
+  const clearAllFilters = () => {
+    setLocalFilters({});
+    setFilters({});
+    setSearchParams({}, { replace: true });
+  };
+
+  const hasActiveFilters = Object.keys(localFilters).some(
+    (key) => key !== "search" && localFilters[key as keyof Filters]
   );
 
   const hasMore = meta ? page < meta.totalPages : false;
@@ -172,21 +298,88 @@ export default function ViewAllListings() {
       </div>
 
       {/* SEARCH BAR */}
-      <div className={styles["top-search"]}>
+      <div 
+        className={styles["top-search"]}
+        ref={searchContainerRef}
+      >
         <Search size={20} />
         <input
-          placeholder="Search mess name or keyword..."
-          value={filters.search || ""}
-          onChange={(e) => updateFilter("search", e.target.value)}
+          ref={locationInputRef}
+          placeholder="Search mess name or location..."
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setIsSuggestionsOpen(true);
+          }}
+          onFocus={() => setIsSuggestionsOpen(true)}
+          onKeyDown={handleSearchKeyDown}
         />
-        {filters.search && (
+        {searchQuery && (
           <button
             className={styles["clear-search-btn"]}
-            onClick={() => updateFilter("search", "")}
+            onClick={() => updateAndApplySearch("")}
             aria-label="Clear search"
           >
             <X size={18} />
           </button>
+        )}
+
+        {/* AUTOCOMPLETE DROPDOWN */}
+        {isSuggestionsOpen && (searchQuery.trim().length > 0 || isLoadingSuggestions) && (
+          <div className={styles["hls-dropdown"]}>
+            {isLoadingSuggestions ? (
+              <div className={styles["hls-dropdown-loading"]}>
+                <Loader2 className={styles["hls-spinner"]} size={20} />
+                <span>Loading suggestions...</span>
+              </div>
+            ) : (
+              <>
+                {suggestions?.messes && suggestions.messes.length > 0 && (
+                  <div className={styles["hls-dropdown-group"]}>
+                    <div className={styles["hls-dropdown-header"]}>Messes</div>
+                    {suggestions.messes.map((mess) => (
+                      <div
+                        key={`mess-${mess.id}`}
+                        className={styles["hls-dropdown-item"]}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectMess(mess);
+                        }}
+                      >
+                        <Store size={16} className={styles["hls-dropdown-icon"]} />
+                        <span className={styles["hls-dropdown-text"]}>{mess.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {suggestions?.locations && suggestions.locations.length > 0 && (
+                  <div className={styles["hls-dropdown-group"]}>
+                    <div className={styles["hls-dropdown-header"]}>Locations</div>
+                    {suggestions.locations.map((loc, idx) => (
+                      <div
+                        key={`loc-${idx}`}
+                        className={styles["hls-dropdown-item"]}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectLocation(loc);
+                        }}
+                      >
+                        <MapPin size={16} className={styles["hls-dropdown-icon"]} />
+                        <span className={styles["hls-dropdown-text"]}>{loc.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!isLoadingSuggestions && (!suggestions?.messes || suggestions.messes.length === 0) && (!suggestions?.locations || suggestions.locations.length === 0) && (
+                  <div className={styles["hls-dropdown-empty"]}>
+                    No results found for "{searchQuery}"
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         )}
       </div>
 
@@ -208,11 +401,6 @@ export default function ViewAllListings() {
               <Filter size={18} />
               Filters
             </h2>
-            {hasActiveFilters && (
-              <button className={styles["clear-all-btn"]} onClick={clearAllFilters}>
-                Clear All
-              </button>
-            )}
             <button
               className={styles["close-filters-btn"]}
               onClick={() => setShowMobileFilters(false)}
@@ -228,8 +416,8 @@ export default function ViewAllListings() {
               Food Type
             </label>
             <select
-              value={filters.foodType || ""}
-              onChange={(e) => updateFilter("foodType", e.target.value)}
+              value={localFilters.foodType || ""}
+              onChange={(e) => updateLocalFilter("foodType", e.target.value)}
             >
               <option value="">All</option>
               <option value="VEG">Vegetarian</option>
@@ -245,8 +433,8 @@ export default function ViewAllListings() {
               Plan Type
             </label>
             <select
-              value={filters.planType || ""}
-              onChange={(e) => updateFilter("planType", e.target.value)}
+              value={localFilters.planType || ""}
+              onChange={(e) => updateLocalFilter("planType", e.target.value)}
             >
               <option value="">All</option>
               <option value="DAILY">Daily Plans</option>
@@ -261,8 +449,8 @@ export default function ViewAllListings() {
               Verification
             </label>
             <select
-              value={filters.isVerified || ""}
-              onChange={(e) => updateFilter("isVerified", e.target.value)}
+              value={localFilters.isVerified || ""}
+              onChange={(e) => updateLocalFilter("isVerified", e.target.value)}
             >
               <option value="">All</option>
               <option value="true">Verified Only</option>
@@ -277,21 +465,33 @@ export default function ViewAllListings() {
               Featured
             </label>
             <select
-              value={filters.featured || ""}
-              onChange={(e) => updateFilter("featured", e.target.value)}
+              value={localFilters.featured || ""}
+              onChange={(e) => updateLocalFilter("featured", e.target.value)}
             >
               <option value="">All</option>
               <option value="true">Featured Only</option>
             </select>
           </div>
 
-          <button
-            className={styles["apply-filters-btn"]}
-            onClick={() => setShowMobileFilters(false)}
-          >
-            <Filter size={16} />
-            Apply Filters
-          </button>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+            <button
+              className={styles["apply-filters-btn"]}
+              style={{ flex: 1 }}
+              onClick={() => applyFilters()}
+            >
+              <Filter size={16} />
+              Apply Filters
+            </button>
+            {hasActiveFilters && (
+              <button 
+                className={styles["clear-all-btn"]} 
+                style={{ flex: 1, border: '1px solid #E3EAE1', background: 'transparent' }}
+                onClick={clearAllFilters}
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
         </aside>
 
         {/* LISTINGS */}
