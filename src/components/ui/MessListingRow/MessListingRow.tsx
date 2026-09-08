@@ -2,13 +2,13 @@ import styles from "./MessListingRow.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
-  Heart,
   MapPin,
   // Star, // commented out — new API does not return ratings
   ArrowRight,
   Check,
   Star as StarIcon,
   ShieldCheck,
+  Users,
   type LucideIcon,
   LucideArrowRight,
 } from "lucide-react";
@@ -149,9 +149,12 @@ export default function MessListingRow({
 
                   <CornerBadge type={badgeType} status={mess.status} />
 
-                  <button className={styles.wishlist} aria-label="Save mess">
-                    <Heart size={14} />
-                  </button>
+                  {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
+                    <span className={styles["subscribers-badge"]}>
+                      <Users size={12} />
+                      {mess.totalSubscribers} Subscribers
+                    </span>
+                  )}
                 </div>
 
                 {/* BODY */}

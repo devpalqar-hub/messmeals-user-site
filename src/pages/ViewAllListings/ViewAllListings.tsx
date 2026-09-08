@@ -5,7 +5,6 @@ import type { MessListing, MessMeta } from "../../types/mess";
 import {
   MapPin,
   // Star, // commented out — new API does not return ratings
-  Heart,
   Search,
   Filter,
   X,
@@ -16,6 +15,7 @@ import {
   Star,
   Loader2,
   Store,
+  Users,
 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import styles from "./ViewAllListings.module.css";
@@ -532,9 +532,12 @@ export default function ViewAllListings() {
                           </span>
                         )}
 
-                        <button className={styles.wishlist} aria-label="Add to wishlist">
-                          <Heart size={14} />
-                        </button>
+                        {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
+                          <span className={styles["subscribers-badge"]}>
+                            <Users size={12} />
+                            {mess.totalSubscribers} Subscribers
+                          </span>
+                        )}
                       </div>
 
                       <div className={styles["card-body"]}>
