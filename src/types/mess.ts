@@ -42,6 +42,7 @@ export type MessListing = {
   status: MessListingStatus;
   distanceKm: number | null;
   foodTypes: string[];
+  totalSubscribers?: number | null;
 };
 
 // ─── Detail API: GET /open/mess/{slug} ────────────────────────────────────────
