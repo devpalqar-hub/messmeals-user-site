@@ -469,32 +469,26 @@
   flex-shrink: 0;
 }
 
-.wishlist {
+.subscribers-badge {
   position: absolute;
   top: 10px;
   right: 10px;
   background: rgba(255, 255, 255, 0.95);
-  color: #111111;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  color: #101C10;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2;
-  backdrop-filter: blur(8px);
+  gap: 4px;
+  z-index: 3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  flex-shrink: 0;
+  backdrop-filter: blur(8px);
 }
 
-.wishlist:hover {
-  background: #EAF7E5;
-  color: #1C3A1C;
-  transform: scale(1.05);
-  box-shadow: 0 6px 18px rgba(28, 58, 28, 0.15);
+.subscribers-badge svg {
+  color: #18864B;
 }
 
 /* CARD BODY */

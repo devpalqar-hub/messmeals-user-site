@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import SEO from "../../components/shared/SEO/SEO";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail } from "lucide-react";
@@ -29,6 +29,15 @@ export default function Login() {
   const [sessionId, setSessionId] = useState("");
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    // Remove the body padding specifically for the login page
+    const originalPadding = document.body.style.paddingBottom;
+    document.body.style.paddingBottom = "0px";
+    return () => {
+      document.body.style.paddingBottom = originalPadding;
+    };
+  }, []);
 
   const isValidPhone = /^[6-9]\d{9}$/.test(phone);
   const isValidEmail = email ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) : true;
