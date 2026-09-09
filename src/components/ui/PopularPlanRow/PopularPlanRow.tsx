@@ -1,6 +1,8 @@
+"use client";
+
 import styles from "./PopularPlanRow.module.css";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import {
   Flame,
   MapPin,
@@ -81,15 +83,18 @@ function formatPrice(value: string): string {
 }
 
 /* ---------------- COMPONENT ---------------- */
-export default function PopularPlanRow() {
-  const [plans, setPlans] = useState<PopularPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function PopularPlanRow({ initialData }: { initialData?: PopularPlan[] }) {
+  const [plans, setPlans] = useState<PopularPlan[]>(initialData || []);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
-    fetchPlans();
+    if (!initialData) {
+      fetchPlans();
+    }
   }, []);
 
   const fetchPlans = async () => {
+    if (!plans.length) setLoading(true);
     try {
       const res = await getPopularPlans(1, 25);
       setPlans(Array.isArray(res) ? res : res?.data ?? []);
@@ -142,7 +147,7 @@ export default function PopularPlanRow() {
               <Link
                 className={styles["plan-card"]}
                 key={plan.id}
-                to={`/mess/${plan.mess.slug}?planId=${plan.id}`}
+                href={`/mess/${plan.mess.slug}?planId=${plan.id}`}
               >
                 {/* IMAGE */}
                 <div className={styles["image-wrap"]}>

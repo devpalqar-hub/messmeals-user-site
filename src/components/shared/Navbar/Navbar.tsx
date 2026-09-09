@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
-import { NavLink, useLocation, useNavigate, Link } from "react-router-dom";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { User, Home, Utensils, Info, BookOpen } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
@@ -12,13 +15,19 @@ const NAV_LINKS = [
   { to: "/blog", label: "Blog", end: false, Icon: BookOpen },
 ];
 
+// Replaces react-router-dom's <NavLink> `end` matching semantics: `end` true
+// requires an exact match, otherwise match the path itself or any sub-path.
+function isLinkActive(pathname: string, to: string, end: boolean) {
+  return end ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
+}
+
 export default function Navbar() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [underline, setUnderline] = useState({ left: 0, width: 0, opacity: 0 });
   const navCenterRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const headerRef = useRef<HTMLElement>(null);
 
@@ -57,11 +66,11 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // small delay to let NavLink apply .active class
+    // small delay to let the active class apply
     const t = setTimeout(restoreToActive, 30);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [pathname]);
 
   return (
     <>
@@ -69,7 +78,7 @@ export default function Navbar() {
         <nav className={styles.navbar}>
 
           {/* LEFT — Logo */}
-          <div className={styles["navbar-left"]} onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+          <div className={styles["navbar-left"]} onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
             <img src="/logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
           </div>
 
@@ -79,22 +88,20 @@ export default function Navbar() {
             ref={navCenterRef}
             onMouseLeave={restoreToActive}
           >
-            {NAV_LINKS.map(({ to, label, end }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={end}
-                className={({ isActive }) =>
-                  isActive
-                    ? `${styles["nav-link"]} ${styles.active}`
-                    : styles["nav-link"]
-                }
-                onClick={closeNavbar}
-                onMouseEnter={(e) => moveUnderlineTo(e.currentTarget)}
-              >
-                {label}
-              </NavLink>
-            ))}
+            {NAV_LINKS.map(({ to, label, end }) => {
+              const active = isLinkActive(pathname, to, end);
+              return (
+                <Link
+                  key={to}
+                  href={to}
+                  className={active ? `${styles["nav-link"]} ${styles.active}` : styles["nav-link"]}
+                  onClick={closeNavbar}
+                  onMouseEnter={(e) => moveUnderlineTo(e.currentTarget)}
+                >
+                  {label}
+                </Link>
+              );
+            })}
             <span
               className={styles["nav-underline"]}
               style={{ left: underline.left, width: underline.width, opacity: underline.opacity }}
@@ -107,12 +114,12 @@ export default function Navbar() {
               List Your Mess
             </button>
             {isAuthenticated ? (
-              <Link className={styles["profile-chip"]} to="/profile">
+              <Link className={styles["profile-chip"]} href="/profile">
                 <User size={15} />
                 {user?.name || "My Account"}
               </Link>
             ) : (
-              <Link className={styles["signin-btn"]} to="/login">
+              <Link className={styles["signin-btn"]} href="/login">
                 Sign In
               </Link>
             )}
@@ -131,22 +138,20 @@ export default function Navbar() {
         {/* MOBILE DROPDOWN */}
         {isNavbarOpen && (
           <div className={styles["mobile-menu"]}>
-            {NAV_LINKS.map(({ to, label, end, Icon }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={end}
-                className={({ isActive }) =>
-                  isActive
-                    ? `${styles["mobile-nav-link"]} ${styles.active}`
-                    : styles["mobile-nav-link"]
-                }
-                onClick={closeNavbar}
-              >
-                <Icon size={18} className={styles["nav-icon"]} />
-                {label}
-              </NavLink>
-            ))}
+            {NAV_LINKS.map(({ to, label, end, Icon }) => {
+              const active = isLinkActive(pathname, to, end);
+              return (
+                <Link
+                  key={to}
+                  href={to}
+                  className={active ? `${styles["mobile-nav-link"]} ${styles.active}` : styles["mobile-nav-link"]}
+                  onClick={closeNavbar}
+                >
+                  <Icon size={18} className={styles["nav-icon"]} />
+                  {label}
+                </Link>
+              );
+            })}
             <button
               className={`${styles["cta-btn"]} ${styles["mobile-cta"]}`}
               onClick={() => { setIsModalOpen(true); closeNavbar(); }}
@@ -156,7 +161,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <Link
                 className={`${styles["signin-btn"]} ${styles["mobile-signin"]}`}
-                to="/profile"
+                href="/profile"
                 onClick={closeNavbar}
               >
                 My Account
@@ -164,7 +169,7 @@ export default function Navbar() {
             ) : (
               <Link
                 className={`${styles["signin-btn"]} ${styles["mobile-signin"]}`}
-                to="/login"
+                href="/login"
                 onClick={closeNavbar}
               >
                 Sign In
