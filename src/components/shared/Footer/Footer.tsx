@@ -1,6 +1,6 @@
 import styles from "./Footer.module.css";
 import { Facebook, Instagram, Twitter, Youtube, Building2, MapPin, Handshake } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -9,7 +9,7 @@ export default function Footer() {
         <div className={styles["footer-container"]}>
           {/* LEFT BRAND */}
           <div className={styles["footer-brand"]}>
-            <Link to="/" className={styles.brand}>
+            <Link href="/" className={styles.brand}>
               <span className={styles["logo-text"]}>
                 <span className={styles["logo-m"]}>M</span>essmeals
               </span>
@@ -91,9 +91,9 @@ export default function Footer() {
           </span>
 
           <div className={styles["legal-links"]}>
-            <Link to="/privacy">Privacy Policy</Link>
+            <Link href="/privacy">Privacy Policy</Link>
             <span className={styles.dot} />
-            <Link to="/terms">Terms &amp; Conditions</Link>
+            <Link href="/terms">Terms &amp; Conditions</Link>
           </div>
 
           <span className={styles["powered-by"]}>

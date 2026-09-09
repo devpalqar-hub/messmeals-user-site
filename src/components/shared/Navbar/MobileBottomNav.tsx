@@ -1,48 +1,58 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Home, ListChecks, CalendarCheck2, User } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import styles from "./MobileBottomNav.module.css";
 
+function isLinkActive(pathname: string, to: string, end: boolean) {
+  return end ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
+}
+
 export default function MobileBottomNav() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
 
   // "My Plans" is active when on /profile with tab=plans
   const isMyPlansActive =
-    location.pathname === "/profile" &&
-    new URLSearchParams(location.search).get("tab") === "plans";
+    pathname === "/profile" && searchParams.get("tab") === "plans";
 
   const handleMyPlans = () => {
     if (isAuthenticated) {
-      navigate("/profile?tab=plans");
+      router.push("/profile?tab=plans");
     } else {
-      navigate("/login", { state: { redirectTo: "/profile?tab=plans" } });
+      router.push(`/login?redirectTo=${encodeURIComponent("/profile?tab=plans")}`);
     }
   };
 
   return (
     <nav className={styles["mobile-bottom-nav"]}>
-      <NavLink
-        to="/"
-        end
-        className={({ isActive }) =>
-          isActive ? `${styles["mbn-item"]} ${styles.active}` : styles["mbn-item"]
+      <Link
+        href="/"
+        className={
+          isLinkActive(pathname, "/", true)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
         }
       >
         <Home size={20} />
         <span>Home</span>
-      </NavLink>
+      </Link>
 
-      <NavLink
-        to="/view-all-listings"
-        className={({ isActive }) =>
-          isActive ? `${styles["mbn-item"]} ${styles.active}` : styles["mbn-item"]
+      <Link
+        href="/view-all-listings"
+        className={
+          isLinkActive(pathname, "/view-all-listings", false)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
         }
       >
         <ListChecks size={20} />
         <span>Messes</span>
-      </NavLink>
+      </Link>
 
       <button
         className={`${styles["mbn-item"]} ${isMyPlansActive ? styles.active : ""}`}
@@ -53,9 +63,9 @@ export default function MobileBottomNav() {
       </button>
 
       <button
-        className={`${styles["mbn-item"]} ${location.pathname === "/profile" && !isMyPlansActive ? styles.active : ""
+        className={`${styles["mbn-item"]} ${pathname === "/profile" && !isMyPlansActive ? styles.active : ""
           }`}
-        onClick={() => navigate(isAuthenticated ? "/profile" : "/login")}
+        onClick={() => router.push(isAuthenticated ? "/profile" : "/login")}
       >
         <User size={20} />
         <span>{isAuthenticated ? "Profile" : "Sign In"}</span>

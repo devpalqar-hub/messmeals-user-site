@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./OwnAMess.module.css";
 import { useState } from "react";
 import { Store } from "lucide-react";

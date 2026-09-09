@@ -1,6 +1,8 @@
+"use client";
+
 import styles from "./HeroSection.module.css";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Utensils,
@@ -52,7 +54,7 @@ const stagger: Variants = {
 /* ---------------- COMPONENT ---------------- */
 
 export default function HeroSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { error } = useToast();
 
   const locationInputRef = useRef<HTMLInputElement>(null);
@@ -166,7 +168,7 @@ export default function HeroSection() {
     if (foodType) params.append("foodType", foodType);
     if (planType) params.append("planType", planType);
 
-    navigate(`/view-all-listings?${params.toString()}`);
+    router.push(`/view-all-listings?${params.toString()}`);
   };
 
   const focusLocation = () => {
@@ -409,7 +411,7 @@ export default function HeroSection() {
             <button
               key={city}
               type="button"
-              onClick={() => navigate("/view-all-listings")}
+              onClick={() => router.push("/view-all-listings")}
             >
               {city}
             </button>

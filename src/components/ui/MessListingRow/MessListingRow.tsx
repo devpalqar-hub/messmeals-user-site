@@ -1,6 +1,9 @@
+"use client";
+
 import styles from "./MessListingRow.module.css";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   MapPin,
   // Star, // commented out — new API does not return ratings
@@ -82,18 +85,22 @@ export default function MessListingRow({
   limit = 8,
   sectionClassName = "",
   apiFilter = {},
-}: MessListingRowProps) {
-  const navigate = useNavigate();
+  initialData,
+}: MessListingRowProps & { initialData?: MessListing[] }) {
+  const router = useRouter();
 
-  const [messList, setMessList] = useState<MessListing[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [messList, setMessList] = useState<MessListing[]>(initialData || []);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
-    fetchMess();
+    if (!initialData) {
+      fetchMess();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchMess = async () => {
+    if (!messList.length) setLoading(true);
     try {
       const res = await getAllMess(1, limit, apiFilter);
       setMessList(Array.isArray(res) ? res : res?.data ?? []);
@@ -125,7 +132,7 @@ export default function MessListingRow({
 
         <button
           className={styles["view-all"]}
-          onClick={() => navigate("/view-all-listings")}
+          onClick={() => router.push("/view-all-listings")}
         >
           View all
           <ArrowRight size={18} className={styles["view-all-icon"]} />
@@ -193,7 +200,7 @@ export default function MessListingRow({
 
                     <Link
                       className={styles["menu-btn"]}
-                      to={`/mess/${mess.slug}`}
+                      href={`/mess/${mess.slug}`}
                     >
                       View Details
                       <LucideArrowRight size={16} />

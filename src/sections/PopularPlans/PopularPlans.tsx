@@ -1,5 +1,7 @@
 import PopularPlanRow from "../../components/ui/PopularPlanRow/PopularPlanRow";
 
-export default function PopularPlans() {
-  return <PopularPlanRow />;
+import type { PopularPlan } from "../../types/popularPlan";
+
+export default function PopularPlans({ initialData }: { initialData?: PopularPlan[] }) {
+  return <PopularPlanRow initialData={initialData} />;
 }
