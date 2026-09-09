@@ -7,7 +7,7 @@ const extractMessage = (resData: any, defaultMsg: string) => {
   return defaultMsg;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export const checkPhone = async (phone: string): Promise<{ success: boolean; hasAccount?: boolean; message?: string; sessionId?: string }> => {
   try {

@@ -1,3 +1,5 @@
+"use client";
+
 import styles from './PartnerSection.module.css';
 import {
   Smartphone,
@@ -9,7 +11,7 @@ import {
   Settings,
   ArrowRight
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const FEATURES = [
   {
@@ -45,7 +47,7 @@ const FEATURES = [
 ];
 
 export default function PartnerSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <section className={styles["partner-section"]}>
@@ -83,7 +85,7 @@ export default function PartnerSection() {
           <div className={styles["partner-cta-area"]}>
             <button
               className={styles["partner-btn"]}
-              onClick={() => navigate("/partner")}
+              onClick={() => router.push("/partner")}
             >
               Know More
               <ArrowRight size={18} />

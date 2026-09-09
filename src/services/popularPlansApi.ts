@@ -2,7 +2,7 @@ import axios from "axios";
 import type { PopularPlan } from "../types/popularPlan";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
 // ─── GET /open/popular-plans ──────────────────────────────────────────────────
