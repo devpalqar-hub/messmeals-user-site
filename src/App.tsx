@@ -20,6 +20,7 @@ import BookingCancel from "./pages/BookingCancel/BookingCancel";
 import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Terms/Terms";
 import Partner from "./pages/Partner/Partner";
+import About from "./pages/About/About";
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/partner" element={<Partner />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       {!isFullPage && !hideFooter && <Footer />}
       {!isFullPage && <MobileBottomNav />}
