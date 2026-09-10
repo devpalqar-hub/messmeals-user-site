@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://messmeals.com";
-  
+
   // Static routes
   const routes: MetadataRoute.Sitemap = [
     {
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/partner`,
+      url: `${baseUrl}/mess-manager`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
@@ -50,25 +50,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const response = await fetch(`${apiUrl}/open/seo/messes`, {
     next: { revalidate: 3600 }, // Revalidate every hour
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch messes for sitemap: ${response.statusText}`);
   }
 
   const result = await response.json();
-  
+
   if (!result || !Array.isArray(result.data)) {
     throw new Error("Invalid API response shape: Expected a 'data' array");
   }
-  
+
   const messes = result.data;
-  
+
   const messRoutes = messes.map((mess: any) => ({
     url: `${baseUrl}/mess/${mess.slug}`,
     lastModified: mess.updatedAt ? new Date(mess.updatedAt) : new Date(),
     changeFrequency: "daily" as const,
     priority: 0.8,
   }));
-  
+
   return [...routes, ...messRoutes];
 }
