@@ -11,7 +11,7 @@ import {
   X,
   Utensils,
   ShieldCheck,
-  Check,
+  BadgeCheck,
   ArrowRight,
   Star,
   Loader2,
@@ -53,12 +53,12 @@ function MessImage({ src, alt }: { src?: string | null; alt: string }) {
   );
 }
 
-export default function ViewAllListingsClient({ 
-  initialData, 
-  initialMeta 
-}: { 
-  initialData?: MessListing[]; 
-  initialMeta?: MessMeta | null; 
+export default function ViewAllListingsClient({
+  initialData,
+  initialMeta
+}: {
+  initialData?: MessListing[];
+  initialMeta?: MessMeta | null;
 }) {
   const [messList, setMessList] = useState<MessListing[]>(initialData || []);
   const [page, setPage] = useState(1);
@@ -531,15 +531,6 @@ export default function ViewAllListingsClient({
                           alt={mess.messName}
                         />
 
-                        {mess.status.isVerified && (
-                          <span className={`${styles.badge} ${styles.verified}`}>
-                            <span className={styles["badge-icon"]}>
-                              <Check size={11} />
-                            </span>
-                            Verified
-                          </span>
-                        )}
-
                         {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
                           <span className={styles["subscribers-badge"]}>
                             <Users size={12} />
@@ -550,11 +541,20 @@ export default function ViewAllListingsClient({
 
                       <div className={styles["card-body"]}>
                         <div className={styles["card-name-block"]}>
+                          <div className={styles["card-name-row"]}>
+                            {mess.status.isVerified && (
+                              <BadgeCheck
+                                className={styles["inline-verified-badge"]}
+                                aria-label="Verified Mess"
+                              />
+                            )}
+                            <h2 className={styles["card-title"]}>{mess.messName}</h2>
+
+                          </div>
                           <div className={styles["card-location"]}>
                             <MapPin size={12} />
                             <span>{mess.address.address || mess.address.location || "Location not set"}</span>
                           </div>
-                          <h2 className={styles["card-title"]}>{mess.messName}</h2>
                         </div>
 
                         {/* Star ratings commented out — new API does not return ratings/reviews */}

@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./HeroSection.module.css";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
@@ -204,6 +205,28 @@ export default function HeroSection() {
 
   return (
     <section className={styles["hero-light"]}>
+      {/* Desktop hero background — hidden on mobile via CSS */}
+      <Image
+        src="/herobg.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
+        className={styles["hero-bg-desktop"]}
+        aria-hidden="true"
+      />
+      {/* Mobile hero background — hidden on desktop via CSS */}
+      <Image
+        src="/herobgmob.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
+        className={styles["hero-bg-mobile"]}
+        aria-hidden="true"
+      />
       <motion.div
         className={styles["hero-light-content"]}
         initial="hidden"

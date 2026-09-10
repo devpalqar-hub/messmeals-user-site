@@ -6,9 +6,16 @@
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  background: url('/herobg.png') center/cover no-repeat;
   padding: 80px 80px 80px;
   font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+/* next/image hero background helpers */
+.hero-bg-desktop {
+  display: block; /* shown on desktop */
+}
+.hero-bg-mobile {
+  display: none; /* hidden on desktop, shown on mobile via media query */
 }
 
 /* Contrast-safety overlay: keeps the dark title/search legible regardless
@@ -371,8 +378,15 @@
 /* Mobile */
 @media (max-width: 768px) {
   .hero-light {
-    background: url('/herobgmob.png') center/cover no-repeat;
     padding: 32px 16px 28px;
+  }
+
+  /* Swap to mobile hero asset */
+  .hero-bg-desktop {
+    display: none;
+  }
+  .hero-bg-mobile {
+    display: block;
   }
 
   .hero-light::before {

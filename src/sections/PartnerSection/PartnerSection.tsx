@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import styles from './PartnerSection.module.css';
 import {
@@ -67,7 +67,7 @@ export default function PartnerSection() {
           </h2>
 
           <p className={styles["partner-subtitle"]}>
-            List your mess, manage menus, track orders, partners and deliveries â€” everything you need to grow your business in one place.
+            List your mess, manage menus, track orders, partners and deliveries — everything you need to grow your business in one place.
           </p>
 
           <div className={styles["partner-features"]}>
