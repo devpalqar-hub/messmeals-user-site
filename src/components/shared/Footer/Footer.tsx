@@ -1,4 +1,4 @@
-﻿import styles from "./Footer.module.css";
+import styles from "./Footer.module.css";
 import { Facebook, Instagram, Building2, Linkedin, Compass, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
@@ -80,7 +80,7 @@ export default function Footer() {
         {/* BOTTOM */}
         <div className={styles["footer-bottom"]}>
           <span className={styles.copyright}>
-            Â© 2026 <span className={styles["brand-accent"]}>Messmeals</span>. All rights reserved.
+            © 2026 <span className={styles["brand-accent"]}>Messmeals</span>. All rights reserved.
           </span>
 
 
