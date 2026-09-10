@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Home, ListChecks, CalendarCheck2, User } from "lucide-react";
+import { House, Utensils, CalendarCheck, UserRound } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import styles from "./MobileBottomNav.module.css";
 
@@ -38,19 +38,19 @@ export default function MobileBottomNav() {
             : styles["mbn-item"]
         }
       >
-        <Home size={20} />
+        <House size={20} />
         <span>Home</span>
       </Link>
 
       <Link
-        href="/view-all-listings"
+        href="/messes"
         className={
-          isLinkActive(pathname, "/view-all-listings", false)
+          isLinkActive(pathname, "/messes", false)
             ? `${styles["mbn-item"]} ${styles.active}`
             : styles["mbn-item"]
         }
       >
-        <ListChecks size={20} />
+        <Utensils size={20} />
         <span>Messes</span>
       </Link>
 
@@ -58,7 +58,7 @@ export default function MobileBottomNav() {
         className={`${styles["mbn-item"]} ${isMyPlansActive ? styles.active : ""}`}
         onClick={handleMyPlans}
       >
-        <CalendarCheck2 size={20} />
+        <CalendarCheck size={20} />
         <span>My Plans</span>
       </button>
 
@@ -67,7 +67,7 @@ export default function MobileBottomNav() {
           }`}
         onClick={() => router.push(isAuthenticated ? "/profile" : "/login")}
       >
-        <User size={20} />
+        <UserRound size={20} />
         <span>{isAuthenticated ? "Profile" : "Sign In"}</span>
       </button>
     </nav>

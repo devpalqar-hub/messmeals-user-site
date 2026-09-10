@@ -93,6 +93,17 @@ export default function PopularPlanRow({ initialData }: { initialData?: PopularP
     }
   }, []);
 
+  // Clear the #popular-plans hash from the URL when the user scrolls
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.location.hash === "#popular-plans") {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const fetchPlans = async () => {
     if (!plans.length) setLoading(true);
     try {
@@ -109,7 +120,7 @@ export default function PopularPlanRow({ initialData }: { initialData?: PopularP
   if (!loading && plans.length === 0) return null;
 
   return (
-    <section className={styles.section}>
+    <section id="popular-plans" className={styles.section}>
       {/* HEADER */}
       <div className={styles["section-header"]}>
         <div>

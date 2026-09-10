@@ -140,6 +140,21 @@ export default function LoginClient() {
     }
   };
 
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "");
+    if (!pastedData) return;
+
+    const next = [...otp];
+    for (let i = 0; i < Math.min(pastedData.length, OTP_LENGTH); i++) {
+      next[i] = pastedData[i];
+    }
+    setOtp(next);
+
+    const nextIndex = Math.min(pastedData.length, OTP_LENGTH - 1);
+    otpRefs.current[nextIndex]?.focus();
+  };
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join("");
@@ -350,6 +365,7 @@ export default function LoginClient() {
                       value={digit}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                      onPaste={handleOtpPaste}
                     />
                   ))}
                 </div>

@@ -12,10 +12,10 @@
   background: #fbfdf9;
   padding: 80px 5%;
   position: relative;
+  box-sizing: border-box;
 }
 
 .heroContainer {
-
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -24,6 +24,7 @@
 
 .heroContent {
   flex: 1;
+  min-width: 0;
 }
 
 .heroBadge {
@@ -79,6 +80,7 @@
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .btnPrimary {
@@ -116,6 +118,7 @@
   display: flex;
   gap: 24px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .featureItem {
@@ -130,6 +133,7 @@
 .heroImageWrapper {
   flex: 1;
   position: relative;
+  min-width: 0;
 }
 
 .heroImage {
@@ -137,6 +141,7 @@
   height: auto;
   border-radius: 24px;
   object-fit: cover;
+  display: block;
 }
 
 /* =========================================
@@ -145,10 +150,10 @@
 .missionSection {
   padding: 100px 5%;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .missionContainer {
-
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -157,16 +162,19 @@
 
 .missionImageWrapper {
   flex: 1;
+  min-width: 0;
 }
 
 .missionImage {
   width: 100%;
   border-radius: 24px;
   object-fit: cover;
+  display: block;
 }
 
 .missionContent {
   flex: 1;
+  min-width: 0;
 }
 
 .sectionBadge {
@@ -216,6 +224,8 @@
   flex-direction: column;
   gap: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .missionCardIcon {
@@ -226,6 +236,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .missionCard strong {
@@ -244,10 +255,10 @@
 .experiencesSection {
   padding: 100px 5%;
   background: #fbfdf9;
+  box-sizing: border-box;
 }
 
 .experiencesContainer {
-
   margin: 0 auto;
 }
 
@@ -308,6 +319,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .expCardHeader {
@@ -325,6 +338,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .expCardHeader h3 {
@@ -397,10 +411,10 @@
 .howItWorksSection {
   padding: 100px 5%;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .howItWorksContainer {
-
   margin: 0 auto;
 }
 
@@ -416,6 +430,7 @@
   padding: 40px;
   margin-bottom: 24px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
 }
 
 .hwBoxHeader {
@@ -447,6 +462,7 @@
   flex-direction: column;
   gap: 12px;
   position: relative;
+  min-width: 0;
 }
 
 .hwStepNum {
@@ -460,6 +476,7 @@
   justify-content: center;
   font-weight: 700;
   font-size: 14px;
+  flex-shrink: 0;
 }
 
 .hwStepIcon {
@@ -471,6 +488,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .hwStep h4 {
@@ -494,6 +512,7 @@
   padding-top: 50px;
   color: #e3eae1;
   font-size: 24px;
+  flex-shrink: 0;
 }
 
 /* =========================================
@@ -502,10 +521,10 @@
 .whyChooseSection {
   padding: 100px 5%;
   background: #fbfdf9;
+  box-sizing: border-box;
 }
 
 .whyChooseContainer {
-
   margin: 0 auto;
 }
 
@@ -515,7 +534,7 @@
 
 .whyChooseGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -529,6 +548,8 @@
   gap: 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .whyCard:hover {
@@ -567,10 +588,10 @@
 .adminAppSection {
   padding: 100px 5%;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .adminAppContainer {
-
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -579,12 +600,14 @@
 
 .adminAppContent {
   flex: 1;
+  min-width: 0;
 }
 
 .appStoreButtons {
   display: flex;
   gap: 16px;
   margin-bottom: 32px;
+  flex-wrap: wrap;
 }
 
 .storeBtn {
@@ -598,6 +621,7 @@
   gap: 12px;
   cursor: pointer;
   transition: background 0.2s ease;
+  box-sizing: border-box;
 }
 
 .storeBtn:hover {
@@ -641,6 +665,7 @@
   display: flex;
   justify-content: flex-end;
   position: relative;
+  min-width: 0;
 }
 
 .adminAppImage {
@@ -649,6 +674,7 @@
   height: auto;
   border-radius: 32px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  display: block;
 }
 
 /* =========================================
@@ -657,10 +683,10 @@
 .visionSection {
   padding: 100px 5%;
   background: #fbfdf9;
+  box-sizing: border-box;
 }
 
 .visionContainer {
-
   margin: 0 auto;
 }
 
@@ -670,7 +696,7 @@
 
 .visionGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -682,6 +708,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .visionCardIcon {
@@ -693,6 +721,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .visionCard h4 {
@@ -715,10 +744,10 @@
 .bottomCtaSection {
   padding: 60px 5% 100px;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .bottomCtaContainer {
-
   margin: 0 auto;
   background: #eaf7e5;
   border-radius: 24px;
@@ -727,6 +756,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
+  box-sizing: border-box;
 }
 
 .bottomCtaLeft {
@@ -734,6 +764,7 @@
   align-items: center;
   gap: 24px;
   flex: 1;
+  min-width: 0;
 }
 
 .bottomCtaIcon {
@@ -778,10 +809,26 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
+
+  .heroSection,
+  .missionSection,
+  .experiencesSection,
+  .howItWorksSection,
+  .whyChooseSection,
+  .adminAppSection,
+  .visionSection {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
   .heroContainer {
     flex-direction: column;
     text-align: center;
     gap: 40px;
+  }
+
+  .heroTitle {
+    font-size: 46px;
   }
 
   .heroActions {
@@ -809,6 +856,11 @@
     order: 1;
   }
 
+  .sectionTitle,
+  .sectionTitleCentered {
+    font-size: 36px;
+  }
+
   .experiencesCards {
     flex-direction: column;
   }
@@ -827,7 +879,7 @@
   }
 
   .whyChooseGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .adminAppContainer {
@@ -845,7 +897,7 @@
   }
 
   .visionGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .bottomCtaContainer {
@@ -867,15 +919,20 @@
   .missionSection,
   .experiencesSection,
   .howItWorksSection {
-    padding: 60px 5%;
+    padding: 56px 5%;
   }
 
   .heroTitle {
-    font-size: 42px;
+    font-size: 38px;
   }
 
   .heroSubtitle {
     font-size: 16px;
+  }
+
+  .heroBadge {
+    font-size: 13px;
+    padding: 5px 14px;
   }
 
   .heroActions {
@@ -886,20 +943,43 @@
   .heroFeatures {
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+  }
+
+  .featureItem {
+    font-size: 13px;
+  }
+
+  .sectionBadge,
+  .sectionBadgeCentered {
+    font-size: 13px;
+    padding: 5px 14px;
   }
 
   .sectionTitle,
   .sectionTitleCentered {
-    font-size: 32px;
+    font-size: 30px;
+  }
+
+  .sectionDesc,
+  .sectionDescCentered {
+    font-size: 15.5px;
   }
 
   .missionCards {
     flex-direction: column;
   }
 
+  .missionCard {
+    padding: 20px 18px;
+  }
+
   .experienceCard {
     padding: 30px;
+  }
+
+  .expCardHeader h3 {
+    font-size: 20px;
   }
 
   .expImageGirl,
@@ -911,28 +991,57 @@
     display: block;
   }
 
+  .howItWorksBox {
+    padding: 30px;
+  }
+
   .hwSteps {
     flex-direction: column;
-    gap: 32px;
+    gap: 28px;
   }
 
   .whyChooseGrid,
   .visionGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .whyCard {
+    padding: 26px;
+  }
+
+  .visionCard {
+    padding: 26px 22px;
   }
 
   .adminAppSection,
   .whyChooseSection,
   .visionSection {
-    padding: 60px 5%;
+    padding: 56px 5%;
+  }
+
+  .storeBtnText strong {
+    font-size: 16px;
   }
 
   .bottomCtaSection {
-    padding: 40px 5% 80px;
+    padding: 36px 5% 72px;
   }
 
   .bottomCtaContainer {
-    padding: 32px 24px;
+    padding: 30px 22px;
+  }
+
+  .bottomCtaIcon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .bottomCtaText h3 {
+    font-size: 21px;
+  }
+
+  .bottomCtaText p {
+    font-size: 14px;
   }
 
   .bottomCtaActions {
@@ -952,90 +1061,251 @@
   .missionSection,
   .experiencesSection,
   .howItWorksSection {
-    padding: 40px 5%;
+    padding: 36px 5%;
+  }
+
+  .heroBadge {
+    font-size: 12px;
+    padding: 4px 12px;
+    gap: 6px;
+    margin-bottom: 18px;
   }
 
   .heroTitle {
-    font-size: 32px;
+    font-size: 28px;
+    margin-bottom: 14px;
   }
 
   .heroSubtitle,
   .sectionDesc,
   .sectionDescCentered {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .heroFeatures {
+    gap: 10px;
+  }
+
+  .featureItem {
+    font-size: 12.5px;
   }
 
   .btnPrimary,
   .btnSecondary,
   .btnPrimaryDark {
-    font-size: 15px;
-    padding: 12px 24px;
+    font-size: 14px;
+    padding: 11px 20px;
     width: 100%;
+  }
+
+  .sectionBadge,
+  .sectionBadgeCentered {
+    font-size: 12px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
   }
 
   .sectionTitle,
   .sectionTitleCentered {
-    font-size: 26px;
+    font-size: 23px;
+    margin-bottom: 12px;
+  }
+
+  .missionCard {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .missionCardIcon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .missionCard strong {
+    font-size: 14.5px;
+  }
+
+  .missionCard span {
+    font-size: 12.5px;
   }
 
   .howItWorksBox {
-    padding: 24px;
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .hwBadge {
+    font-size: 12.5px;
+    padding: 5px 13px;
+  }
+
+  .hwStepNum {
+    width: 28px;
+    height: 28px;
+    font-size: 12.5px;
+  }
+
+  .hwStepIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .hwStep h4 {
+    font-size: 14.5px;
+  }
+
+  .hwStep p {
+    font-size: 12.5px;
   }
 
   .experienceCard {
-    padding: 24px;
+    padding: 22px;
+    border-radius: 18px;
   }
 
   .expCardHeader {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .expCardIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .expCardHeader h3 {
+    font-size: 17px;
+  }
+
+  .expCardHeader p {
+    font-size: 12.5px;
+  }
+
+  .expList {
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .expList li {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .expImageGirl,
+  .expImageMan {
+    width: 160px;
+  }
+
+  .whyCard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .whyCardIcon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+  }
+
+  .whyCardContent h4 {
+    font-size: 15.5px;
+    margin-bottom: 5px;
+  }
+
+  .whyCardContent p {
+    font-size: 12.5px;
+  }
+
+  .visionCard {
+    padding: 20px 16px;
+  }
+
+  .visionCardIcon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+  }
+
+  .visionCard h4 {
+    font-size: 15.5px;
+    margin-bottom: 8px;
+  }
+
+  .visionCard p {
+    font-size: 13px;
   }
 
   .appStoreButtons {
     flex-direction: column;
   }
 
+  .storeBtn {
+    padding: 9px 16px;
+    justify-content: center;
+  }
+
+  .storeBtnText strong {
+    font-size: 14.5px;
+  }
+
+  .storeBtnText span {
+    font-size: 9px;
+  }
+
+  .learnMoreLink {
+    font-size: 14px;
+  }
+
+  .adminAppImage {
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
   .adminAppSection,
   .whyChooseSection,
   .visionSection {
-    padding: 40px 5%;
+    padding: 36px 5%;
   }
 
-  .whyCard {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px;
+  .bottomCtaContainer {
+    padding: 24px 18px;
+    border-radius: 18px;
+    gap: 22px;
+  }
+
+  .bottomCtaLeft {
+    gap: 14px;
+  }
+
+  .bottomCtaIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .bottomCtaText h3 {
+    font-size: 18px;
+  }
+
+  .bottomCtaText p {
+    font-size: 13px;
   }
 }
 
 /* Very small phones */
 @media (max-width: 360px) {
   .heroTitle {
-    font-size: 28px;
-  }
-
-  .sectionTitle,
-  .sectionTitleCentered {
-    font-size: 22px;
-  }
-
-  .expList li {
-    font-size: 14px;
-  }
-
-  .hwStep h4 {
-    font-size: 15px;
-  }
-
-  .hwStep p {
-    font-size: 13px;
-  }
-}
-
-/* Very Very Small Mobile */
-@media (max-width: 300px) {
-  .heroTitle {
     font-size: 24px;
+  }
+
+  .heroSubtitle {
+    font-size: 13px;
   }
 
   .sectionTitle,
@@ -1043,15 +1313,117 @@
     font-size: 20px;
   }
 
+  .sectionDesc,
+  .sectionDescCentered {
+    font-size: 13px;
+  }
+
+  .expList li {
+    font-size: 12.5px;
+  }
+
+  .hwStep h4 {
+    font-size: 13.5px;
+  }
+
+  .hwStep p {
+    font-size: 12px;
+  }
+
+  .missionCard strong {
+    font-size: 13.5px;
+  }
+
+  .missionCard span {
+    font-size: 12px;
+  }
+
+  .whyCardContent h4,
+  .visionCard h4 {
+    font-size: 14.5px;
+  }
+
+  .whyCardContent p,
+  .visionCard p {
+    font-size: 12px;
+  }
+
+  .bottomCtaText h3 {
+    font-size: 16.5px;
+  }
+
+  .bottomCtaText p {
+    font-size: 12.5px;
+  }
+}
+
+/* Very Very Small Mobile */
+@media (max-width: 300px) {
+  .heroTitle {
+    font-size: 21px;
+  }
+
+  .heroBadge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .sectionTitle,
+  .sectionTitleCentered {
+    font-size: 18px;
+  }
+
+  .sectionBadge,
+  .sectionBadgeCentered {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
   .btnPrimary,
   .btnSecondary,
   .btnPrimaryDark {
-    font-size: 14px;
+    font-size: 13px;
     padding: 10px 16px;
   }
 
   .howItWorksBox,
   .experienceCard {
     padding: 16px;
+  }
+
+  .missionCard {
+    padding: 14px 12px;
+  }
+
+  .missionCardIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hwStepIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hwStepNum {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  .expCardIcon,
+  .whyCardIcon,
+  .visionCardIcon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .bottomCtaIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .bottomCtaText h3 {
+    font-size: 15px;
   }
 }

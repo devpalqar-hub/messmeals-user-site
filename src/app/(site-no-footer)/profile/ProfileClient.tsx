@@ -27,6 +27,7 @@ import { getUserProfile } from "../../../services/userService";
 import { getAddresses } from "../../../services/addressService";
 import type { Address } from "../../../types/address";
 import AddressModal from "./AddressModal";
+import ConfirmModal from "../../../components/ui/ConfirmModal/ConfirmModal";
 import { getMySubscriptions } from "../../../services/bookingService";
 import type { MySubscription } from "../../../types/booking";
 import styles from "./ProfileClient.module.css";
@@ -43,21 +44,21 @@ const fmt = (iso: string) =>
 
 function statusMeta(status: string) {
   switch (status.toUpperCase()) {
-    case "ACTIVE":   return { label: "Active",    cls: styles["status-active"],    icon: <BadgeCheck size={12} /> };
-    case "PAUSED":   return { label: "Paused",    cls: styles["status-paused"],    icon: <PauseCircle size={12} /> };
-    case "CANCELLED":return { label: "Cancelled", cls: styles["status-cancelled"], icon: <Ban size={12} /> };
-    default:         return { label: "Inactive",  cls: styles["status-inactive"],  icon: <Clock size={12} /> };
+    case "ACTIVE": return { label: "Active", cls: styles["status-active"], icon: <BadgeCheck size={12} /> };
+    case "PAUSED": return { label: "Paused", cls: styles["status-paused"], icon: <PauseCircle size={12} /> };
+    case "CANCELLED": return { label: "Cancelled", cls: styles["status-cancelled"], icon: <Ban size={12} /> };
+    default: return { label: "Inactive", cls: styles["status-inactive"], icon: <Clock size={12} /> };
   }
 }
 
 function scheduleLabel(sub: MySubscription) {
   switch (sub.scheduleType) {
-    case "DAILY":     return "Daily";
-    case "MONTHLY":   return "Monthly";
-    case "EVERYDAY":  return "Every day";
-    case "CUSTOM":    return "Custom days";
-    case "WEEKLY":    return "Weekly";
-    default:          return sub.scheduleType;
+    case "DAILY": return "Daily";
+    case "MONTHLY": return "Monthly";
+    case "EVERYDAY": return "Every day";
+    case "CUSTOM": return "Custom days";
+    case "WEEKLY": return "Weekly";
+    default: return sub.scheduleType;
   }
 }
 
@@ -72,8 +73,8 @@ export default function ProfileClient() {
   const tabParam = searchParams.get("tab");
   const resolvedTab =
     tabParam === "plans" ? "plans" :
-    tabParam === "addresses" ? "addresses" :
-    "details";
+      tabParam === "addresses" ? "addresses" :
+        "details";
 
   const [activeTab, setActiveTab] = useState<"details" | "addresses" | "plans">(resolvedTab);
 
@@ -87,6 +88,7 @@ export default function ProfileClient() {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [addressesLoading, setAddressesLoading] = useState(true);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -159,7 +161,7 @@ export default function ProfileClient() {
         <div style={{ flex: 1 }}>
           <h1 style={{ fontSize: "20px", margin: 0, color: "#14181a" }}>My Account</h1>
         </div>
-        <button className={styles["profile-logout"]} onClick={() => { logout(); router.push("/"); }}>
+        <button className={styles["profile-logout"]} onClick={() => setIsLogoutModalOpen(true)}>
           <LogOut size={16} /> Logout
         </button>
       </div>
@@ -256,7 +258,7 @@ export default function ProfileClient() {
             <div className={styles["profile-empty"]}>
               <UtensilsCrossed size={40} strokeWidth={1.4} color="#b3bab3" />
               <p>You haven&apos;t booked any mess plans yet.</p>
-              <Link href="/view-all-listings">Browse Messes</Link>
+              <Link href="/messes">Browse Messes</Link>
             </div>
           ) : (
             <div className={styles["sub-list"]}>
@@ -334,6 +336,19 @@ export default function ProfileClient() {
           )}
         </div>
       )}
+
+
+      <ConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={() => { logout(); router.push("/"); }}
+        title="Log out?"
+        message="You'll need to sign in again to access your account."
+        confirmLabel="Log Out"
+        cancelLabel="Stay Signed In"
+        variant="danger"
+        icon={<LogOut size={26} />}
+      />
     </main>
   );
 }

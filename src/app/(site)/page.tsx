@@ -3,10 +3,11 @@ import HeroSection from "../../sections/HeroSection/HeroSection";
 import PopularPlans from "../../sections/PopularPlans/PopularPlans";
 import FeaturedMesses from "../../sections/FeaturedMesses/FeaturedMesses";
 import VerifiedMesses from "../../sections/VerifiedMesses/VerifiedMesses";
-// Testimonials was commented out in the old App.tsx home route — kept unused/dead, not reintroduced.
 // import Testimonials from "../../sections/Testimonials/Testimonials";
 import PartnerSection from "../../sections/PartnerSection/PartnerSection";
 import OwnAMess from "../../sections/OwnAMess/OwnAMess";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "MessMeals – Find the Best Mess & Homely Food Near You",
@@ -36,7 +37,7 @@ export default async function Home() {
       getAllMess(1, 8, { isVerified: "true" }),
       getPopularPlans(1, 25),
     ]);
-    
+
     featuredMesses = Array.isArray(fRes) ? fRes : fRes?.data ?? [];
     verifiedMesses = Array.isArray(vRes) ? vRes : vRes?.data ?? [];
     popularPlans = Array.isArray(pRes) ? pRes : pRes?.data ?? [];
