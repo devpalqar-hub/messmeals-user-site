@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { UserRound, House, Utensils, LucideInfo, BookOpen } from "lucide-react";
+import { UserRound, House, Utensils, LucideInfo, BookOpen, Menu, X } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 import { useAuth } from "../../../context/AuthContext";
@@ -77,12 +77,12 @@ export default function Navbar() {
       <header className={styles["navbar-wrapper"]} ref={headerRef}>
         <nav className={styles.navbar}>
 
-          {/* LEFT â€” Logo */}
+          {/* LEFT — Logo */}
           <div className={styles["navbar-left"]} onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
             <img src="/logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
           </div>
 
-          {/* CENTER â€” Nav links (desktop) */}
+          {/* CENTER — Nav links (desktop) */}
           <div
             className={styles["navbar-center"]}
             ref={navCenterRef}
@@ -108,7 +108,7 @@ export default function Navbar() {
             />
           </div>
 
-          {/* RIGHT â€” CTA */}
+          {/* RIGHT — CTA */}
           <div className={styles["navbar-right"]}>
             <button className={styles["cta-btn"]} onClick={() => router.push("/mess-manager")}>
               List Your Mess
@@ -131,7 +131,7 @@ export default function Navbar() {
             aria-label="Toggle navigation"
             onClick={() => setIsNavbarOpen(!isNavbarOpen)}
           >
-            {isNavbarOpen ? "âœ•" : "â˜°"}
+            {isNavbarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
 

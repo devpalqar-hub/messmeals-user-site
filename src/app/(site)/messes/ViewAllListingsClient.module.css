@@ -125,6 +125,7 @@
   flex-direction: column;
   gap: 8px;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .hls-dropdown-loading {
@@ -173,6 +174,7 @@
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease;
+  min-width: 0;
 }
 
 .hls-dropdown-item:hover {
@@ -191,6 +193,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .hls-dropdown-empty {
@@ -503,10 +506,13 @@
   z-index: 3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(8px);
+  max-width: calc(100% - 50px);
+  box-sizing: border-box;
 }
 
 .subscribers-badge svg {
   color: #18864B;
+  flex-shrink: 0;
 }
 
 /* CARD BODY */
@@ -521,6 +527,15 @@
   min-width: 0;
 }
 
+/* Row: name + verified badge side by side, name truncates, badge never overflows */
+.card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-bottom: 3px;
+}
+
 .card-location {
   display: flex;
   align-items: center;
@@ -528,7 +543,6 @@
   font-size: 11.5px;
   color: #617061;
   font-weight: 500;
-  margin-bottom: 3px;
   min-width: 0;
 }
 
@@ -552,6 +566,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* flex child: shrinks and truncates, giving space to the badge */
+  min-width: 0;
+  flex: 1 1 0%;
+}
+
+/* Instagram-style BadgeCheck inline verified icon */
+.inline-verified-badge {
+  flex-shrink: 0;          /* badge NEVER shrinks — always visible */
+  width: 17px;
+  height: 17px;
+  color: #55C500;          /* solid theme green matching the badge fill */
+  display: block;
 }
 
 .card-divider {
@@ -814,6 +840,32 @@
     font-size: 13px;
   }
 
+  .hls-dropdown {
+    border-radius: 12px;
+    padding: 6px;
+    max-height: 280px;
+  }
+
+  .hls-dropdown-header {
+    font-size: 10px;
+    padding: 7px 10px 3px;
+  }
+
+  .hls-dropdown-item {
+    padding: 9px 10px;
+    gap: 10px;
+  }
+
+  .hls-dropdown-text {
+    font-size: 13px;
+  }
+
+  .hls-dropdown-loading,
+  .hls-dropdown-empty {
+    font-size: 13px;
+    padding: 14px;
+  }
+
   .mobile-filter-toggle {
     display: inline-flex;
     align-items: center;
@@ -896,6 +948,12 @@
     font-size: 16.5px;
   }
 
+  .apply-filters-btn,
+  .clear-all-btn {
+    font-size: 13.5px;
+    padding: 11px 14px;
+  }
+
   /* TWO SMALLER CARDS PER ROW, WITH MORE BREATHING ROOM */
   .listing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -912,6 +970,16 @@
 
   .card-title {
     font-size: 12.5px;
+  }
+
+  .card-name-row {
+    gap: 4px;
+    margin-bottom: 2px;
+  }
+
+  .inline-verified-badge {
+    width: 14px;
+    height: 14px;
   }
 
   .card-location {
@@ -981,14 +1049,15 @@
     height: 11px;
   }
 
-  .wishlist {
-    width: 22px;
-    height: 22px;
+  .subscribers-badge {
+    padding: 3px 8px;
+    font-size: 8.5px;
     top: 8px;
     right: 8px;
+    gap: 3px;
   }
 
-  .wishlist svg {
+  .subscribers-badge svg {
     width: 11px;
     height: 11px;
   }
@@ -1054,6 +1123,19 @@
     font-size: 12.5px;
   }
 
+  .hls-dropdown {
+    padding: 5px;
+    max-height: 240px;
+  }
+
+  .hls-dropdown-item {
+    padding: 8px;
+  }
+
+  .hls-dropdown-text {
+    font-size: 12.5px;
+  }
+
   .mobile-filter-toggle {
     width: 40px;
     height: 40px;
@@ -1096,7 +1178,17 @@
   }
 
   .card-title {
-    font-size: 11.5px;
+    font-size: 11px;
+  }
+
+  .card-name-row {
+    gap: 3px;
+    margin-bottom: 2px;
+  }
+
+  .inline-verified-badge {
+    width: 13px;
+    height: 13px;
   }
 
   .card-location {
@@ -1130,9 +1222,14 @@
     height: 10px;
   }
 
-  .wishlist {
-    width: 20px;
-    height: 20px;
+  .subscribers-badge {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .subscribers-badge svg {
+    width: 10px;
+    height: 10px;
   }
 
   .filters {
@@ -1159,7 +1256,7 @@
   }
 }
 
-/* Very small phones — only when necessary */
+/* Very small phones */
 @media (max-width: 360px) {
   .view-all-page {
     padding: 16px 8px;
@@ -1184,10 +1281,24 @@
     font-size: 12px;
   }
 
+  .hls-dropdown-text {
+    font-size: 12px;
+  }
+
   .mobile-filter-toggle {
     width: 38px;
     height: 38px;
     margin-left: 6px;
+  }
+
+  .filter-header h2 {
+    font-size: 14.5px;
+  }
+
+  .apply-filters-btn,
+  .clear-all-btn {
+    font-size: 13px;
+    padding: 10px 12px;
   }
 
   .listing-grid {
@@ -1200,7 +1311,17 @@
   }
 
   .card-title {
-    font-size: 10.5px;
+    font-size: 10px;
+  }
+
+  .card-name-row {
+    gap: 3px;
+    margin-bottom: 2px;
+  }
+
+  .inline-verified-badge {
+    width: 12px;
+    height: 12px;
   }
 
   .card-location {
@@ -1225,17 +1346,191 @@
     padding: 2px 5px;
   }
 
-  .wishlist {
-    width: 20px;
-    height: 20px;
+  .subscribers-badge {
+    font-size: 7.5px;
+    padding: 2px 5px;
   }
 
-  .wishlist svg {
-    width: 10px;
-    height: 10px;
+  .subscribers-badge svg {
+    width: 9px;
+    height: 9px;
   }
 
   .skeleton-image {
     height: 78px;
+  }
+}
+
+/* Very Very Small Mobile */
+@media (max-width: 300px) {
+  .view-all-page {
+    padding: 12px 6px;
+  }
+
+  .page-header h1 {
+    font-size: 15px;
+  }
+
+  .page-subtitle {
+    font-size: 11px;
+  }
+
+  .results-count {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .top-search {
+    width: calc(100% - 40px);
+    padding: 7px 9px;
+    gap: 6px;
+  }
+
+  .top-search input,
+  .top-search input::placeholder {
+    font-size: 11px;
+  }
+
+  .hls-dropdown {
+    padding: 4px;
+    max-height: 200px;
+  }
+
+  .hls-dropdown-header {
+    font-size: 9px;
+    padding: 6px 8px 3px;
+  }
+
+  .hls-dropdown-item {
+    padding: 7px;
+    gap: 8px;
+  }
+
+  .hls-dropdown-text {
+    font-size: 11px;
+  }
+
+  .mobile-filter-toggle {
+    width: 34px;
+    height: 34px;
+    margin-left: 6px;
+    border-radius: 5px;
+  }
+
+  .filter-header h2 {
+    font-size: 13.5px;
+  }
+
+  .filter-group label {
+    font-size: 12px;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+
+  .apply-filters-btn,
+  .clear-all-btn {
+    font-size: 12px;
+    padding: 9px 10px;
+  }
+
+  .listing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .listing-card {
+    border-radius: 9px;
+  }
+
+  .image-wrap {
+    height: 68px;
+  }
+
+  .card-title {
+    font-size: 9.5px;
+  }
+
+  .card-name-row {
+    gap: 3px;
+    margin-bottom: 1px;
+  }
+
+  .inline-verified-badge {
+    width: 12px;
+    height: 12px;
+  }
+
+  .card-location {
+    font-size: 7.5px;
+  }
+
+  .card-body {
+    padding: 5px 5px 7px;
+  }
+
+  .card-divider {
+    margin: 5px 0;
+  }
+
+  .price-info small {
+    font-size: 6.5px;
+  }
+
+  .price-info strong {
+    font-size: 10.5px;
+  }
+
+  .price-info strong span {
+    font-size: 8px;
+  }
+
+  .view-btn {
+    font-size: 8.5px;
+    padding: 5px 3px;
+  }
+
+  .badge {
+    font-size: 7px;
+    padding: 2px 4px;
+  }
+
+  .badge-icon {
+    width: 8px;
+    height: 8px;
+  }
+
+  .subscribers-badge {
+    font-size: 7px;
+    padding: 2px 4px;
+  }
+
+  .subscribers-badge svg {
+    width: 8px;
+    height: 8px;
+  }
+
+  .skeleton-image {
+    height: 68px;
+  }
+
+  .empty-state {
+    padding: 32px 10px;
+  }
+
+  .empty-state p {
+    font-size: 12px;
+  }
+
+  .clear-filters-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .end-of-list {
+    font-size: 11px;
   }
 }
