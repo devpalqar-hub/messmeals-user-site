@@ -487,21 +487,18 @@ export default function ViewAllListingsClient({
           <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
             <button
               className={styles["apply-filters-btn"]}
-              style={{ flex: 1 }}
               onClick={() => applyFilters()}
             >
               <Filter size={16} />
               Apply Filters
             </button>
-            {hasActiveFilters && (
-              <button
-                className={styles["clear-all-btn"]}
-                style={{ flex: 1, border: '1px solid #E3EAE1', background: 'transparent' }}
-                onClick={clearAllFilters}
-              >
-                Clear Filters
-              </button>
-            )}
+            <button
+              className={styles["clear-all-btn"]}
+              onClick={clearAllFilters}
+              disabled={!hasActiveFilters}
+            >
+              Clear
+            </button>
           </div>
         </aside>
 

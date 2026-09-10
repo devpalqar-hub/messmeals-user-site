@@ -1,5 +1,5 @@
-import styles from "./Footer.module.css";
-import { Facebook, Instagram, Twitter, Youtube, Building2, MapPin, Handshake } from "lucide-react";
+﻿import styles from "./Footer.module.css";
+import { Facebook, Instagram, Building2, Linkedin, Compass, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -29,11 +29,8 @@ export default function Footer() {
                 <a href="#" aria-label="Instagram" className={styles["social-btn"]}>
                   <Instagram size={18} />
                 </a>
-                <a href="#" aria-label="Twitter" className={styles["social-btn"]}>
-                  <Twitter size={18} />
-                </a>
-                <a href="#" aria-label="YouTube" className={styles["social-btn"]}>
-                  <Youtube size={18} />
+                <a href="#" aria-label="Linkedin" className={styles["social-btn"]}>
+                  <Linkedin size={18} />
                 </a>
               </div>
             </div>
@@ -44,39 +41,35 @@ export default function Footer() {
             <div className={styles["link-group"]}>
               <h4>
                 <span className={styles["link-icon"]}>
+                  <Compass size={16} />
+                </span>
+                Explore
+              </h4>
+              <Link href="/messes">Messes</Link>
+              <Link href="/#popular-plans">Popular Plans</Link>
+              <Link href="/mess-manager">List Your Mess</Link>
+            </div>
+
+            <div className={styles["link-group"]}>
+              <h4>
+                <span className={styles["link-icon"]}>
                   <Building2 size={16} />
                 </span>
                 Company
               </h4>
-              <a href="#">About Us</a>
-              <a href="#">Careers</a>
-              <a href="#">Press</a>
-              <a href="#">Contact Us</a>
+              <Link href="/about">About Us</Link>
+              <Link href="#">Blog</Link>
             </div>
 
             <div className={styles["link-group"]}>
               <h4>
                 <span className={styles["link-icon"]}>
-                  <MapPin size={16} />
+                  <ShieldCheck size={16} />
                 </span>
-                Cities
+                Legal
               </h4>
-              <a href="#">Kochi</a>
-              <a href="#">Thiruvananthapuram</a>
-              <a href="#">Kozhikode</a>
-              <a href="#">All Cities</a>
-            </div>
-
-            <div className={styles["link-group"]}>
-              <h4>
-                <span className={styles["link-icon"]}>
-                  <Handshake size={16} />
-                </span>
-                Partners
-              </h4>
-              <a href="#">List Your Mess</a>
-              <a href="#">Safety Standards</a>
-              <a href="#">Success Stories</a>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms &amp; Conditions</Link>
             </div>
           </div>
         </div>
@@ -87,14 +80,9 @@ export default function Footer() {
         {/* BOTTOM */}
         <div className={styles["footer-bottom"]}>
           <span className={styles.copyright}>
-            © 2026 <span className={styles["brand-accent"]}>Messmeals</span>. All rights reserved.
+            Â© 2026 <span className={styles["brand-accent"]}>Messmeals</span>. All rights reserved.
           </span>
 
-          <div className={styles["legal-links"]}>
-            <Link href="/privacy">Privacy Policy</Link>
-            <span className={styles.dot} />
-            <Link href="/terms">Terms &amp; Conditions</Link>
-          </div>
 
           <span className={styles["powered-by"]}>
             Powered by <a href="https://palqar.com/" target="_blank" rel="noopener noreferrer" className={styles["powered-brand"]} style={{ textDecoration: 'none' }}>Palqar</a>

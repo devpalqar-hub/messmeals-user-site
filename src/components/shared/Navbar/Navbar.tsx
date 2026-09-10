@@ -1,17 +1,17 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { User, Home, Utensils, Info, BookOpen } from "lucide-react";
+import { UserRound, House, Utensils, LucideInfo, BookOpen } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 import { useAuth } from "../../../context/AuthContext";
 
 const NAV_LINKS = [
-  { to: "/", label: "Home", end: true, Icon: Home },
-  { to: "/view-all-listings", label: "Messes", end: false, Icon: Utensils },
-  { to: "/about", label: "About Us", end: false, Icon: Info },
+  { to: "/", label: "Home", end: true, Icon: House },
+  { to: "/messes", label: "Messes", end: false, Icon: Utensils },
+  { to: "/about", label: "About Us", end: false, Icon: LucideInfo },
   { to: "/blog", label: "Blog", end: false, Icon: BookOpen },
 ];
 
@@ -77,12 +77,12 @@ export default function Navbar() {
       <header className={styles["navbar-wrapper"]} ref={headerRef}>
         <nav className={styles.navbar}>
 
-          {/* LEFT — Logo */}
+          {/* LEFT â€” Logo */}
           <div className={styles["navbar-left"]} onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
             <img src="/logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
           </div>
 
-          {/* CENTER — Nav links (desktop) */}
+          {/* CENTER â€” Nav links (desktop) */}
           <div
             className={styles["navbar-center"]}
             ref={navCenterRef}
@@ -108,14 +108,14 @@ export default function Navbar() {
             />
           </div>
 
-          {/* RIGHT — CTA */}
+          {/* RIGHT â€” CTA */}
           <div className={styles["navbar-right"]}>
-            <button className={styles["cta-btn"]} onClick={() => setIsModalOpen(true)}>
+            <button className={styles["cta-btn"]} onClick={() => router.push("/mess-manager")}>
               List Your Mess
             </button>
             {isAuthenticated ? (
               <Link className={styles["profile-chip"]} href="/profile">
-                <User size={15} />
+                <UserRound size={15} />
                 {user?.name || "My Account"}
               </Link>
             ) : (
@@ -131,7 +131,7 @@ export default function Navbar() {
             aria-label="Toggle navigation"
             onClick={() => setIsNavbarOpen(!isNavbarOpen)}
           >
-            {isNavbarOpen ? "✕" : "☰"}
+            {isNavbarOpen ? "âœ•" : "â˜°"}
           </button>
         </nav>
 
@@ -154,7 +154,7 @@ export default function Navbar() {
             })}
             <button
               className={`${styles["cta-btn"]} ${styles["mobile-cta"]}`}
-              onClick={() => { setIsModalOpen(true); closeNavbar(); }}
+              onClick={() => { router.push("/mess-manager"); closeNavbar(); }}
             >
               List Your Mess
             </button>
@@ -187,3 +187,4 @@ export default function Navbar() {
     </>
   );
 }
+

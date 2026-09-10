@@ -4,9 +4,6 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import styles from "./page.module.css";
 
-// Extracted from Partner.tsx's inline FaqItem — the only interactive part of
-// the otherwise-static /partner page, so it gets its own client boundary
-// while the page itself stays a Server Component.
 export default function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
   return (

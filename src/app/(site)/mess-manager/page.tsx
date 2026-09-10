@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import styles from "./page.module.css";
 import FaqItem from "./FaqItem";
 import {
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
   title: "MessMeals Admin - Manage Your Mess Anytime, Anywhere",
   description:
     "MessMeals Admin is a powerful app for mess owners to manage menus, customers, orders, delivery partners and business performance - all in one place.",
-  alternates: { canonical: "/partner" },
+  alternates: { canonical: "/mess-manager" },
   openGraph: {
     title: "MessMeals Admin - Manage Your Mess Anytime, Anywhere",
     description:
       "MessMeals Admin is a powerful app for mess owners to manage menus, customers, orders, delivery partners and business performance - all in one place.",
-    url: "/partner",
+    url: "/mess-manager",
   },
 };
 
@@ -135,7 +135,7 @@ export default function Partner() {
             Anytime, <span>Anywhere.</span>
           </h1>
           <p className={styles["hero-subtitle"]}>
-            MessMeals Admin is a powerful and easy-to-use app designed for mess owners and operations teams to manage menus, customers, orders, partners, deliveries and business performance — all in one place.
+            MessMeals Admin is a powerful and easy-to-use app designed for mess owners and operations teams to manage menus, customers, orders, partners, deliveries and business performance â€” all in one place.
           </p>
           <StoreButtons />
           <div className={styles["trust-row"]}>
@@ -253,3 +253,4 @@ export default function Partner() {
     </main>
   );
 }
+

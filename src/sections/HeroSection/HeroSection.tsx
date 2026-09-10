@@ -168,7 +168,7 @@ export default function HeroSection() {
     if (foodType) params.append("foodType", foodType);
     if (planType) params.append("planType", planType);
 
-    router.push(`/view-all-listings?${params.toString()}`);
+    router.push(`/messes?${params.toString()}`);
   };
 
   const focusLocation = () => {
@@ -411,7 +411,7 @@ export default function HeroSection() {
             <button
               key={city}
               type="button"
-              onClick={() => router.push("/view-all-listings")}
+              onClick={() => router.push("/messes")}
             >
               {city}
             </button>

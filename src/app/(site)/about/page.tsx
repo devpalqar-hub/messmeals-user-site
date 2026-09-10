@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -40,7 +40,7 @@ export default function About() {
               <Link href="/" className={styles.btnPrimary}>
                 Explore Messes &rarr;
               </Link>
-              <Link href="/partner" className={styles.btnSecondary}>
+              <Link href="/mess-manager" className={styles.btnSecondary}>
                 List Your Mess
               </Link>
             </div>
@@ -180,7 +180,7 @@ export default function About() {
                   <li><CheckIcon /> View and filter deliveries</li>
                 </ul>
                 <div className={styles.expCardFooter}>
-                  <Link href="/partner" className={styles.btnPrimaryDark}>
+                  <Link href="/mess-manager" className={styles.btnPrimaryDark}>
                     List Your Mess &rarr;
                   </Link>
                 </div>
@@ -389,7 +389,7 @@ export default function About() {
                 </div>
               </button>
             </div>
-            <Link href="/partner" className={styles.learnMoreLink}>
+            <Link href="/mess-manager" className={styles.learnMoreLink}>
               Learn more about Messmeals Admin &rarr;
             </Link>
           </div>
@@ -464,7 +464,7 @@ export default function About() {
             <Link href="/" className={styles.btnPrimaryDark}>
               Explore Messes &rarr;
             </Link>
-            <Link href="/partner" className={styles.btnSecondary}>
+            <Link href="/mess-manager" className={styles.btnSecondary}>
               List Your Mess
             </Link>
           </div>
@@ -554,3 +554,4 @@ const CheckIcon = () => (
     <path d="M7 12L10.5 15.5L18 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+
