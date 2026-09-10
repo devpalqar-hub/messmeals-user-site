@@ -371,6 +371,14 @@
   transform: translateY(-1px);
 }
 
+.plan-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
 .plan-card-type-badge {
   display: inline-block;
   background: #f0fdf0;
@@ -381,7 +389,6 @@
   letter-spacing: 0.6px;
   padding: 4px 10px;
   border-radius: 999px;
-  margin-bottom: 12px;
   width: fit-content;
 }
 
@@ -1339,6 +1346,15 @@
 
 .plan-modal-header h3 {
   margin: 0;
+}
+
+/* Row containing the plan-type badge + share icon */
+.plan-modal-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
 }
 
 .plan-modal-type-badge {
@@ -3223,17 +3239,53 @@
     gap: 4px;
   }
 
+  .plan-tabs button {
+    padding: 4px 6px;
+    font-size: 0.6rem;
+  }
+
+  .plans-section-subtitle {
+    font-size: 0.62rem;
+  }
+
   .plan-card {
     width: 84vw;
     padding: 10px 8px 6px;
+  }
+
+  .plan-card-type-badge {
+    font-size: 0.52rem;
+    padding: 2px 6px;
   }
 
   .plan-card-name {
     font-size: 0.66rem;
   }
 
+  .plan-includes-label {
+    font-size: 0.56rem;
+  }
+
+  .plan-includes-pill {
+    font-size: 0.5rem;
+    padding: 2px 5px;
+  }
+
+  .plan-duration-chip {
+    font-size: 0.5rem;
+  }
+
+  .plan-card-desc {
+    font-size: 0.56rem;
+  }
+
   .plan-card-amount {
     font-size: 0.92rem;
+  }
+
+  .plan-card-currency,
+  .plan-card-period {
+    font-size: 0.52rem;
   }
 
   .plan-card-btn {
@@ -3241,8 +3293,52 @@
     padding: 6px 3px;
   }
 
+  .plan-action-btn {
+    padding: 9px 10px;
+    font-size: 0.64rem;
+  }
+
+  .empty-plans-title {
+    font-size: 0.82rem;
+  }
+
+  .empty-plans-desc {
+    font-size: 0.6rem;
+  }
+
+  .empty-icon-circle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .empty-contact-banner {
+    padding: 8px;
+  }
+
+  .eci-content small {
+    font-size: 0.54rem;
+  }
+
+  .eci-content p {
+    font-size: 0.6rem;
+  }
+
+  .empty-action-circle {
+    width: 28px;
+    height: 28px;
+  }
+
   .gallery-mobile-main {
     height: 130px;
+  }
+
+  .gallery-photo-count {
+    font-size: 0.62rem;
+  }
+
+  .gallery-header-action {
+    font-size: 0.56rem;
+    padding: 3px 7px;
   }
 
   .tag-pill {
@@ -3255,8 +3351,28 @@
     padding: 5px 9px;
   }
 
+  .gallery-modal-nav {
+    width: 26px;
+    height: 26px;
+  }
+
+  .gallery-modal-thumb {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 26px;
+  }
+
+  .modal-close-btn {
+    width: 24px;
+    height: 24px;
+  }
+
   .plan-modal-main-image {
     height: 100px;
+  }
+
+  .plan-modal-body {
+    padding: 8px;
   }
 
   .plan-modal-header h3 {
@@ -3267,9 +3383,44 @@
     font-size: 1.02rem;
   }
 
-  .plan-action-btn {
-    padding: 9px 10px;
-    font-size: 0.64rem;
+  .plan-price .currency {
+    font-size: 0.7rem;
+  }
+
+  .plan-price .period {
+    font-size: 0.58rem;
+  }
+
+  .plan-modal-footer {
+    padding: 8px;
+    margin: 8px -8px -8px;
+  }
+
+  .whatsapp-banner {
+    padding: 7px 8px;
+  }
+
+  .whatsapp-icon-wrap {
+    width: 22px;
+    height: 22px;
+  }
+
+  .whatsapp-banner-title {
+    font-size: 0.58rem;
+  }
+
+  .whatsapp-banner-sub {
+    font-size: 0.54rem;
+  }
+
+  .whatsapp-enquire-btn {
+    font-size: 0.58rem;
+    padding: 6px 8px;
+  }
+
+  .plan-menu-header {
+    padding: 6px 8px;
+    font-size: 0.62rem;
   }
 
   .plan-menu-table {
@@ -3307,8 +3458,12 @@
     font-size: 0.7rem;
   }
 
+  .contact-info-text h3+p {
+    font-size: 0.56rem;
+  }
+
   .contact-inquiry-btn {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     padding: 6px 8px;
   }
 
@@ -3317,16 +3472,29 @@
     padding: 14px 10px 10px;
   }
 
+  .post-inquiry-icon-wrap {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 7px;
+    border-width: 3px;
+  }
+
   .post-inquiry-title {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
   }
 
   .post-inquiry-desc {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
+    margin-bottom: 10px;
   }
 
   .post-inquiry-wa-btn {
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     padding: 8px;
+  }
+
+  .post-inquiry-cancel-btn {
+    font-size: 0.62rem;
+    padding: 6px;
   }
 }

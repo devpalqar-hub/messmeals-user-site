@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../../context/AuthContext";
 import FloatingContact from "../../../../components/ui/FloatingContact/FloatingContact";
+import ShareButton from "../../../../components/ui/ShareButton/ShareButton";
 import styles from "./ViewMessDetailsClient.module.css";
 
 const WhatsappIcon = ({ size = 18, color = "currentColor" }: { size?: number, color?: string }) => (
@@ -112,6 +113,11 @@ export default function ViewMessDetailsClient({
   const { isAuthenticated } = useAuth();
   const [mess, setMess] = useState<MessDetails | null>(initialData);
   const [loading, setLoading] = useState(!initialData);
+  // Safely capture window.location.origin on the client — avoids SSR/hydration mismatch
+  const [siteOrigin, setSiteOrigin] = useState("");
+  useEffect(() => {
+    setSiteOrigin(window.location.origin);
+  }, []);
   const [planTab, setPlanTab] = useState<"monthly" | "daily">(() => {
     if (!initialData) return "monthly";
     const hasMonthly = initialData.plans?.some((p) => p.isMonthlyPlan);
@@ -403,10 +409,20 @@ export default function ViewMessDetailsClient({
             <div className={styles["plans-card-row"]}>
               {visiblePlans.map((plan) => (
                 <article key={plan.id} className={styles["plan-card"]}>
-                  {/* Top badge */}
-                  <span className={styles["plan-card-type-badge"]}>
-                    {plan.isMonthlyPlan ? "Monthly" : "Daily"}
-                  </span>
+                  {/* Top header with badge and share */}
+                  <div className={styles["plan-card-header"]}>
+                    <span className={styles["plan-card-type-badge"]}>
+                      {plan.isMonthlyPlan ? "Monthly" : "Daily"}
+                    </span>
+                    {siteOrigin && (
+                      <ShareButton
+                        title={plan.planName}
+                        text={`Check out the ${plan.planName} plan at ${mess.messName} on MessMeals`}
+                        url={`${siteOrigin}/mess/${slug}?planId=${plan.id}`}
+                        variant="icon"
+                      />
+                    )}
+                  </div>
 
                   {/* Plan name */}
                   <h3 className={styles["plan-card-name"]}>{plan.planName}</h3>
@@ -851,9 +867,19 @@ export default function ViewMessDetailsClient({
                 <div className={styles["plan-modal-body"]}>
                   {/* Header — badge first, then name */}
                   <div className={styles["plan-modal-header"]}>
-                    <span className={styles["plan-modal-type-badge"]}>
-                      {viewPlan.isMonthlyPlan ? "Monthly Plan" : "Daily Plan"}
-                    </span>
+                    <div className={styles["plan-modal-header-top"]}>
+                      <span className={styles["plan-modal-type-badge"]}>
+                        {viewPlan.isMonthlyPlan ? "Monthly Plan" : "Daily Plan"}
+                      </span>
+                      {siteOrigin && (
+                        <ShareButton
+                          title={viewPlan.planName}
+                          text={`Check out the ${viewPlan.planName} plan at ${mess.messName} on MessMeals`}
+                          url={`${siteOrigin}/mess/${slug}?planId=${viewPlan.id}`}
+                          variant="icon"
+                        />
+                      )}
+                    </div>
                     <h3>{viewPlan.planName}</h3>
                   </div>
 

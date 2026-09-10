@@ -386,49 +386,63 @@
 /* Tablet */
 @media (max-width: 1024px) {
   .trending {
-    padding: 32px 40px;
+    padding: 28px 32px;
+  }
+
+  .trending-header {
+    margin-bottom: 20px;
   }
 
   .trending-header h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .trending-header p {
-    font-size: 14px;
+    font-size: 13.5px;
     max-width: 100%;
   }
 
   .listing-card {
-    width: clamp(230px, 40vw, 270px);
+    width: clamp(215px, 34vw, 260px);
   }
 
   .image-wrap {
-    height: 190px;
+    height: 175px;
+  }
+
+  .badge,
+  .subscribers-badge {
+    font-size: 10.5px;
   }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   .trending {
-    padding: 24px 20px;
+    padding: 20px 16px;
   }
 
   .trending-header {
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 14px;
   }
 
   .trending-header h2 {
-    font-size: 19px;
+    font-size: 17px;
+    gap: 6px;
+  }
+
+  .trending-icon {
+    border-radius: 7px;
   }
 
   .trending-header p {
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 2px;
   }
 
   .view-all {
-    font-size: 14px;
+    font-size: 13px;
     gap: 4px;
     padding: 0;
     border: none;
@@ -440,51 +454,94 @@
   }
 
   .listing-row {
-    gap: 14px;
+    gap: 12px;
   }
 
   .listing-card {
-    width: 68vw;
+    width: 50vw;
+    border-radius: 14px;
   }
 
   .card-body {
-    padding: 12px 12px 14px;
+    padding: 11px 11px 13px;
+  }
+
+  .card-name-block {
+    margin-bottom: 6px;
+  }
+
+  .card-location {
+    font-size: 10.5px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-divider {
+    margin: 8px 0 10px;
+  }
+
+  .card-footer {
+    gap: 8px;
+  }
+
+  .card-footer small {
+    font-size: 9.5px;
   }
 
   .card-footer strong {
-    font-size: 17px;
+    font-size: 15.5px;
+  }
+
+  .card-footer strong span {
+    font-size: 11px;
+  }
+
+  .price-na {
+    font-size: 11px;
   }
 
   .menu-btn {
-    padding: 8px 14px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 11.5px;
     border-radius: 8px;
     white-space: nowrap;
   }
 
   .image-wrap {
-    height: 170px;
+    height: 160px;
+    border-radius: 14px 14px 0 0;
   }
 
-  .image-info {
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
+  .badge {
+    padding: 3px 8px;
+    font-size: 9.5px;
   }
 
-  .image-info .location {
-    font-size: 11px;
-    gap: 4px;
-    margin-bottom: 4px;
+  .badge-verified {
+    padding: 3px 8px 3px 3px;
+    gap: 5px;
   }
 
-  .image-info h3 {
-    font-size: 15px;
-    line-height: 1.25;
+  .badge-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .subscribers-badge {
+    font-size: 9.5px;
+    padding: 3px 7px;
+  }
+
+  .rating,
+  .rating-divider,
+  .review-count {
+    font-size: 11.5px;
   }
 
   .booking-count {
-    font-size: 9.5px;
+    font-size: 9px;
     padding: 2px 6px;
   }
 }
@@ -492,62 +549,260 @@
 /* Small Mobile */
 @media (max-width: 480px) {
   .trending {
-    padding: 20px 16px;
+    padding: 16px 12px;
   }
 
   .trending-header h2 {
-    font-size: 18px;
-  }
-
-  .trending-header p {
-    font-size: 12.5px;
-  }
-
-  .listing-card {
-    width: 72vw;
-  }
-
-  .image-wrap {
-    height: 160px;
-  }
-
-  .image-info h3 {
-    font-size: 14px;
-  }
-
-  .card-body {
-    padding: 10px 10px 12px;
-  }
-
-  .card-footer strong {
     font-size: 16px;
   }
 
-  .menu-btn {
+  .trending-header p {
     font-size: 11.5px;
-    padding: 8px 12px;
-  }
-}
-
-/* Very small phones — only when necessary */
-@media (max-width: 360px) {
-  .trending {
-    padding: 18px 14px;
   }
 
   .listing-card {
-    width: 78vw;
+    width: 55vw;
+    border-radius: 12px;
+  }
+
+  .image-wrap {
+    height: 145px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .card-body {
+    padding: 9px 9px 11px;
+  }
+
+  .card-location {
+    font-size: 10px;
+  }
+
+  .card-title {
+    font-size: 13px;
+  }
+
+  .card-divider {
+    margin: 7px 0 9px;
+  }
+
+  .card-footer strong {
+    font-size: 14.5px;
+  }
+
+  .card-footer strong span {
+    font-size: 10.5px;
+  }
+
+  .menu-btn {
+    font-size: 10.5px;
+    padding: 7px 10px;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 3px 7px;
+  }
+
+  .subscribers-badge {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .booking-count {
+    font-size: 8.5px;
+    padding: 2px 6px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .trending {
+    padding: 14px 10px;
+  }
+
+  .listing-card {
+    width: 70vw;
   }
 
   .trending-header h2 {
-    font-size: 15px;
+    font-size: 14.5px;
   }
 
   .trending-header p {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .view-all {
+    font-size: 11px;
+  }
+
+  .image-wrap {
+    height: 130px;
+  }
+
+  .card-body {
+    padding: 8px 8px 10px;
+  }
+
+  .card-title {
+    font-size: 12.5px;
+  }
+
+  .card-location {
+    font-size: 9.5px;
+  }
+
+  .card-footer strong {
+    font-size: 13.5px;
+  }
+
+  .card-footer strong span {
+    font-size: 10px;
+  }
+
+  .menu-btn {
+    font-size: 10px;
+    padding: 7px 9px;
+  }
+
+  .badge {
+    font-size: 8.5px;
+    padding: 2px 6px;
+  }
+
+  .subscribers-badge {
+    font-size: 8.5px;
+    padding: 2px 6px;
+  }
+}
+
+/* Very Very Small Mobile */
+@media (max-width: 300px) {
+  .trending {
+    padding: 10px 8px;
+  }
+
+  .trending-header {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .trending-header h2 {
+    font-size: 13px;
+    gap: 5px;
+  }
+
+  .trending-icon {
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 6px;
+  }
+
+  .trending-header p {
+    font-size: 10px;
+    margin-top: 1px;
+  }
+
+  .view-all {
+    font-size: 10px;
+    gap: 3px;
+  }
+
+  .listing-row {
+    gap: 8px;
+  }
+
+  .listing-card {
+    width: 70vw;
+    border-radius: 10px;
+  }
+
+  .image-wrap {
+    height: 110px;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .card-body {
+    padding: 7px 7px 9px;
+  }
+
+  .card-name-block {
+    margin-bottom: 5px;
+  }
+
+  .card-location {
+    font-size: 9px;
+    gap: 3px;
+  }
+
+  .card-title {
+    font-size: 11.5px;
+  }
+
+  .card-divider {
+    margin: 6px 0 8px;
+  }
+
+  .card-footer {
+    gap: 6px;
+  }
+
+  .card-footer small {
+    font-size: 8.5px;
+  }
+
+  .card-footer strong {
+    font-size: 12.5px;
+  }
+
+  .card-footer strong span {
+    font-size: 9.5px;
+  }
+
+  .price-na {
+    font-size: 9.5px;
+  }
+
+  .menu-btn {
+    padding: 6px 8px;
+    font-size: 9.5px;
+    border-radius: 7px;
+    gap: 4px;
+  }
+
+  .badge {
+    font-size: 8px;
+    padding: 2px 6px;
+    top: 7px;
+    left: 7px;
+  }
+
+  .badge-verified {
+    padding: 2px 6px 2px 2px;
+    gap: 4px;
+  }
+
+  .badge-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .subscribers-badge {
+    font-size: 8px;
+    padding: 2px 6px;
+    top: 7px;
+    right: 7px;
+  }
+
+  .booking-count {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+
+  .rating,
+  .rating-divider,
+  .review-count {
     font-size: 10px;
   }
 }
