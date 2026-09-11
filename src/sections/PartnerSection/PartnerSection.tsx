@@ -76,8 +76,10 @@ export default function PartnerSection() {
                 <div className={styles["feature-icon-wrapper"]}>
                   {feature.icon}
                 </div>
-                <h3 className={styles["feature-title"]}>{feature.title}</h3>
-                <p className={styles["feature-desc"]}>{feature.desc}</p>
+                <div className={styles["feature-text"]}>
+                  <h3 className={styles["feature-title"]}>{feature.title}</h3>
+                  <p className={styles["feature-desc"]}>{feature.desc}</p>
+                </div>
               </div>
             ))}
           </div>

@@ -100,11 +100,11 @@ const humanizeTag = (tag: string) =>
     .map(capitalize)
     .join(" ");
 
-export default function ViewMessDetailsClient({ 
-  slug, 
-  initialData = null 
-}: { 
-  slug: string; 
+export default function ViewMessDetailsClient({
+  slug,
+  initialData = null
+}: {
+  slug: string;
   initialData?: MessDetails | null;
 }) {
   const router = useRouter();
@@ -824,6 +824,7 @@ export default function ViewMessDetailsClient({
                 className={`${styles["modal-card"]} ${styles["plan-modal-card"]}`}
                 onClick={(e) => e.stopPropagation()}
               >
+                {/* Close button — outside scroll area so it stays fixed in corner */}
                 <button
                   className={styles["modal-close-btn"]}
                   onClick={closePlanModal}
@@ -832,56 +833,58 @@ export default function ViewMessDetailsClient({
                   <X size={20} />
                 </button>
 
-                {/* Plan images */}
-                {modalImages.length > 0 && (
-                  <div className={styles["plan-modal-gallery"]}>
-                    <div className={styles["plan-modal-main-image"]}>
-                      <MessImage
-                        src={modalImages[activePlanImage]?.url}
-                        alt={viewPlan.planName}
-                      />
-                    </div>
-
-                    {modalImages.length > 1 && (
-                      <div className={styles["plan-modal-thumbs"]}>
-                        {modalImages.map((img, index) => (
-                          <button
-                            key={img.id}
-                            type="button"
-                            className={`${styles["plan-modal-thumb"]} ${index === activePlanImage ? styles.active : ""
-                              }`}
-                            onClick={() => setActivePlanImage(index)}
-                            aria-label={`Show image ${index + 1}`}
-                          >
-                            <MessImage
-                              src={img.url}
-                              alt=""
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <div className={styles["plan-modal-body"]}>
-                  {/* Header — badge first, then name */}
-                  <div className={styles["plan-modal-header"]}>
-                    <div className={styles["plan-modal-header-top"]}>
-                      <span className={styles["plan-modal-type-badge"]}>
-                        {viewPlan.isMonthlyPlan ? "Monthly Plan" : "Daily Plan"}
-                      </span>
-                      {siteOrigin && (
-                        <ShareButton
-                          title={viewPlan.planName}
-                          text={`Check out the ${viewPlan.planName} plan at ${mess.messName} on MessMeals`}
-                          url={`${siteOrigin}/mess/${slug}?planId=${viewPlan.id}`}
-                          variant="icon"
+                {/* Scrollable content */}
+                <div className={`${styles["plan-modal-scroll"]}${modalImages.length === 0 ? ` ${styles["plan-modal-scroll--no-image"]}` : ""}`}>
+                  {/* Plan images */}
+                  {modalImages.length > 0 && (
+                    <div className={styles["plan-modal-gallery"]}>
+                      <div className={styles["plan-modal-main-image"]}>
+                        <MessImage
+                          src={modalImages[activePlanImage]?.url}
+                          alt={viewPlan.planName}
                         />
+                      </div>
+
+                      {modalImages.length > 1 && (
+                        <div className={styles["plan-modal-thumbs"]}>
+                          {modalImages.map((img, index) => (
+                            <button
+                              key={img.id}
+                              type="button"
+                              className={`${styles["plan-modal-thumb"]} ${index === activePlanImage ? styles.active : ""
+                                }`}
+                              onClick={() => setActivePlanImage(index)}
+                              aria-label={`Show image ${index + 1}`}
+                            >
+                              <MessImage
+                                src={img.url}
+                                alt=""
+                              />
+                            </button>
+                          ))}
+                        </div>
                       )}
                     </div>
-                    <h3>{viewPlan.planName}</h3>
-                  </div>
+                  )}
+
+                  <div className={styles["plan-modal-body"]}>
+                    {/* Header — badge first, then name */}
+                    <div className={styles["plan-modal-header"]}>
+                      <div className={styles["plan-modal-header-top"]}>
+                        <span className={styles["plan-modal-type-badge"]}>
+                          {viewPlan.isMonthlyPlan ? "Monthly Plan" : "Daily Plan"}
+                        </span>
+                        {siteOrigin && (
+                          <ShareButton
+                            title={viewPlan.planName}
+                            text={`Check out the ${viewPlan.planName} plan at ${mess.messName} on MessMeals`}
+                            url={`${siteOrigin}/mess/${slug}?planId=${viewPlan.id}`}
+                            variant="icon"
+                          />
+                        )}
+                      </div>
+                      <h3>{viewPlan.planName}</h3>
+                    </div>
 
                   {/* Plan Includes — variation pills */}
                   {viewPlan.variations && viewPlan.variations.length > 0 && (
@@ -1004,8 +1007,9 @@ export default function ViewMessDetailsClient({
                     >
                       Book Now
                     </button>
-                  </div>
-                </div>
+                   </div>
+                  </div>{/* end plan-modal-body */}
+                </div>{/* end plan-modal-scroll */}
               </div>
             </div>
           );
