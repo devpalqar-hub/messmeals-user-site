@@ -108,6 +108,13 @@
   color: #617061;
 }
 
+/* Text group — desktop stacks vertically inside the card */
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .partner-cta-area {
   display: flex;
   align-items: center;
@@ -400,16 +407,35 @@
     gap: 10px;
   }
 
+  /* Row layout: [icon] | [title + desc stacked] — same as HowItWorks */
   .feature-card {
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
-    gap: 14px;
+    gap: 10px;
     padding: 16px;
   }
 
   .feature-icon-wrapper {
-    margin-bottom: 0;
     flex-shrink: 0;
+    margin-bottom: 0;
+    align-self: center;
+  }
+
+  .feature-text {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-self: center;
+  }
+
+  .feature-title {
+    margin: 0;
+  }
+
+  .feature-desc {
+    margin: 0;
   }
 
   .partner-btn {
@@ -433,15 +459,42 @@
 
 
 /* ============================= */
-/* Very small phones — only when necessary */
+/* Very small phones             */
 /* ============================= */
 @media (max-width: 360px) {
+  .partner-section {
+    padding: 16px;
+  }
+
+  .partner-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    gap: 6px;
+  }
+
   .partner-title {
     font-size: 24px;
   }
 
   .partner-subtitle {
     font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .partner-features {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .feature-card {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .feature-icon-wrapper {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
   }
 
   .feature-title {
@@ -450,6 +503,15 @@
 
   .feature-desc {
     font-size: 12px;
+  }
+
+  .partner-cta-area {
+    gap: 12px;
+  }
+
+  .partner-btn {
+    padding: 12px 20px;
+    font-size: 13px;
   }
 
   .partner-cta-text {
@@ -467,5 +529,91 @@
 
   .mockup-image {
     max-width: 85%;
+  }
+}
+
+
+/* ============================= */
+/* Very Very Small Mobile        */
+/* ============================= */
+@media (max-width: 300px) {
+  .partner-section {
+    padding: 14px 12px;
+  }
+
+  .partner-container {
+    gap: 24px;
+  }
+
+  .partner-badge {
+    font-size: 10px;
+    padding: 4px 9px;
+    gap: 5px;
+  }
+
+  .partner-title {
+    font-size: 19px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+
+  .partner-subtitle {
+    font-size: 11.5px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .partner-features {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .feature-card {
+    padding: 10px;
+    gap: 10px;
+    border-radius: 12px;
+  }
+
+  .feature-icon-wrapper {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
+
+  .feature-title {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .feature-desc {
+    font-size: 10.5px;
+  }
+
+  .partner-cta-area {
+    gap: 10px;
+  }
+
+  .partner-btn {
+    padding: 11px 16px;
+    font-size: 12px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .partner-cta-text {
+    font-size: 11px;
+  }
+
+  .partner-right {
+    min-height: 170px;
+  }
+
+  .circle-bg {
+    width: 170px;
+    height: 170px;
+  }
+
+  .mockup-image {
+    max-width: 90%;
   }
 }

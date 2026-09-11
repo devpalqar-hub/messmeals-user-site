@@ -13,6 +13,8 @@ import {
   MapPin,
   Store,
   Loader2,
+  Home,
+  LayoutGrid,
 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import type { Variants } from "framer-motion";
@@ -68,7 +70,7 @@ export default function HeroSection() {
   const [suggestions, setSuggestions] = useState<SearchSuggestionResponse | null>(null);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [selectedItem, setSelectedItem] = useState<
     | { type: "mess"; id: string; name: string }
     | { type: "location"; name: string; latitude: number; longitude: number }
@@ -119,7 +121,7 @@ export default function HeroSection() {
 
     document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("scroll", handleScroll);
@@ -146,7 +148,7 @@ export default function HeroSection() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (searchQuery.trim().length > 0 && !selectedItem) {
       error("Please select a suggestion from the dropdown.");
       setIsSuggestionsOpen(true);
@@ -233,13 +235,22 @@ export default function HeroSection() {
         animate="visible"
         variants={stagger}
       >
+        {/* Badge */}
+        <motion.div
+          className={styles["hero-badge"]}
+          variants={fadeUp}
+        >
+          <Home size={14} className={styles["hero-badge-icon"]} />
+          <span>Homely Food, Closer to You</span>
+        </motion.div>
+
         {/* Title */}
         <motion.h1
           className={styles["hero-light-title"]}
           variants={fadeUp}
         >
-          Find homely meals <br />
-          from <span>trusted messes.</span>
+          Find a Mess<br />
+          Available <span>Near You</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -247,9 +258,7 @@ export default function HeroSection() {
           className={styles["hero-light-subtitle"]}
           variants={fadeUp}
         >
-          Search, compare and book the best mess plans
-          <br />
-          that suit your taste and budget.
+          MessMeals makes it easy to discover trusted local messes, compare daily and monthly meal plans, and book homely food that fits your location, taste, and routine.
         </motion.p>
 
         {/* SEARCH BAR */}
@@ -283,10 +292,10 @@ export default function HeroSection() {
                 value={searchQuery}
                 onChange={handleQueryChange}
                 onFocus={() => setIsSuggestionsOpen(true)}
-                placeholder="Mess or location search"
+                placeholder="Search by city or locality"
               />
             </div>
-            
+
             {/* AUTOCOMPLETE DROPDOWN */}
             {isSuggestionsOpen && (searchQuery.trim().length > 0 || isLoading) && (
               <div className={styles["hls-dropdown"]}>
@@ -315,7 +324,7 @@ export default function HeroSection() {
                         ))}
                       </div>
                     )}
-                    
+
                     {suggestions?.locations && suggestions.locations.length > 0 && (
                       <div className={styles["hls-dropdown-group"]}>
                         <div className={styles["hls-dropdown-header"]}>Locations</div>
@@ -364,13 +373,13 @@ export default function HeroSection() {
             </div>
 
             <div className={styles["hls-field"]}>
-              <label>Meal preference</label>
+              <label>Food preference</label>
 
               <select ref={mealSelectRef} defaultValue="">
-                <option value="">Any</option>
-                <option value="VEG">Veg</option>
-                <option value="NON_VEG">Non-Veg</option>
-                <option value="MIXED">Mixed</option>
+                <option value="">All options</option>
+                <option value="VEG">Vegetarian</option>
+                <option value="NON_VEG">Non-vegetarian</option>
+                <option value="MIXED">Mixed food</option>
               </select>
             </div>
 
@@ -401,12 +410,12 @@ export default function HeroSection() {
             </div>
 
             <div className={styles["hls-field"]}>
-              <label>Plan type</label>
+              <label>Meal plan type</label>
 
               <select ref={planSelectRef} defaultValue="">
-                <option value="">Any</option>
-                <option value="DAILY">Daily</option>
-                <option value="MONTHLY">Monthly</option>
+                <option value="">All options</option>
+                <option value="DAILY">Daily plans</option>
+                <option value="MONTHLY">Monthly plans</option>
               </select>
             </div>
 
@@ -418,10 +427,37 @@ export default function HeroSection() {
 
           {/* SEARCH BUTTON */}
           <button type="submit" className={styles["hls-btn"]}>
-            Search Meals
+            Search Available Messes
             <ArrowRight size={17} />
           </button>
         </motion.form>
+
+        {/* OR + Browse All */}
+        <motion.div
+          className={styles["hero-browse-block"]}
+          variants={fadeUp}
+        >
+          <div className={styles["hero-or-divider"]}>
+            <span className={styles["hero-or-line"]} />
+            <span className={styles["hero-or-text"]}>OR</span>
+            <span className={styles["hero-or-line"]} />
+          </div>
+
+          <button
+            type="button"
+            className={styles["hero-browse-btn"]}
+            onClick={() => router.push("/messes")}
+          >
+            <LayoutGrid size={16} className={styles["hero-browse-icon"]} />
+            Browse All Messes
+            <ArrowRight size={15} />
+          </button>
+
+          <p className={styles["hero-hint"]}>
+            <MapPin size={13} className={styles["hero-hint-icon"]} />
+            Search by city or locality to find available mess food, meal options, prices, and plans near you.
+          </p>
+        </motion.div>
 
         {/* Popular Searches */}
         {/* <motion.div

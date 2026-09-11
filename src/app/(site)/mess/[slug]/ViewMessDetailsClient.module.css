@@ -1221,17 +1221,15 @@
 }
 
 .modal-close-btn {
-  position: sticky;
-  margin-left: auto;
-  margin-top: -16px;
-  margin-right: -16px;
-  margin-bottom: -16px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 1px solid #E3EAE1;
   background: #ffffff;
   color: #617061;
@@ -1249,15 +1247,29 @@
 .plan-modal-card {
   max-width: 670px;
   padding: 0;
+  overflow: hidden;
+  /* scroll lives in plan-modal-scroll instead */
+}
+
+/* Scrollable inner area — the close button sits outside this */
+.plan-modal-scroll {
+  max-height: 90vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* When no gallery image — add top padding so badge/share row clears the close button */
+.plan-modal-scroll--no-image {
+  padding-top: 20px;
 }
 
 .plan-modal-card .modal-close-btn {
-  margin-top: 16px;
-  margin-right: 16px;
-  margin-bottom: -48px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
   background: white;
   border: 1px solid #E3EAE1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   z-index: 20;
 }
 
@@ -2289,6 +2301,11 @@
     padding: 16px;
   }
 
+  .modal-close-btn {
+    width: 24px;
+    height: 24px;
+  }
+
   .plan-modal-header h3 {
     font-size: 1rem;
   }
@@ -2620,19 +2637,17 @@
   }
 
   .plan-modal-card .modal-close-btn {
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-bottom: -38px;
-    width: 28px;
-    height: 28px;
+    top: 10px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
   }
 
   .modal-close-btn {
-    margin-top: 4px;
-    margin-right: 4px;
-    margin-bottom: -12px;
-    width: 28px;
-    height: 28px;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
   }
 
   .plan-modal-main-image {
@@ -2641,6 +2656,10 @@
 
   .plan-modal-body {
     padding: 12px;
+  }
+
+  .plan-modal-scroll--no-image {
+    padding-top: 16px;
   }
 
   .plan-modal-header h3 {
@@ -2653,8 +2672,8 @@
   }
 
   .plan-modal-footer {
-    padding: 12px;
-    margin: 12px -12px -12px;
+    padding: 16px 28px;
+    margin: 16px -28px -28px;
   }
 
   .plan-price .amount {
@@ -3070,11 +3089,10 @@
   }
 
   .plan-modal-card .modal-close-btn {
-    margin-top: 8px;
-    margin-right: 8px;
-    margin-bottom: -34px;
-    width: 26px;
-    height: 26px;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
   }
 
   .modal-close-btn {
@@ -3088,6 +3106,10 @@
 
   .plan-modal-body {
     padding: 9px;
+  }
+
+  .plan-modal-scroll--no-image {
+    padding-top: 16px;
   }
 
   .plan-modal-header h3 {
@@ -3362,6 +3384,13 @@
     height: 26px;
   }
 
+  .plan-modal-card .modal-close-btn {
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+  }
+
   .modal-close-btn {
     width: 24px;
     height: 24px;
@@ -3373,6 +3402,10 @@
 
   .plan-modal-body {
     padding: 8px;
+  }
+
+  .plan-modal-scroll--no-image {
+    padding-top: 16px;
   }
 
   .plan-modal-header h3 {
@@ -3389,11 +3422,6 @@
 
   .plan-price .period {
     font-size: 0.58rem;
-  }
-
-  .plan-modal-footer {
-    padding: 8px;
-    margin: 8px -8px -8px;
   }
 
   .whatsapp-banner {
