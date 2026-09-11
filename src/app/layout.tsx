@@ -47,7 +47,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={beVietnamPro.className}>
         <Providers>{children}</Providers>
         {process.env.NEXT_PUBLIC_CLARITY_ID && (
