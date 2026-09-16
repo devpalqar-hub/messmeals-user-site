@@ -517,7 +517,7 @@ export default function ViewMessDetailsClient({
                     <a href={`tel:${mess.phone}`} className={styles["empty-action-circle"]} aria-label="Call us">
                       <Phone size={18} />
                     </a>
-                    <a href={`https://wa.me/919544222468`} target="_blank" rel="noreferrer" className={styles["empty-action-circle"]} aria-label="WhatsApp us">
+                    <a href={`https://wa.me/${mess.phone}`} target="_blank" rel="noreferrer" className={styles["empty-action-circle"]} aria-label="WhatsApp us">
                       <WhatsappIcon size={18} />
                     </a>
                   </div>
@@ -1117,7 +1117,7 @@ export default function ViewMessDetailsClient({
             </p>
             <div className={styles["post-inquiry-actions"]}>
               <a
-                href={`https://wa.me/919544222468?text=${encodeURIComponent(`Hello! I saw your "${closedPlanInquiry.planName}" plan on Messmeals for ${mess?.messName}. Could you please share more information about it? Thank you!`)}`}
+                href={`https://wa.me/${mess?.phone}?text=${encodeURIComponent(`Hello! I saw your "${closedPlanInquiry.planName}" plan on Messmeals for ${mess?.messName}. Could you please share more information about it? Thank you!`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles["post-inquiry-wa-btn"]}

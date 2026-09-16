@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -550,8 +550,8 @@ const AppleIcon = () => (
 
 const CheckIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.checkIcon}>
-    <rect width="24" height="24" rx="12" fill="#55C500"/>
-    <path d="M7 12L10.5 15.5L18 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect width="24" height="24" rx="12" fill="#55C500" />
+    <path d="M7 12L10.5 15.5L18 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
