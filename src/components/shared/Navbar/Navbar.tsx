@@ -1,12 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { UserRound, House, Utensils, LucideInfo, BookOpen, Menu, X, ChevronRight, Plus, ArrowRight } from "lucide-react";
+import { House, Utensils, LucideInfo, BookOpen, Menu, X, ChevronRight, Plus, ArrowRight } from "lucide-react";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
-import { useAuth } from "../../../context/AuthContext";
+// import { useAuth } from "../../../context/AuthContext";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true, Icon: House },
@@ -26,7 +26,7 @@ export default function Navbar() {
   const navCenterRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
+  // const { isAuthenticated, user } = useAuth();
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -121,6 +121,7 @@ export default function Navbar() {
             <button className={styles["cta-btn"]} onClick={() => router.push("/mess-manager")}>
               List Your Mess
             </button>
+            {/* LOGIN / PROFILE — hidden for now, uncomment to re-enable
             {isAuthenticated ? (
               <Link className={styles["profile-chip"]} href="/profile">
                 <span className={styles["profile-avatar"]}>
@@ -133,6 +134,7 @@ export default function Navbar() {
                 Sign In
               </Link>
             )}
+            */}
           </div>
 
           {/* MOBILE TOGGLE */}
@@ -206,7 +208,7 @@ export default function Navbar() {
             <ArrowRight size={16} strokeWidth={2} className={styles["sidebar-cta-arrow"]} />
           </button>
 
-          {/* Account row */}
+          {/* ACCOUNT ROW — hidden for now, uncomment to re-enable
           {isAuthenticated ? (
             <Link
               className={styles["sidebar-account"]}
@@ -238,6 +240,7 @@ export default function Navbar() {
               <ChevronRight size={16} strokeWidth={2} className={styles["sidebar-account-chevron"]} />
             </Link>
           )}
+          */}
         </div>
       </div>
 
