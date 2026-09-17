@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { House, Utensils, CalendarCheck, UserRound } from "lucide-react";
+import { House, Utensils, CalendarCheck, UserRound, LucideInfo, ClipboardList } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import styles from "./MobileBottomNav.module.css";
 
@@ -54,6 +54,31 @@ export default function MobileBottomNav() {
         <span>Messes</span>
       </Link>
 
+      <Link
+        href="/about"
+        className={
+          isLinkActive(pathname, "/about", false)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
+        }
+      >
+        <LucideInfo size={20} />
+        <span>About</span>
+      </Link>
+
+      <Link
+        href="/mess-manager"
+        className={
+          isLinkActive(pathname, "/mess-manager", false)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
+        }
+      >
+        <ClipboardList size={20} />
+        <span>List Mess</span>
+      </Link>
+
+      {/* MY PLANS & PROFILE / SIGN IN — hidden while login flow is disabled, uncomment to re-enable
       <button
         className={`${styles["mbn-item"]} ${isMyPlansActive ? styles.active : ""}`}
         onClick={handleMyPlans}
@@ -70,6 +95,7 @@ export default function MobileBottomNav() {
         <UserRound size={20} />
         <span>{isAuthenticated ? "Profile" : "Sign In"}</span>
       </button>
+      */}
     </nav>
   );
 }
