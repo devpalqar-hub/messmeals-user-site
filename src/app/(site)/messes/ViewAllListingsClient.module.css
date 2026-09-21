@@ -515,6 +515,23 @@
   flex-shrink: 0;
 }
 
+.new-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #55C500 0%, #3da800 100%);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+  letter-spacing: 0.2px;
+}
+
 /* CARD BODY */
 .card-body {
   padding: 10px 12px 14px;
@@ -573,10 +590,12 @@
 
 /* Instagram-style BadgeCheck inline verified icon */
 .inline-verified-badge {
-  flex-shrink: 0;          /* badge NEVER shrinks — always visible */
+  flex-shrink: 0;
+  /* badge NEVER shrinks — always visible */
   width: 17px;
   height: 17px;
-  color: #55C500;          /* solid theme green matching the badge fill */
+  color: #55C500;
+  /* solid theme green matching the badge fill */
   display: block;
 }
 

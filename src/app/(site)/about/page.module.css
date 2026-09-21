@@ -613,19 +613,32 @@
 .storeBtn {
   background: #101c10;
   color: #ffffff;
-  border: none;
+  border: 1.5px solid #1C3A1C;
   border-radius: 12px;
   padding: 10px 20px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
   box-sizing: border-box;
 }
 
 .storeBtn:hover {
-  background: #2a3a2a;
+  background: #1C3A1C;
+  transform: translateY(-2px);
+}
+
+.storeBtnIcon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.storeBtnIconInvert {
+  filter: invert(1);
 }
 
 .storeBtnText {
@@ -633,18 +646,24 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  gap: 1px;
 }
 
 .storeBtnText span {
   font-size: 10px;
+  font-weight: 500;
+  color: #b0c4b0;
+  line-height: 1;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.8;
 }
 
 .storeBtnText strong {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .learnMoreLink {
@@ -1020,7 +1039,7 @@
   }
 
   .storeBtnText strong {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .bottomCtaSection {
