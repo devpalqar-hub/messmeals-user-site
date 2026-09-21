@@ -26,7 +26,7 @@ import {
   Coffee,
   Tag,
 } from "lucide-react";
-import { useAuth } from "../../../../context/AuthContext";
+// import { useAuth } from "../../../../context/AuthContext";
 import FloatingContact from "../../../../components/ui/FloatingContact/FloatingContact";
 import ShareButton from "../../../../components/ui/ShareButton/ShareButton";
 import styles from "./ViewMessDetailsClient.module.css";
@@ -110,7 +110,7 @@ export default function ViewMessDetailsClient({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
   const [mess, setMess] = useState<MessDetails | null>(initialData);
   const [loading, setLoading] = useState(!initialData);
   // Safely capture window.location.origin on the client — avoids SSR/hydration mismatch
@@ -171,14 +171,27 @@ export default function ViewMessDetailsClient({
     return () => window.removeEventListener("keydown", handleKey);
   }, [showGalleryModal]);
 
+  // const goToBooking = (planId: string) => {
+  //     const bookingPath = `/mess/${slug}/book?planId=${planId}`;
+  //     if (!isAuthenticated) {
+  //       router.push(`/login?redirectTo=${encodeURIComponent(bookingPath)}`);
+  //       return;
+  //     }
+  //     router.push(bookingPath);
+  //   };
   const goToBooking = (planId: string) => {
-    const bookingPath = `/mess/${slug}/book?planId=${planId}`;
-    if (!isAuthenticated) {
-      router.push(`/login?redirectTo=${encodeURIComponent(bookingPath)}`);
-      return;
+    const plan = mess?.plans?.find((p) => p.id === planId);
+    const planName = plan?.planName ?? "your plan";
+    const messName = mess?.messName ?? "your mess";
+    const phone = mess?.phone ?? "";
+    const text = encodeURIComponent(
+      `Hello! I saw ${messName} on MessMeals and I want to book the ${planName} plan. Can you tell me the details and help me get started? Thanks!`
+    );
+    if (phone) {
+      window.open(`https://wa.me/${phone}?text=${text}`, "_blank", "noopener,noreferrer");
     }
-    router.push(bookingPath);
   };
+
 
   const openPlanModal = (plan: NewMessPlan) => {
     setViewPlan(plan);
@@ -517,7 +530,7 @@ export default function ViewMessDetailsClient({
                     <a href={`tel:${mess.phone}`} className={styles["empty-action-circle"]} aria-label="Call us">
                       <Phone size={18} />
                     </a>
-                    <a href={`https://wa.me/919544222468`} target="_blank" rel="noreferrer" className={styles["empty-action-circle"]} aria-label="WhatsApp us">
+                    <a href={`https://wa.me/${mess.phone}`} target="_blank" rel="noreferrer" className={styles["empty-action-circle"]} aria-label="WhatsApp us">
                       <WhatsappIcon size={18} />
                     </a>
                   </div>
@@ -886,128 +899,128 @@ export default function ViewMessDetailsClient({
                       <h3>{viewPlan.planName}</h3>
                     </div>
 
-                  {/* Plan Includes — variation pills */}
-                  {viewPlan.variations && viewPlan.variations.length > 0 && (
-                    <div className={styles["plan-includes"]}>
-                      <span className={styles["plan-includes-label"]}>Plan Includes</span>
-                      <div className={styles["plan-includes-pills"]}>
-                        {sortVariations(viewPlan.variations).map((v) => {
-                          const { Icon: VIcon, colorClass } = getVariationConfig(v.title);
-                          return (
-                            <span key={v.id} className={`${styles["plan-includes-pill"]} ${colorClass}`}>
-                              <VIcon size={12} />
-                              {v.title}
-                            </span>
-                          );
-                        })}
+                    {/* Plan Includes — variation pills */}
+                    {viewPlan.variations && viewPlan.variations.length > 0 && (
+                      <div className={styles["plan-includes"]}>
+                        <span className={styles["plan-includes-label"]}>Plan Includes</span>
+                        <div className={styles["plan-includes-pills"]}>
+                          {sortVariations(viewPlan.variations).map((v) => {
+                            const { Icon: VIcon, colorClass } = getVariationConfig(v.title);
+                            return (
+                              <span key={v.id} className={`${styles["plan-includes-pill"]} ${colorClass}`}>
+                                <VIcon size={12} />
+                                {v.title}
+                              </span>
+                            );
+                          })}
+                        </div>
                       </div>
+                    )}
+
+                    {/* Price */}
+                    <div className={styles["plan-price"]}>
+                      <span className={styles.currency}>₹</span>
+                      <span className={styles.amount}>{viewPlan.price}</span>
+                      <span className={styles.period}>
+                        /{viewPlan.isMonthlyPlan ? "month" : "day"}
+                      </span>
                     </div>
-                  )}
 
-                  {/* Price */}
-                  <div className={styles["plan-price"]}>
-                    <span className={styles.currency}>₹</span>
-                    <span className={styles.amount}>{viewPlan.price}</span>
-                    <span className={styles.period}>
-                      /{viewPlan.isMonthlyPlan ? "month" : "day"}
-                    </span>
-                  </div>
+                    {/* Weekly Menu */}
+                    {viewPlan.menus && viewPlan.menus.length > 0 && (
+                      <div className={styles["plan-menu-section"]}>
+                        <div className={styles["plan-menu-header"]}>
+                          <CalendarDays size={16} />
+                          <span>Weekly Menu</span>
+                        </div>
 
-                  {/* Weekly Menu */}
-                  {viewPlan.menus && viewPlan.menus.length > 0 && (
-                    <div className={styles["plan-menu-section"]}>
-                      <div className={styles["plan-menu-header"]}>
-                        <CalendarDays size={16} />
-                        <span>Weekly Menu</span>
-                      </div>
-
-                      <div className={styles["plan-menu-table-wrapper"]}>
-                        <table className={styles["plan-menu-table"]}>
-                          <thead>
-                            <tr>
-                              <th>Day</th>
-                              {sortVariations(viewPlan.variations).map((variation) => {
-                                const { Icon: VIcon, colorClass } = getVariationConfig(variation.title);
-                                return (
-                                  <th key={variation.id} className={colorClass}>
-                                    <div>
-                                      <VIcon size={14} />
-                                      <span>{variation.title}</span>
-                                    </div>
-                                  </th>
+                        <div className={styles["plan-menu-table-wrapper"]}>
+                          <table className={styles["plan-menu-table"]}>
+                            <thead>
+                              <tr>
+                                <th>Day</th>
+                                {sortVariations(viewPlan.variations).map((variation) => {
+                                  const { Icon: VIcon, colorClass } = getVariationConfig(variation.title);
+                                  return (
+                                    <th key={variation.id} className={colorClass}>
+                                      <div>
+                                        <VIcon size={14} />
+                                        <span>{variation.title}</span>
+                                      </div>
+                                    </th>
+                                  );
+                                })}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {DAY_ORDER_UPPER.map((day) => {
+                                const entriesForDay = viewPlan.menus.flatMap((menu) =>
+                                  (menu.schedule[day] || []).map((entry) => ({
+                                    ...entry,
+                                    menuName: menu.name,
+                                  }))
                                 );
-                              })}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {DAY_ORDER_UPPER.map((day) => {
-                              const entriesForDay = viewPlan.menus.flatMap((menu) =>
-                                (menu.schedule[day] || []).map((entry) => ({
-                                  ...entry,
-                                  menuName: menu.name,
-                                }))
-                              );
 
-                              const hasAnyEntry = entriesForDay.length > 0;
+                                const hasAnyEntry = entriesForDay.length > 0;
 
-                              return (
-                                <tr key={day}>
-                                  <td className={styles["day-cell"]}>
-                                    <div className={styles["day-cell-content"]}>
-                                      {DAY_SHORT[day]}
-                                    </div>
-                                  </td>
-                                  {hasAnyEntry ? (
-                                    sortVariations(viewPlan.variations).map((variation) => {
-                                      const entriesForVariation = entriesForDay.filter(
-                                        (e) => e.variationId === variation.id
-                                      );
-                                      const { colorClass } = getVariationConfig(variation.title);
-                                      return (
-                                        <td key={variation.id}>
-                                          {entriesForVariation.length > 0 ? (
-                                            <div className={`${styles["plan-menu-table-cell"]} ${colorClass}`}>
-                                              <div className={styles["plan-menu-table-items"]}>
-                                                {entriesForVariation.map((e, i) => (
-                                                  <span key={i}>{e.items}</span>
-                                                ))}
-                                              </div>
-                                            </div>
-                                          ) : (
-                                            <span className={styles["plan-menu-table-empty"]}>-</span>
-                                          )}
-                                        </td>
-                                      );
-                                    })
-                                  ) : (
-                                    <td colSpan={viewPlan.variations.length + 1} className={styles["holiday-cell"]}>
-                                      <div className={styles["plan-menu-holiday"]}>
-                                        <span>🏖️</span>
-                                        <p>Holiday / No meals on {DAY_SHORT[day]}</p>
+                                return (
+                                  <tr key={day}>
+                                    <td className={styles["day-cell"]}>
+                                      <div className={styles["day-cell-content"]}>
+                                        {DAY_SHORT[day]}
                                       </div>
                                     </td>
-                                  )}
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
+                                    {hasAnyEntry ? (
+                                      sortVariations(viewPlan.variations).map((variation) => {
+                                        const entriesForVariation = entriesForDay.filter(
+                                          (e) => e.variationId === variation.id
+                                        );
+                                        const { colorClass } = getVariationConfig(variation.title);
+                                        return (
+                                          <td key={variation.id}>
+                                            {entriesForVariation.length > 0 ? (
+                                              <div className={`${styles["plan-menu-table-cell"]} ${colorClass}`}>
+                                                <div className={styles["plan-menu-table-items"]}>
+                                                  {entriesForVariation.map((e, i) => (
+                                                    <span key={i}>{e.items}</span>
+                                                  ))}
+                                                </div>
+                                              </div>
+                                            ) : (
+                                              <span className={styles["plan-menu-table-empty"]}>-</span>
+                                            )}
+                                          </td>
+                                        );
+                                      })
+                                    ) : (
+                                      <td colSpan={viewPlan.variations.length + 1} className={styles["holiday-cell"]}>
+                                        <div className={styles["plan-menu-holiday"]}>
+                                          <span>🏖️</span>
+                                          <p>Holiday / No meals on {DAY_SHORT[day]}</p>
+                                        </div>
+                                      </td>
+                                    )}
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div className={styles["plan-modal-footer"]}>
-                    <button
-                      className={`${styles["plan-action-btn"]} ${styles["full-width"]}`}
-                      onClick={() => {
-                        const planId = viewPlan.id;
-                        setViewPlan(null);
-                        goToBooking(planId);
-                      }}
-                    >
-                      Book Now
-                    </button>
-                   </div>
+                    <div className={styles["plan-modal-footer"]}>
+                      <button
+                        className={`${styles["plan-action-btn"]} ${styles["full-width"]}`}
+                        onClick={() => {
+                          const planId = viewPlan.id;
+                          setViewPlan(null);
+                          goToBooking(planId);
+                        }}
+                      >
+                        Book Now
+                      </button>
+                    </div>
                   </div>{/* end plan-modal-body */}
                 </div>{/* end plan-modal-scroll */}
               </div>
@@ -1117,7 +1130,7 @@ export default function ViewMessDetailsClient({
             </p>
             <div className={styles["post-inquiry-actions"]}>
               <a
-                href={`https://wa.me/919544222468?text=${encodeURIComponent(`Hello! I saw your "${closedPlanInquiry.planName}" plan on Messmeals for ${mess?.messName}. Could you please share more information about it? Thank you!`)}`}
+                href={`https://wa.me/${mess?.phone}?text=${encodeURIComponent(`Hello! I saw your "${closedPlanInquiry.planName}" plan on Messmeals for ${mess?.messName}. Could you please share more information about it? Thank you!`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles["post-inquiry-wa-btn"]}

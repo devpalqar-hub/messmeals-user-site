@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -374,20 +374,32 @@ export default function About() {
               menus, plans, wallets, discounts and deliveries &mdash; all in one place.
             </p>
             <div className={styles.appStoreButtons}>
-              <button className={styles.storeBtn}>
-                <GooglePlayIcon />
+              <a
+                href="https://play.google.com/store/apps/details?id=com.messmeals.mess"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.storeBtn}
+                aria-label="Get it on Google Play"
+              >
+                <img src="/Playstore.svg" alt="Google Play" className={styles.storeBtnIcon} />
                 <div className={styles.storeBtnText}>
                   <span>GET IT ON</span>
                   <strong>Google Play</strong>
                 </div>
-              </button>
-              <button className={styles.storeBtn}>
-                <AppleIcon />
+              </a>
+              <a
+                href="https://apps.apple.com/in/app/messmeals/id6754977891"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.storeBtn}
+                aria-label="Download on the App Store"
+              >
+                <img src="/Apple.svg" alt="App Store" className={`${styles.storeBtnIcon} ${styles.storeBtnIconInvert}`} />
                 <div className={styles.storeBtnText}>
                   <span>Download on the</span>
                   <strong>App Store</strong>
                 </div>
-              </button>
+              </a>
             </div>
             <Link href="/mess-manager" className={styles.learnMoreLink}>
               Learn more about Messmeals Admin &rarr;
@@ -550,8 +562,8 @@ const AppleIcon = () => (
 
 const CheckIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.checkIcon}>
-    <rect width="24" height="24" rx="12" fill="#55C500"/>
-    <path d="M7 12L10.5 15.5L18 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect width="24" height="24" rx="12" fill="#55C500" />
+    <path d="M7 12L10.5 15.5L18 8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 

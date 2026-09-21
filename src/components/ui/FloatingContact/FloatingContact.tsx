@@ -68,7 +68,7 @@ export default function FloatingContact({ phone }: FloatingContactProps) {
 
           <a
             id="floating-contact-sms-btn"
-            href={`https://wa.me/919544222468`}
+            href={`https://wa.me/${phone}`}
             target="_blank"
             rel="noreferrer"
             className={styles.btnWA}

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { House, Utensils, CalendarCheck, UserRound } from "lucide-react";
-import { useAuth } from "../../../context/AuthContext";
+import { usePathname } from "next/navigation";
+import { House, Utensils, LucideInfo, ClipboardList } from "lucide-react";
+// import { useAuth } from "../../../context/AuthContext";
 import styles from "./MobileBottomNav.module.css";
 
 function isLinkActive(pathname: string, to: string, end: boolean) {
@@ -11,22 +11,21 @@ function isLinkActive(pathname: string, to: string, end: boolean) {
 }
 
 export default function MobileBottomNav() {
-  const router = useRouter();
+  // const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  // const searchParams = useSearchParams();
+  // const { isAuthenticated } = useAuth();
 
-  // "My Plans" is active when on /profile with tab=plans
-  const isMyPlansActive =
-    pathname === "/profile" && searchParams.get("tab") === "plans";
+  // const isMyPlansActive =
+  //   pathname === "/profile" && searchParams.get("tab") === "plans";
 
-  const handleMyPlans = () => {
-    if (isAuthenticated) {
-      router.push("/profile?tab=plans");
-    } else {
-      router.push(`/login?redirectTo=${encodeURIComponent("/profile?tab=plans")}`);
-    }
-  };
+  // const handleMyPlans = () => {
+  //   if (isAuthenticated) {
+  //     router.push("/profile?tab=plans");
+  //   } else {
+  //     router.push(`/login?redirectTo=${encodeURIComponent("/profile?tab=plans")}`);
+  //   }
+  // };
 
   return (
     <nav className={styles["mobile-bottom-nav"]}>
@@ -54,6 +53,31 @@ export default function MobileBottomNav() {
         <span>Messes</span>
       </Link>
 
+      <Link
+        href="/about"
+        className={
+          isLinkActive(pathname, "/about", false)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
+        }
+      >
+        <LucideInfo size={20} />
+        <span>About</span>
+      </Link>
+
+      <Link
+        href="/mess-manager"
+        className={
+          isLinkActive(pathname, "/mess-manager", false)
+            ? `${styles["mbn-item"]} ${styles.active}`
+            : styles["mbn-item"]
+        }
+      >
+        <ClipboardList size={20} />
+        <span>List Mess</span>
+      </Link>
+
+      {/* MY PLANS & PROFILE / SIGN IN — hidden while login flow is disabled, uncomment to re-enable
       <button
         className={`${styles["mbn-item"]} ${isMyPlansActive ? styles.active : ""}`}
         onClick={handleMyPlans}
@@ -70,6 +94,7 @@ export default function MobileBottomNav() {
         <UserRound size={20} />
         <span>{isAuthenticated ? "Profile" : "Sign In"}</span>
       </button>
+      */}
     </nav>
   );
 }

@@ -12,6 +12,7 @@ import {
   Star as StarIcon,
   ShieldCheck,
   Users,
+  Sparkles,
   type LucideIcon,
   LucideArrowRight,
 } from "lucide-react";
@@ -157,10 +158,17 @@ export default function MessListingRow({
                   <CornerBadge type={badgeType} status={mess.status} />
 
                   {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
-                    <span className={styles["subscribers-badge"]}>
-                      <Users size={12} />
-                      {mess.totalSubscribers} Subscribers
-                    </span>
+                    mess.totalSubscribers === 0 ? (
+                      <span className={styles["new-badge"]}>
+                        <Sparkles size={11} />
+                        New
+                      </span>
+                    ) : (
+                      <span className={styles["subscribers-badge"]}>
+                        <Users size={12} />
+                        {mess.totalSubscribers} Subscribers
+                      </span>
+                    )
                   )}
                 </div>
 

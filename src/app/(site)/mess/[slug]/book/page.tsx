@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import BookPlanClient from "./BookPlanClient";
+// import { Suspense } from "react";
+import { notFound } from "next/navigation";
+// import BookPlanClient from "./BookPlanClient"; // hidden for now
 
 // The original BookPlan page always used this exact static title/noindex
 // regardless of the plan/mess being booked (never dynamic) — and this route
@@ -12,9 +13,14 @@ export const metadata: Metadata = {
 };
 
 export default function BookPlanPage() {
+  // BOOK PAGE TEMPORARILY HIDDEN — remove notFound() to re-enable
+  notFound();
+
+  /* ORIGINAL — uncomment when re-enabling booking:
   return (
     <Suspense fallback={null}>
       <BookPlanClient />
     </Suspense>
   );
+  */
 }
