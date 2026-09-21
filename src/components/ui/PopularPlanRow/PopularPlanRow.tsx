@@ -13,6 +13,7 @@ import {
   Moon,
   Coffee,
   Salad,
+  Sparkles,
   LucideArrowRight,
 } from "lucide-react";
 import { getPopularPlans } from "../../../services/popularPlansApi";
@@ -178,7 +179,12 @@ export default function PopularPlanRow({ initialData }: { initialData?: PopularP
                   </span>
 
                   {/* Subscriber count */}
-                  {subscriberLabel && (
+                  {plan.totalCustomers === 0 ? (
+                    <span className={styles["badge-new"]}>
+                      <Sparkles size={11} />
+                      New
+                    </span>
+                  ) : subscriberLabel && (
                     <span className={styles["badge-subscribers"]}>
                       <Users size={11} />
                       {subscriberLabel}

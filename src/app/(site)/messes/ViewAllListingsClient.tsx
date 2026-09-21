@@ -17,6 +17,7 @@ import {
   Loader2,
   Store,
   Users,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -532,10 +533,17 @@ export default function ViewAllListingsClient({
                         />
 
                         {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
-                          <span className={styles["subscribers-badge"]}>
-                            <Users size={12} />
-                            {mess.totalSubscribers} Subscribers
-                          </span>
+                          mess.totalSubscribers === 0 ? (
+                            <span className={styles["new-badge"]}>
+                              <Sparkles size={11} />
+                              New
+                            </span>
+                          ) : (
+                            <span className={styles["subscribers-badge"]}>
+                              <Users size={12} />
+                              {mess.totalSubscribers} Subscribers
+                            </span>
+                          )
                         )}
                       </div>
 
