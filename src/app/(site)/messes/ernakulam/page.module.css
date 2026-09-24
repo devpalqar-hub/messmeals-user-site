@@ -1,0 +1,1805 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Thiruvananthapuram City SEO Page — /messes/thiruvananthapuram/
+   Design system tokens: #101C10 · #55C500 · #1C3A1C · #617061 · #EAF7E5
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── PAGE SHELL ─────────────────────────────────────────────────────────── */
+
+.page {
+  width: 100%;
+  background: #FAFCF9;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── SHARED UTILITIES ───────────────────────────────────────────────────── */
+
+.section-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EAF7E5;
+  border: 1px solid #C2E6B0;
+  border-radius: 100px;
+  padding: 5px 14px;
+  margin-bottom: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2E7D32;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0 0 14px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  font-size: 15.5px;
+  color: #617061;
+  line-height: 1.65;
+  margin: 0 0 12px;
+}
+
+.section-desc:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── 1. HERO ─────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, #f0f9ea 0%, #ffffff 60%, #f6fdf2 100%);
+  border-bottom: 1px solid #E3EAE1;
+  padding: 80px 80px 72px;
+  overflow: hidden;
+}
+
+/* Subtle decorative circle */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(85, 197, 0, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #EAF7E5;
+  border: 1px solid #C2E6B0;
+  border-radius: 100px;
+  padding: 6px 16px 6px 12px;
+  margin-bottom: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #2E7D32;
+  letter-spacing: 0.08em;
+}
+
+.hero-label svg {
+  color: #55C500;
+  flex-shrink: 0;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #101C10;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+.hero-title span {
+  color: #2E7D32;
+}
+
+.hero-title-alt {
+  color: #617061 !important;
+  font-weight: 600;
+}
+
+.hero-desc {
+  font-size: 16.5px;
+  color: #3a503a;
+  line-height: 1.65;
+  margin: 0 0 12px;
+  max-width: 680px;
+}
+
+.hero-desc-sub {
+  font-size: 15px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0 0 32px;
+  max-width: 640px;
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.hero-cta-primary:hover {
+  background: #45A800;
+  box-shadow: 0 6px 20px rgba(69, 168, 0, 0.3);
+}
+
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: #2E7D32;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 26px;
+  border: 1.5px solid #55C500;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.hero-cta-secondary:hover {
+  background: #EAF7E5;
+  box-shadow: 0 4px 14px rgba(85, 197, 0, 0.15);
+}
+
+
+/* ─── 3. LISTINGS SECTION ─────────────────────────────────────────────────── */
+
+.listings-section {
+  padding: 64px 80px;
+  background: #FAFCF9;
+}
+
+.listings-section .section-container {
+  margin-bottom: 36px;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.listings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #1C3A1C;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: 1px solid #E3EAE1;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #FAFCF9;
+  border-color: #55C500;
+  color: #101C10;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #FAFCF9;
+}
+
+.pagination-info {
+  font-size: 14px;
+  font-weight: 500;
+  color: #617061;
+}
+
+/* ── MESS CARD ── */
+.mess-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #E3EAE1;
+  box-shadow: 0 4px 14px rgba(28, 58, 28, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mess-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(28, 58, 28, 0.12);
+}
+
+.mess-card-image {
+  position: relative;
+  height: 175px;
+  overflow: hidden;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.mess-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.mess-card:hover .mess-card-image img {
+  transform: scale(1.06);
+}
+
+.card-new-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #55C500 0%, #3da800 100%);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+
+.card-subs-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #101C10;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.card-subs-badge svg {
+  color: #18864B;
+}
+
+.mess-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.mess-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+.mess-card-verified {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: #55C500;
+}
+
+.mess-card-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 0%;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.mess-card-location,
+.mess-card-food-type {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #617061;
+  font-weight: 500;
+  margin-bottom: 3px;
+  min-width: 0;
+}
+
+.mess-card-location svg,
+.mess-card-food-type svg {
+  flex-shrink: 0;
+  color: #849084;
+}
+
+.mess-card-location span,
+.mess-card-food-type span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.mess-card-divider {
+  height: 1px;
+  background: #E3EAE1;
+  margin: 10px 0;
+}
+
+.mess-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.mess-card-price small {
+  display: block;
+  font-size: 9.5px;
+  color: #849084;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+.mess-card-price strong {
+  font-size: 16px;
+  color: #1C3A1C;
+  font-weight: 700;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mess-card-price strong span {
+  font-size: 12px;
+  color: #617061;
+  font-weight: 500;
+}
+
+.mess-card-price-na {
+  font-size: 13px !important;
+  color: #849084 !important;
+  font-weight: 500 !important;
+}
+
+.mess-card-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #1C3A1C;
+  color: #ffffff;
+  border: none;
+  text-decoration: none;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.mess-card-btn:hover {
+  background: #45A800;
+  box-shadow: 0 6px 16px rgba(69, 168, 0, 0.28);
+  color: #ffffff;
+}
+
+.listings-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #E3EAE1;
+  color: #617061;
+  font-size: 15px;
+}
+
+/* ─── 4. AREAS SECTION ───────────────────────────────────────────────────── */
+
+.areas-section {
+  padding: 64px 80px;
+  background: #ffffff;
+  border-top: 1px solid #E3EAE1;
+  border-bottom: 1px solid #E3EAE1;
+}
+
+.areas-section .section-container {
+  margin-bottom: 36px;
+}
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.area-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FAFCF9;
+  border: 1px solid #E3EAE1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+}
+
+.area-card:hover {
+  border-color: #55C500;
+  background: #EAF7E5;
+  box-shadow: 0 4px 12px rgba(85, 197, 0, 0.12);
+}
+
+.area-card-icon {
+  color: #2E7D32;
+  flex-shrink: 0;
+}
+
+.area-card-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1C3A1C;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.area-card-arrow {
+  color: #849084;
+  flex-shrink: 0;
+}
+
+.area-card:hover .area-card-arrow {
+  color: #2E7D32;
+}
+
+/* ─── 5. AUDIENCE SECTION ────────────────────────────────────────────────── */
+
+.audience-section {
+  padding: 64px 80px;
+  background: #FAFCF9;
+}
+
+.audience-section .section-container {
+  margin-bottom: 36px;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.audience-card {
+  background: #ffffff;
+  border: 1px solid #E3EAE1;
+  border-radius: 16px;
+  padding: 24px 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.audience-card:hover {
+  border-color: #55C500;
+  box-shadow: 0 8px 24px rgba(28, 58, 28, 0.08);
+  transform: translateY(-2px);
+}
+
+.audience-card-icon {
+  width: 48px;
+  height: 48px;
+  background: #EAF7E5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  color: #2E7D32;
+  transition: background 0.2s ease;
+}
+
+.audience-card:hover .audience-card-icon {
+  background: #d4f0c0;
+}
+
+.audience-card-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0 0 8px;
+}
+
+.audience-card-desc {
+  font-size: 14px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── 6. FOOD PREFERENCE ─────────────────────────────────────────────────── */
+
+.food-pref-section {
+  background: #ffffff;
+  border-top: 1px solid #E3EAE1;
+  border-bottom: 1px solid #E3EAE1;
+  padding: 64px 80px;
+}
+
+.food-pref-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+  margin: 0 auto;
+}
+
+.food-pref-inner .food-pref-text {
+  grid-column: 1;
+}
+
+.food-pref-inner .food-pref-cards {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.food-pref-text .section-title {
+  text-align: left;
+}
+
+.food-pref-text .section-label {
+  text-align: left;
+}
+
+.food-pref-text .section-desc {
+  text-align: left;
+}
+
+.food-pref-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 100px;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.food-pref-cta:hover {
+  background: #45A800;
+  box-shadow: 0 6px 18px rgba(69, 168, 0, 0.28);
+  color: #ffffff;
+}
+
+.food-pref-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FAFCF9;
+  border: 1px solid #E3EAE1;
+  border-radius: 14px;
+  padding: 18px 20px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.food-pref-card:hover {
+  border-color: #55C500;
+  background: #f0fae8;
+}
+
+.food-pref-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.food-pref-veg {
+  background: #d4f0c0;
+  color: #2E7D32;
+}
+
+.food-pref-nonveg {
+  background: #ffe4e4;
+  color: #c0392b;
+}
+
+.food-pref-mixed {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.food-pref-card h3 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+}
+
+.food-pref-card p {
+  font-size: 13px;
+  color: #617061;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── 7. MEAL PLANS ──────────────────────────────────────────────────────── */
+
+.plans-section {
+  padding: 64px 80px;
+  background: #FAFCF9;
+}
+
+.plans-section .section-container {
+  margin-bottom: 36px;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  background: #ffffff;
+  border: 1px solid #E3EAE1;
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.plan-card:hover {
+  border-color: #55C500;
+  box-shadow: 0 8px 24px rgba(28, 58, 28, 0.08);
+  transform: translateY(-2px);
+}
+
+.plan-card-icon {
+  width: 52px;
+  height: 52px;
+  background: #EAF7E5;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #2E7D32;
+  transition: background 0.2s ease;
+}
+
+.plan-card:hover .plan-card-icon {
+  background: #d4f0c0;
+}
+
+.plan-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0 0 8px;
+}
+
+.plan-card-desc {
+  font-size: 13.5px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── 8. HOW TO CHOOSE ───────────────────────────────────────────────────── */
+
+.choose-section {
+  padding: 64px 80px;
+  background: #ffffff;
+  border-top: 1px solid #E3EAE1;
+  border-bottom: 1px solid #E3EAE1;
+}
+
+.choose-section .section-container {
+  margin-bottom: 40px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 auto;
+  position: relative;
+}
+
+.step-card {
+  position: relative;
+  padding: 24px 28px;
+  border: 1px solid #E3EAE1;
+  border-radius: 0;
+  background: #FAFCF9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background 0.2s ease;
+}
+
+.step-card:hover {
+  background: #f0fae8;
+  z-index: 1;
+  border-color: #C5E0B8;
+}
+
+/* Round corners on grid edges */
+.step-card:nth-child(1) {
+  border-radius: 16px 0 0 0;
+}
+
+.step-card:nth-child(3) {
+  border-radius: 0 16px 0 0;
+}
+
+.step-card:nth-child(4) {
+  border-radius: 0 0 0 16px;
+  border-top: none;
+}
+
+.step-card:nth-child(6) {
+  border-radius: 0 0 16px 0;
+  border-top: none;
+}
+
+.step-card:nth-child(2) {
+  border-top: 1px solid #E3EAE1;
+  border-left: none;
+  border-right: none;
+}
+
+.step-card:nth-child(3) {
+  border-left: none;
+}
+
+.step-card:nth-child(5) {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.step-card:nth-child(6) {
+  border-left: none;
+  border-top: none;
+}
+
+.step-connector {
+  display: none;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #55C500;
+}
+
+.step-num svg {
+  flex-shrink: 0;
+}
+
+.step-num span {
+  font-size: 13px;
+  font-weight: 800;
+  color: #55C500;
+  letter-spacing: 0.03em;
+}
+
+.step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+}
+
+.step-desc {
+  font-size: 13.5px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── 9. WHY MESSMEALS ───────────────────────────────────────────────────── */
+
+.why-section {
+  padding: 64px 80px;
+  background: #FAFCF9;
+}
+
+.why-inner {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.why-text {
+  grid-column: 1;
+}
+
+.why-text .section-title {
+  text-align: left;
+}
+
+.why-text .section-label {
+  text-align: left;
+}
+
+.why-text .section-desc {
+  text-align: left;
+}
+
+.why-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 100px;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.why-cta:hover {
+  background: #45A800;
+  box-shadow: 0 6px 18px rgba(69, 168, 0, 0.28);
+  color: #ffffff;
+}
+
+.why-cards {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.why-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid #E3EAE1;
+  border-radius: 14px;
+  padding: 20px 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.why-card:hover {
+  border-color: #55C500;
+  box-shadow: 0 6px 18px rgba(28, 58, 28, 0.08);
+}
+
+.why-card-icon {
+  width: 42px;
+  height: 42px;
+  background: #EAF7E5;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #2E7D32;
+  transition: background 0.2s ease;
+}
+
+.why-card:hover .why-card-icon {
+  background: #d4f0c0;
+}
+
+.why-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+}
+
+.why-card-desc {
+  font-size: 13.5px;
+  color: #617061;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ─── 10. FAQ ────────────────────────────────────────────────────────────── */
+
+.faq-section {
+  padding: 64px 80px;
+  background: #ffffff;
+  border-top: 1px solid #E3EAE1;
+}
+
+.faq-section .section-container {
+  margin-bottom: 36px;
+}
+
+.faq-list {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  background: #FAFCF9;
+  border: 1px solid #E3EAE1;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  overflow: hidden;
+  user-select: none;
+}
+
+.faq-item:hover {
+  border-color: #C2E6B0;
+  background: #f6fdf2;
+}
+
+.faq-item--open {
+  border-color: #55C500;
+  background: #f6fdf2;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.faq-number {
+  font-size: 11px;
+  font-weight: 800;
+  color: #55C500;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.faq-q-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #101C10;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.faq-chevron {
+  color: #849084;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.faq-item--open .faq-chevron {
+  transform: rotate(180deg);
+  color: #2E7D32;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.25s ease;
+  padding: 0 20px;
+}
+
+.faq-item--open .faq-answer {
+  max-height: 400px;
+  padding: 0 20px 18px;
+}
+
+.faq-answer p {
+  font-size: 14px;
+  color: #617061;
+  line-height: 1.7;
+  margin: 0;
+  padding-left: 34px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   Breakpoints: 1380 · 1200 · 1024 · 768 · 480 · 360 · 300
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Large Desktop ─────────────────────────────────────────────────────────── */
+@media (max-width: 1380px) {
+  .listings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── Medium Desktop ────────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .food-pref-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .why-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── Tablet ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+
+  /* ── Hero ── */
+  .hero {
+    padding: 56px 40px 52px;
+  }
+
+  .hero-title {
+    font-size: 38px;
+  }
+
+  .hero-desc {
+    font-size: 15.5px;
+  }
+
+  /* ── Listings ── */
+  .listings-section {
+    padding: 52px 40px;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* ── Areas ── */
+  .areas-section {
+    padding: 52px 40px;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* ── Audience ── */
+  .audience-section {
+    padding: 52px 40px;
+  }
+
+  .audience-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* ── Food pref ── */
+  .food-pref-section {
+    padding: 52px 40px;
+  }
+
+  .food-pref-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .food-pref-inner .food-pref-cards {
+    grid-column: 1;
+  }
+
+  .food-pref-text .section-title,
+  .food-pref-text .section-label,
+  .food-pref-text .section-desc {
+    text-align: center;
+  }
+
+  .food-pref-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Plans ── */
+  .plans-section {
+    padding: 52px 40px;
+  }
+
+  /* ── Choose ── */
+  .choose-section {
+    padding: 52px 40px;
+  }
+
+  .steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Fix border-radius for 2-col layout */
+  .step-card:nth-child(1) {
+    border-radius: 16px 0 0 0;
+  }
+
+  .step-card:nth-child(2) {
+    border-radius: 0 16px 0 0;
+    border-left: none;
+    border-right: 1px solid #E3EAE1;
+    border-top: 1px solid #E3EAE1;
+  }
+
+  .step-card:nth-child(3) {
+    border-radius: 0;
+    border-top: none;
+    border-right: none;
+  }
+
+  .step-card:nth-child(4) {
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: 1px solid #E3EAE1;
+  }
+
+  .step-card:nth-child(5) {
+    border-radius: 0 0 0 16px;
+    border-top: none;
+    border-right: none;
+  }
+
+  .step-card:nth-child(6) {
+    border-radius: 0 0 16px 0;
+    border-top: none;
+    border-left: none;
+  }
+
+  /* ── Why ── */
+  .why-section {
+    padding: 52px 40px;
+  }
+
+  .why-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .why-text {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .why-text .section-title,
+  .why-text .section-label,
+  .why-text .section-desc {
+    text-align: center;
+  }
+
+  .why-cards {
+    grid-column: 1;
+  }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 52px 40px;
+  }
+
+  /* ── Section shared ── */
+  .section-title {
+    font-size: 24px;
+  }
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── Hero ── */
+  .hero {
+    padding: 40px 16px 36px;
+  }
+
+  .hero::after {
+    display: none;
+  }
+
+  .hero-title {
+    font-size: 27px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-title-alt {
+    display: block;
+    font-size: 20px;
+  }
+
+  .hero-desc {
+    font-size: 14.5px;
+  }
+
+  .hero-desc-sub {
+    font-size: 13.5px;
+  }
+
+  .hero-label {
+    font-size: 10.5px;
+    padding: 5px 13px 5px 10px;
+    margin-bottom: 16px;
+  }
+
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    font-size: 14px;
+    padding: 12px 22px;
+  }
+
+  /* ── Listings ── */
+  .listings-section {
+    padding: 40px 16px;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .mess-card-image {
+    height: 130px;
+  }
+
+  .mess-card-body {
+    padding: 10px 11px 12px;
+  }
+
+  .mess-card-name {
+    font-size: 13px;
+  }
+
+  .mess-card-location,
+  .mess-card-food-type {
+    font-size: 10.5px;
+  }
+
+  .mess-card-price strong {
+    font-size: 14px;
+  }
+
+  .mess-card-btn {
+    font-size: 12.5px;
+    padding: 9px 10px;
+  }
+
+  /* ── Areas ── */
+  .areas-section {
+    padding: 40px 16px;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .area-card {
+    padding: 12px 14px;
+  }
+
+  .area-card-name {
+    font-size: 13px;
+  }
+
+  /* ── Audience ── */
+  .audience-section {
+    padding: 40px 16px;
+  }
+
+  .audience-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .audience-card {
+    padding: 18px 16px;
+  }
+
+  .audience-card-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .audience-card-title {
+    font-size: 14px;
+  }
+
+  .audience-card-desc {
+    font-size: 12.5px;
+  }
+
+  /* ── Food pref ── */
+  .food-pref-section {
+    padding: 40px 16px;
+  }
+
+  .food-pref-card {
+    display: block;
+    padding: 18px 16px;
+  }
+
+  .food-pref-card-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 14px;
+  }
+
+  .food-pref-card h3 {
+    margin: 0 0 8px;
+  }
+
+  /* ── Plans ── */
+  .plans-section {
+    padding: 40px 16px;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .plan-card {
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+
+  .plan-card-icon {
+    margin: 0;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ── Choose ── */
+  .choose-section {
+    padding: 40px 16px;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reset all step border tricks for single col */
+  .step-card:nth-child(n) {
+    border-radius: 0;
+    border: 1px solid #E3EAE1;
+    border-top: none;
+  }
+
+  .step-card:nth-child(1) {
+    border-top: 1px solid #E3EAE1;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .step-card:nth-last-child(1) {
+    border-radius: 0 0 16px 16px;
+  }
+
+  /* ── Why ── */
+  .why-section {
+    padding: 40px 16px;
+  }
+
+  .why-card {
+    display: block;
+    padding: 18px 16px;
+  }
+
+  .why-card-icon {
+    margin-bottom: 14px;
+  }
+
+  .why-card-title {
+    margin: 0 0 8px;
+  }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 40px 16px;
+  }
+
+  .faq-question {
+    padding: 15px 16px;
+    gap: 12px;
+  }
+
+  .faq-q-text {
+    font-size: 14px;
+  }
+
+  .faq-item--open .faq-answer {
+    padding: 0 16px 15px;
+  }
+
+  .faq-answer p {
+    font-size: 13.5px;
+    padding-left: 26px;
+  }
+
+  /* ── Section shared ── */
+  .section-title {
+    font-size: 21px;
+  }
+
+  .section-desc {
+    font-size: 14px;
+  }
+
+  .section-container {
+    text-align: center;
+  }
+}
+
+/* ── Small Mobile ───────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .hero {
+    padding: 32px 14px 28px;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
+
+  .hero-title-alt {
+    font-size: 17px;
+  }
+
+  .hero-desc {
+    font-size: 13.5px;
+  }
+
+  .hero-desc-sub {
+    font-size: 12.5px;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    justify-content: center;
+    font-size: 13.5px;
+  }
+
+  /* ── Listings ── */
+  .listings-section {
+    padding: 32px 14px;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mess-card-image {
+    height: 100px;
+  }
+
+  .mess-card-body {
+    padding: 8px 9px 10px;
+  }
+
+  .mess-card-name {
+    font-size: 11.5px;
+  }
+
+  .mess-card-location,
+  .mess-card-food-type {
+    font-size: 9.5px;
+  }
+
+  .mess-card-price strong {
+    font-size: 12.5px;
+  }
+
+  .mess-card-price small {
+    font-size: 8.5px;
+  }
+
+  .mess-card-btn {
+    font-size: 11px;
+    padding: 7px 6px;
+    border-radius: 8px;
+    gap: 3px;
+  }
+
+  .mess-card-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* ── Areas ── */
+  .areas-section {
+    padding: 32px 14px;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .area-card {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .area-card-name {
+    font-size: 12px;
+  }
+
+  /* ── Audience ── */
+  .audience-section {
+    padding: 32px 14px;
+  }
+
+  .audience-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* ── Food pref ── */
+  .food-pref-section {
+    padding: 32px 14px;
+  }
+
+  /* ── Plans ── */
+  .plans-section {
+    padding: 32px 14px;
+  }
+
+  /* ── Choose ── */
+  .choose-section {
+    padding: 32px 14px;
+  }
+
+  /* ── Why ── */
+  .why-section {
+    padding: 32px 14px;
+  }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 32px 14px;
+  }
+
+  .faq-q-text {
+    font-size: 13.5px;
+  }
+
+  /* ── Section shared ── */
+  .section-title {
+    font-size: 19px;
+  }
+
+  .section-desc {
+    font-size: 13px;
+  }
+}
+
+/* ── Very Small Phones ──────────────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  .hero {
+    padding: 24px 12px 22px;
+  }
+
+  .hero-title {
+    font-size: 19px;
+  }
+
+  .hero-title-alt {
+    font-size: 15px;
+  }
+
+  /* ── Listings ── */
+  .listings-section {
+    padding: 24px 12px;
+  }
+
+  .listings-grid {
+    gap: 8px;
+  }
+
+  .mess-card-image {
+    height: 88px;
+  }
+
+  .mess-card-name {
+    font-size: 10.5px;
+  }
+
+  .mess-card-location,
+  .mess-card-food-type {
+    font-size: 8.5px;
+  }
+
+  .mess-card-btn {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+
+  /* ── Areas ── */
+  .areas-section {
+    padding: 24px 12px;
+  }
+
+  /* ── Audience ── */
+  .audience-section {
+    padding: 24px 12px;
+  }
+
+  /* ── Food pref ── */
+  .food-pref-section {
+    padding: 24px 12px;
+  }
+
+  /* ── Plans ── */
+  .plans-section {
+    padding: 24px 12px;
+  }
+
+  /* ── Choose ── */
+  .choose-section {
+    padding: 24px 12px;
+  }
+
+  .step-card {
+    padding: 18px 16px;
+  }
+
+  /* ── Why ── */
+  .why-section {
+    padding: 24px 12px;
+  }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 24px 12px;
+  }
+
+  /* ── Section shared ── */
+  .section-title {
+    font-size: 17px;
+  }
+
+  .section-desc {
+    font-size: 12.5px;
+  }
+}
+
+/* ── Very Very Small ────────────────────────────────────────────────────────── */
+@media (max-width: 300px) {
+  .hero {
+    padding: 18px 10px 16px;
+  }
+
+  .hero-title {
+    font-size: 17px;
+  }
+
+  .listings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .areas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mess-card-image {
+    height: 160px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  .section-desc {
+    font-size: 12px;
+  }
+
+
+}

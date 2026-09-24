@@ -56,10 +56,15 @@ function MessImage({ src, alt }: { src?: string | null; alt: string }) {
 
 export default function ViewAllListingsClient({
   initialData,
-  initialMeta
+  initialMeta,
+  defaultLatitude,
+  defaultLongitude,
 }: {
   initialData?: MessListing[];
   initialMeta?: MessMeta | null;
+  /** Pre-seed lat/lng for city pages (used when URL has no lat/lng param). */
+  defaultLatitude?: string;
+  defaultLongitude?: string;
 }) {
   const [messList, setMessList] = useState<MessListing[]>(initialData || []);
   const [page, setPage] = useState(1);
@@ -83,8 +88,11 @@ export default function ViewAllListingsClient({
   const getInitialFilters = (): Filters => {
     const init: Filters = {};
     if (searchParams.get("name")) init.search = searchParams.get("name")!;
-    if (searchParams.get("latitude")) init.latitude = searchParams.get("latitude")!;
-    if (searchParams.get("longitude")) init.longitude = searchParams.get("longitude")!;
+    // Use URL param first; fall back to page-level default (e.g. city page)
+    const lat = searchParams.get("latitude") || defaultLatitude;
+    const lng = searchParams.get("longitude") || defaultLongitude;
+    if (lat) init.latitude = lat;
+    if (lng) init.longitude = lng;
     if (searchParams.get("foodType")) init.foodType = searchParams.get("foodType")!;
     if (searchParams.get("planType")) init.planType = searchParams.get("planType")!;
     return init;
