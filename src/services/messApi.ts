@@ -4,6 +4,23 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
+// Add a retry interceptor for transient server errors (e.g. during build time)
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config;
+    // Retry up to 3 times for 500 or network errors
+    if (config && (!config.retryCount || config.retryCount < 3) && (!error.response || error.response.status >= 500)) {
+      config.retryCount = (config.retryCount || 0) + 1;
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = Math.pow(2, config.retryCount - 1) * 1000;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return api(config);
+    }
+    return Promise.reject(error);
+  }
+);
+
 // ─── Filters for GET /open/messes ─────────────────────────────────────────────
 
 export interface MessListFilters {
