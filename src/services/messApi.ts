@@ -1,30 +1,46 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
-interface MessFilters {
+// Add a retry interceptor for transient server errors (e.g. during build time)
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config;
+    // Retry up to 3 times for 500 or network errors
+    if (config && (!config.retryCount || config.retryCount < 3) && (!error.response || error.response.status >= 500)) {
+      config.retryCount = (config.retryCount || 0) + 1;
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = Math.pow(2, config.retryCount - 1) * 1000;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return api(config);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// ─── Filters for GET /open/messes ─────────────────────────────────────────────
+
+export interface MessListFilters {
   search?: string;
-  categoryId?: string;
-  ratings?: string;
-  is_active?: string;
-  is_verified?: string;
-  location?: string;
-  variationId?: string;
-  foodType?: string;
-  districtName?: string;
-  date1?: string;
-  date2?: string;
+  foodType?: string;   // VEG | NON_VEG | MIXED
+  planType?: string;   // DAILY | MONTHLY
+  featured?: string;   // "true" | "false"
+  isVerified?: string; // "true" | "false"
+  latitude?: string;
+  longitude?: string;
 }
+
+// ─── GET /open/messes ─────────────────────────────────────────────────────────
 
 export const getAllMess = async (
   page = 1,
   limit = 10,
-  filters: MessFilters = {}
+  filters: MessListFilters = {}
 ) => {
-  // Build query params, only including non-empty values
-  const params: any = { page, limit };
+  const params: Record<string, string | number> = { page, limit };
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value && value.trim() !== "") {
@@ -32,16 +48,46 @@ export const getAllMess = async (
     }
   });
 
-  const res = await api.get("/mess", { params });
+  const res = await api.get("/open/messes", { params });
   return res.data;
 };
 
-export const getMessById = async (messId: string) => {
-  const res = await api.get(`/mess/${messId}`);
+// ─── GET /open/mess/{slug} ────────────────────────────────────────────────────
+
+export const getMessBySlug = async (slug: string) => {
+  const res = await api.get(`/open/mess/${slug}`);
   return res.data;
 };
+
+// ─── GET /open/search-suggestions ─────────────────────────────────────────────
+
+export interface SearchSuggestionResponse {
+  messes: {
+    id: string;
+    slug: string;
+    name: string;
+  }[];
+  locations: {
+    name: string;
+    longitude: number;
+    latitude: number;
+  }[];
+}
+
+export const getSearchSuggestions = async (
+  q: string,
+  limit: number = 50
+): Promise<SearchSuggestionResponse> => {
+  const response = await api.get("/open/search-suggestions", {
+    params: { q, limit },
+  });
+  return response.data;
+};
+
+
+// ─── GET /plans/:id — unchanged, used by BookPlan ────────────────────────────
 
 export const getPlanById = async (planId: string) => {
   const res = await api.get(`/plans/${planId}`);
   return res.data;
-};
+};

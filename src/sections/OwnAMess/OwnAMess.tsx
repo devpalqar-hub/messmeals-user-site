@@ -1,11 +1,9 @@
+"use client";
+
 import styles from "./OwnAMess.module.css";
-import { useState } from "react";
 import { Store } from "lucide-react";
-import ListMessModal from "../../components/ui/ListMessModal/ListMessModal";
 
 export default function OwnAMess() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <section className={styles["own-a-mess"]}>
       <div className={styles["oam-inner"]}>
@@ -18,12 +16,23 @@ export default function OwnAMess() {
           <p>Join our platform and reach thousands of hungry people in your area.</p>
         </div>
 
-        <button className={styles["oam-btn"]} onClick={() => setIsModalOpen(true)}>
-          List Your Mess Now
-        </button>
+        <div className={styles["store-btns"]}>
+          <a href="https://play.google.com/store/apps/details?id=com.messmeals.mess" target="_blank" rel="noopener noreferrer" className={styles["store-btn"]} aria-label="Get it on Google Play">
+            <img src="/Playstore.svg" alt="Google Play" className={styles["store-btn-icon"]} />
+            <div className={styles["store-btn-text"]}>
+              <span className={styles["store-btn-label"]}>GET IT ON</span>
+              <span className={styles["store-btn-name"]}>Google Play</span>
+            </div>
+          </a>
+          <a href="https://apps.apple.com/in/app/messmeals/id6754977891" target="_blank" rel="noopener noreferrer" className={styles["store-btn"]} aria-label="Download on the App Store">
+            <img src="/Apple.svg" alt="App Store" className={`${styles["store-btn-icon"]} ${styles["store-btn-icon--invert"]}`} />
+            <div className={styles["store-btn-text"]}>
+              <span className={styles["store-btn-label"]}>Download on the</span>
+              <span className={styles["store-btn-name"]}>App Store</span>
+            </div>
+          </a>
+        </div>
       </div>
-
-      <ListMessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }

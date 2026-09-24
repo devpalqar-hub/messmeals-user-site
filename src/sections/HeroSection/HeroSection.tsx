@@ -1,11 +1,28 @@
+"use client";
+
 import styles from "./HeroSection.module.css";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Utensils, CalendarDays } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  Search,
+  Utensils,
+  CalendarDays,
+  ChevronDown,
+  ArrowRight,
+  MapPin,
+  Store,
+  Loader2,
+  Home,
+  LayoutGrid,
+} from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import type { Variants } from "framer-motion";
+import { getSearchSuggestions } from "../../services/messApi";
+import type { SearchSuggestionResponse } from "../../services/messApi";
+import { useToast } from "../../context/ToastContext";
 
 /* ---------------- ANIMATION VARIANTS ---------------- */
-
-import type { Variants } from "framer-motion";
 
 const fadeUp: Variants = {
   hidden: {
@@ -30,37 +47,218 @@ const stagger: Variants = {
   },
 };
 
-const POPULAR_SEARCHES = ["Kochi", "Trivandrum", "Calicut", "Ernakulam", "Thrissur"];
+// const POPULAR_SEARCHES = [
+//   "Kerala",
+//   "Tamilnadu",
+//   "Pondicherry",
+//   "Bangalore",
+// ];
 
 /* ---------------- COMPONENT ---------------- */
 
 export default function HeroSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { error } = useToast();
+
+  const locationInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const mealSelectRef = useRef<HTMLSelectElement>(null);
+  const planSelectRef = useRef<HTMLSelectElement>(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SearchSuggestionResponse | null>(null);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedItem, setSelectedItem] = useState<
+    | { type: "mess"; id: string; name: string }
+    | { type: "location"; name: string; latitude: number; longitude: number }
+    | null
+  >(null);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setSuggestions(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getSearchSuggestions(debouncedQuery, 50);
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      if (isSuggestionsOpen) {
+        setIsSuggestionsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isSuggestionsOpen]);
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setSelectedItem(null);
+    setIsSuggestionsOpen(true);
+  };
+
+  const handleSelectMess = (mess: any) => {
+    setSearchQuery(mess.name);
+    setSelectedItem({ type: "mess", id: mess.id, name: mess.name });
+    setIsSuggestionsOpen(false);
+  };
+
+  const handleSelectLocation = (loc: any) => {
+    setSearchQuery(loc.name);
+    setSelectedItem({ type: "location", name: loc.name, latitude: loc.latitude, longitude: loc.longitude });
+    setIsSuggestionsOpen(false);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/view-all-listings");
+
+    if (searchQuery.trim().length > 0 && !selectedItem) {
+      error("Please select a suggestion from the dropdown.");
+      setIsSuggestionsOpen(true);
+      locationInputRef.current?.focus();
+      return;
+    }
+
+    const foodType = mealSelectRef.current?.value || "";
+    const planType = planSelectRef.current?.value || "";
+
+    const params = new URLSearchParams();
+
+    if (selectedItem?.type === "mess") {
+      params.append("name", selectedItem.name);
+    } else if (selectedItem?.type === "location") {
+      params.append("latitude", selectedItem.latitude.toString());
+      params.append("longitude", selectedItem.longitude.toString());
+    }
+
+    if (foodType) params.append("foodType", foodType);
+    if (planType) params.append("planType", planType);
+
+    router.push(`/messes?${params.toString()}`);
+  };
+
+  const focusLocation = () => {
+    locationInputRef.current?.focus();
+    setIsSuggestionsOpen(true);
+  };
+
+  const openMealDropdown = () => {
+    const select = mealSelectRef.current;
+
+    if (!select) return;
+
+    select.focus();
+
+    // Opens the native dropdown where supported
+    if ("showPicker" in HTMLSelectElement.prototype) {
+      select.showPicker();
+    }
+  };
+
+  const openPlanDropdown = () => {
+    const select = planSelectRef.current;
+
+    if (!select) return;
+
+    select.focus();
+
+    // Opens the native dropdown where supported
+    if ("showPicker" in HTMLSelectElement.prototype) {
+      select.showPicker();
+    }
   };
 
   return (
     <section className={styles["hero-light"]}>
+      {/* Desktop hero background — hidden on mobile via CSS */}
+      <Image
+        src="/herobg.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
+        className={styles["hero-bg-desktop"]}
+        aria-hidden="true"
+      />
+      {/* Mobile hero background — hidden on desktop via CSS */}
+      <Image
+        src="/herobgmob.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
+        className={styles["hero-bg-mobile"]}
+        aria-hidden="true"
+      />
       <motion.div
         className={styles["hero-light-content"]}
         initial="hidden"
         animate="visible"
         variants={stagger}
       >
+        {/* Badge */}
+        <motion.div
+          className={styles["hero-badge"]}
+          variants={fadeUp}
+        >
+          <Home size={14} className={styles["hero-badge-icon"]} />
+          <span>Homely Food, Closer to You</span>
+        </motion.div>
+
         {/* Title */}
-        <motion.h1 className={styles["hero-light-title"]} variants={fadeUp}>
-          Find homely meals <br />
-          from <span>trusted messes.</span>
+        <motion.h1
+          className={styles["hero-light-title"]}
+          variants={fadeUp}
+        >
+          Find a Mess<br />
+          Available <span>Near You</span>
         </motion.h1>
 
         {/* Subtitle */}
-        <motion.p className={styles["hero-light-subtitle"]} variants={fadeUp}>
-          Search, compare and book the best mess plans
-          <br />
-          that suit your taste and budget.
+        <motion.p
+          className={styles["hero-light-subtitle"]}
+          variants={fadeUp}
+        >
+          MessMeals makes it easy to discover trusted local messes, compare daily and monthly meal plans, and book homely food that fits your location, taste, and routine.
         </motion.p>
 
         {/* SEARCH BAR */}
@@ -69,60 +267,215 @@ export default function HeroSection() {
           variants={fadeUp}
           onSubmit={handleSearch}
         >
-          {/* Location */}
-          <div className={styles["hls-item"]}>
-            <MapPin size={18} className={styles["hls-icon"]} />
-            <div className={styles["hls-field"]}>
-              <label>Enter location</label>
-              <input type="text" placeholder="e.g. Kochi, Kerala" />
+          {/* SEARCH INPUT */}
+          <div
+            className={`${styles["hls-item"]} ${styles["hls-search-item"]}`}
+            ref={searchContainerRef}
+            onClick={focusLocation}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                focusLocation();
+              }
+            }}
+          >
+            <div className={`${styles["hls-icon-wrapper"]} ${styles["hls-search-icon-wrapper"]}`}>
+              <Search size={18} className={styles["hls-icon"]} />
             </div>
+
+            <div className={`${styles["hls-field"]} ${styles["hls-field-center"]}`}>
+              <input
+                ref={locationInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={handleQueryChange}
+                onFocus={() => setIsSuggestionsOpen(true)}
+                placeholder="Search by city or locality"
+              />
+            </div>
+
+            {/* AUTOCOMPLETE DROPDOWN */}
+            {isSuggestionsOpen && (searchQuery.trim().length > 0 || isLoading) && (
+              <div className={styles["hls-dropdown"]}>
+                {isLoading ? (
+                  <div className={styles["hls-dropdown-loading"]}>
+                    <Loader2 className={styles["hls-spinner"]} size={20} />
+                    <span>Loading suggestions...</span>
+                  </div>
+                ) : (
+                  <>
+                    {suggestions?.messes && suggestions.messes.length > 0 && (
+                      <div className={styles["hls-dropdown-group"]}>
+                        <div className={styles["hls-dropdown-header"]}>Messes</div>
+                        {suggestions.messes.map((mess) => (
+                          <div
+                            key={`mess-${mess.id}`}
+                            className={styles["hls-dropdown-item"]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSelectMess(mess);
+                            }}
+                          >
+                            <Store size={16} className={styles["hls-dropdown-icon"]} />
+                            <span className={styles["hls-dropdown-text"]}>{mess.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {suggestions?.locations && suggestions.locations.length > 0 && (
+                      <div className={styles["hls-dropdown-group"]}>
+                        <div className={styles["hls-dropdown-header"]}>Locations</div>
+                        {suggestions.locations.map((loc, idx) => (
+                          <div
+                            key={`loc-${idx}`}
+                            className={styles["hls-dropdown-item"]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSelectLocation(loc);
+                            }}
+                          >
+                            <MapPin size={16} className={styles["hls-dropdown-icon"]} />
+                            <span className={styles["hls-dropdown-text"]}>{loc.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {!isLoading && (!suggestions?.messes || suggestions.messes.length === 0) && (!suggestions?.locations || suggestions.locations.length === 0) && (
+                      <div className={styles["hls-dropdown-empty"]}>
+                        No results found for "{searchQuery}"
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
-          <div className={styles["hls-divider"]} />
+          {/* MEAL PREFERENCE */}
+          <div
+            className={`${styles["hls-item"]} ${styles["hls-select"]}`}
+            onClick={openMealDropdown}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openMealDropdown();
+              }
+            }}
+          >
+            <div className={styles["hls-icon-wrapper"]}>
+              <Utensils size={18} className={styles["hls-icon"]} />
+            </div>
 
-          {/* Meal preference */}
-          <div className={`${styles["hls-item"]} ${styles["hls-select"]}`}>
-            <Utensils size={18} className={styles["hls-icon"]} />
             <div className={styles["hls-field"]}>
-              <label>Meal preference</label>
-              <select defaultValue="">
-                <option value="">Any</option>
-                <option value="veg">Veg</option>
-                <option value="non-veg">Non-Veg</option>
+              <label>Food preference</label>
+
+              <select ref={mealSelectRef} defaultValue="">
+                <option value="">All options</option>
+                <option value="VEG">Vegetarian</option>
+                <option value="NON_VEG">Non-vegetarian</option>
+                <option value="MIXED">Mixed food</option>
               </select>
             </div>
+
+            <ChevronDown
+              size={18}
+              className={styles["hls-right-icon"]}
+            />
           </div>
 
-          <div className={styles["hls-divider"]} />
+          {/* PLAN TYPE */}
+          <div
+            className={`${styles["hls-item"]} ${styles["hls-select"]}`}
+            onClick={openPlanDropdown}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openPlanDropdown();
+              }
+            }}
+          >
+            <div className={styles["hls-icon-wrapper"]}>
+              <CalendarDays
+                size={18}
+                className={styles["hls-icon"]}
+              />
+            </div>
 
-          {/* Plan type */}
-          <div className={`${styles["hls-item"]} ${styles["hls-select"]}`}>
-            <CalendarDays size={18} className={styles["hls-icon"]} />
             <div className={styles["hls-field"]}>
-              <label>Plan type</label>
-              <select defaultValue="">
-                <option value="">Any</option>
-                <option value="daily">Daily</option>
-                <option value="monthly">Monthly</option>
-                <option value="custom">Custom</option>
+              <label>Meal plan type</label>
+
+              <select ref={planSelectRef} defaultValue="">
+                <option value="">All options</option>
+                <option value="DAILY">Daily plans</option>
+                <option value="MONTHLY">Monthly plans</option>
               </select>
             </div>
+
+            <ChevronDown
+              size={18}
+              className={styles["hls-right-icon"]}
+            />
           </div>
 
+          {/* SEARCH BUTTON */}
           <button type="submit" className={styles["hls-btn"]}>
-            Search Meals <Search size={17} />
+            Search Available Messes
+            <ArrowRight size={17} />
           </button>
         </motion.form>
 
+        {/* OR + Browse All */}
+        <motion.div
+          className={styles["hero-browse-block"]}
+          variants={fadeUp}
+        >
+          <div className={styles["hero-or-divider"]}>
+            <span className={styles["hero-or-line"]} />
+            <span className={styles["hero-or-text"]}>OR</span>
+            <span className={styles["hero-or-line"]} />
+          </div>
+
+          <button
+            type="button"
+            className={styles["hero-browse-btn"]}
+            onClick={() => router.push("/messes")}
+          >
+            <LayoutGrid size={16} className={styles["hero-browse-icon"]} />
+            Browse All Messes
+            <ArrowRight size={15} />
+          </button>
+
+          <p className={styles["hero-hint"]}>
+            <MapPin size={13} className={styles["hero-hint-icon"]} />
+            Search by city or locality to find available mess food, meal options, prices, and plans near you.
+          </p>
+        </motion.div>
+
         {/* Popular Searches */}
-        <motion.div className={styles["hero-light-tags"]} variants={fadeUp}>
+        {/* <motion.div
+          className={styles["hero-light-tags"]}
+          variants={fadeUp}
+        >
           <span>Popular searches:</span>
+
           {POPULAR_SEARCHES.map((city) => (
-            <button key={city} onClick={() => navigate("/view-all-listings")}>
+            <button
+              key={city}
+              type="button"
+              onClick={() => router.push("/messes")}
+            >
               {city}
             </button>
           ))}
-        </motion.div>
+        </motion.div> */}
       </motion.div>
     </section>
   );

@@ -1,0 +1,233 @@
+/* ===================== WHY MESSMEALS SECTION ===================== */
+
+.why-section {
+  background: linear-gradient(135deg, #f4faf0 0%, #eaf7e2 60%, #f9fdf6 100%);
+  padding: 24px 80px;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+}
+
+.why-container {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+
+/* ── LEFT ── */
+.why-left {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.why-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #14181a;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.why-brand {
+  color: #2db52d;
+}
+
+.why-desc {
+  font-size: 15px;
+  color: #4e5d55;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.why-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #1d8a1d;
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(29, 138, 29, 0.25);
+  margin-top: 6px;
+}
+
+.why-btn:hover {
+  background: #166e16;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(29, 138, 29, 0.32);
+}
+
+.why-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(29, 138, 29, 0.2);
+}
+
+/* ── RIGHT ── */
+.why-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.why-image {
+  width: 400px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .why-section {
+    padding: 48px 40px;
+  }
+
+  .why-container {
+    gap: 40px;
+  }
+
+  .why-title {
+    font-size: 24px;
+  }
+
+  .why-image {
+    width: 360px;
+  }
+}
+
+/* Mobile landscape / small tablet */
+@media (max-width: 768px) {
+  .why-section {
+    padding: 40px 20px;
+  }
+
+  .why-container {
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .why-left {
+    gap: 16px;
+  }
+
+  .why-title {
+    font-size: 22px;
+  }
+
+  .why-desc {
+    font-size: 14.5px;
+  }
+
+  .why-image {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .why-right {
+    width: 100%;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+  .why-section {
+    padding: 32px 16px;
+  }
+
+  .why-title {
+    font-size: 20px;
+  }
+
+  .why-desc {
+    font-size: 14px;
+  }
+
+  .why-btn {
+    font-size: 13.5px;
+    padding: 11px 18px;
+  }
+}
+
+/* Very small */
+@media (max-width: 360px) {
+  .why-section {
+    padding: 24px 12px;
+  }
+
+  .why-container {
+    gap: 24px;
+  }
+
+  .why-left {
+    gap: 12px;
+  }
+
+  .why-title {
+    font-size: 18.5px;
+  }
+
+  .why-desc {
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .why-btn {
+    font-size: 12.5px;
+    padding: 10px 16px;
+    gap: 6px;
+  }
+
+  .why-image {
+    max-width: 320px;
+  }
+}
+
+/* Very Very Small Mobile */
+@media (max-width: 300px) {
+  .why-section {
+    padding: 18px 10px;
+  }
+
+  .why-container {
+    gap: 16px;
+  }
+
+  .why-left {
+    gap: 8px;
+  }
+
+  .why-title {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .why-desc {
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+
+  .why-btn {
+    font-size: 11px;
+    padding: 8px 12px;
+    gap: 5px;
+    margin-top: 2px;
+  }
+
+  .why-image {
+    max-width: 220px;
+  }
+}
