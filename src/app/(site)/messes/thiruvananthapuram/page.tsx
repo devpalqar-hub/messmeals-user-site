@@ -2,22 +2,8 @@ import type { Metadata } from "next";
 
 import Script from "next/script";
 import Link from "next/link";
-import {
-  MapPin,
-  ArrowRight,
-  Utensils,
-  BookOpen,
-  GraduationCap,
-  Briefcase,
-  Home,
-  Coffee,
-  Leaf,
-  CalendarDays,
-  ListChecks,
-  CheckCircle2,
-  ChevronRight,
-  Star,
-} from "lucide-react";
+import { ArrowRight, BookOpen, Briefcase, Coffee, Leaf, CalendarDays, ListChecks, CheckCircle2, ChevronRight, Star, GraduationCap } from "lucide-react";
+import { MapPin, Utensils, Home } from "../../../../components/ui/SvgIcon/SvgIcon";
 import { getAllMess } from "../../../../services/messApi";
 import type { MessListing } from "../../../../types/mess";
 import TvmFaqItem from "./TvmFaqItem";

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { X, PauseCircle, XCircle, CalendarX2, AlertTriangle } from "lucide-react";
+import { X, PauseCircle, XCircle, CalendarX2 } from "lucide-react";
+import { AlertTriangle } from "../../../components/ui/SvgIcon/SvgIcon";
 import styles from "./SubscriptionActionModal.module.css";
 
 export type ActionMode = "pause" | "cancel" | "skip";

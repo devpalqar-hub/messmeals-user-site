@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Share2, Copy, Mail, X } from "lucide-react";
+import { Share2, Copy, X } from "lucide-react";
+import { Mail } from "../SvgIcon/SvgIcon";
 import { useToast } from "../../../context/ToastContext";
 import styles from "./ShareButton.module.css";
 

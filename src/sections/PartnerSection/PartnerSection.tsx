@@ -1,16 +1,8 @@
 "use client";
 
 import styles from './PartnerSection.module.css';
-import {
-  Smartphone,
-  Store,
-  FileText,
-  Users,
-  Handshake,
-  BarChart2,
-  Settings,
-  ArrowRight
-} from 'lucide-react';
+import { Smartphone, FileText, Handshake, BarChart2, ArrowRight } from "lucide-react";
+import { Store, Users, Settings } from "../../components/ui/SvgIcon/SvgIcon";
 import { useRouter } from 'next/navigation';
 
 const FEATURES = [

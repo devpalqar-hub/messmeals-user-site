@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Utensils, LucideInfo, ClipboardList } from "lucide-react";
+import { LucideInfo } from "lucide-react";
+import { House, Utensils, ClipboardList } from "../../ui/SvgIcon/SvgIcon";
 // import { useAuth } from "../../../context/AuthContext";
 import styles from "./MobileBottomNav.module.css";
 

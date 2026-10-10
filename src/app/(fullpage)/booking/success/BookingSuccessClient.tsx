@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Truck, UserCircle, PartyPopper } from "lucide-react";
+import { Truck, PartyPopper } from "lucide-react";
+import { UserCircle } from "../../../../components/ui/SvgIcon/SvgIcon";
 import styles from "./BookingSuccessClient.module.css";
 
 export default function BookingSuccessClient() {

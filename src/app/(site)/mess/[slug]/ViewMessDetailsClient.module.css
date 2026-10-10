@@ -272,6 +272,10 @@
   flex-shrink: 0;
 }
 
+.section-title > span {
+  color: #63e100;
+}
+
 /* Plans Section */
 .plans-section-header {
   display: flex;

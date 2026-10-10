@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Phone, X } from "lucide-react";
+import { X } from "lucide-react";
+import { Phone } from "../SvgIcon/SvgIcon";
 import styles from "./FloatingContact.module.css";
 
 const WhatsappIcon = ({ size = 18, color = "currentColor" }: { size?: number, color?: string }) => (
