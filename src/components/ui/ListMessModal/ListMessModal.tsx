@@ -101,6 +101,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
         <form className={styles["modal-form"]} onSubmit={handleSubmit}>
           <input
             name="ownerName"
+            aria-label="Mess Owner Name"
             placeholder="Mess Owner Name"
             value={form.ownerName}
             onChange={handleChange}
@@ -109,6 +110,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
 
           <input
             name="messName"
+            aria-label="Mess Name"
             placeholder="Mess Name"
             value={form.messName}
             onChange={handleChange}
@@ -118,6 +120,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
           <input
             type="email"
             name="email"
+            aria-label="Email address"
             placeholder="Mess Mail ID"
             value={form.email}
             onChange={handleChange}
@@ -127,6 +130,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
           <input
             type="tel"
             name="phone"
+            aria-label="Phone number"
             placeholder="Phone No"
             value={form.phone}
             onChange={handleChange}
@@ -135,6 +139,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
 
           <select
             name="district"
+            aria-label="District"
             value={form.district}
             onChange={handleChange}
             required
@@ -147,6 +152,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
 
           <input
             name="locality"
+            aria-label="Locality or Pincode"
             placeholder="Locality - Pincode"
             value={form.locality}
             onChange={handleChange}
@@ -154,6 +160,7 @@ export default function ListMessModal({ isOpen, onClose }: Props) {
 
           <textarea
             name="message"
+            aria-label="Additional message"
             placeholder="Additional Message"
             rows={3}
             value={form.message}

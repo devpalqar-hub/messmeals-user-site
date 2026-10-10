@@ -1,0 +1,44 @@
+.wrapper {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.card {
+  max-width: 420px;
+}
+
+.code {
+  margin: 0;
+  font-size: 64px;
+  font-weight: 700;
+  color: #55c500;
+  line-height: 1;
+}
+
+.title {
+  margin: 12px 0 8px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1b1b1b;
+}
+
+.desc {
+  margin: 0 0 24px;
+  color: #6b6b6b;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.link {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background-color: #55c500;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}

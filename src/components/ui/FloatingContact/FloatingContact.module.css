@@ -1,0 +1,260 @@
+/* ─────────────────────────────────────────
+   Floating Contact Button  –  CSS Module
+   Brand color: #18864b (Updated for Mess Meals)
+───────────────────────────────────────── */
+
+/* ── Outer wrapper ── */
+.container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* ── Expanded contact card ── */
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow:
+    0 8px 32px rgba(24, 134, 75, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 18px 20px 14px;
+  min-width: 230px;
+  border: 1px solid rgba(24, 134, 75, 0.15);
+  position: relative;
+  overflow: hidden;
+
+  /* Animation defaults (Hidden state) */
+  opacity: 0;
+  transform: scale(0.85) translateY(16px);
+  transform-origin: bottom right;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+.cardOpen {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #18864b, #22c55e);
+  border-radius: 18px 18px 0 0;
+}
+
+.cardLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #18864b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-family: inherit;
+}
+
+/* ── Card action buttons ── */
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Call button */
+.btnCall {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #18864b;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(24, 134, 75, 0.3);
+}
+
+.btnCall:hover {
+  background: #126336;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(24, 134, 75, 0.4);
+}
+
+.btnCall:active {
+  transform: scale(0.97);
+}
+
+/* WhatsApp button */
+.btnWA {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #f0fdf4;
+  color: #25d366;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid #25d36630;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btnWA:hover {
+  background: #dcfce7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+}
+
+.btnWA:active {
+  transform: scale(0.97);
+}
+
+/* ── Main floating trigger button ── */
+.trigger {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e 0%, #18864b 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 20px rgba(24, 134, 75, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.trigger:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 6px 28px rgba(24, 134, 75, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.14);
+}
+
+.trigger:active {
+  transform: scale(0.95);
+}
+
+/* ── Icon rotation ── */
+.iconWrapper {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.iconPhone, .iconClose {
+  position: absolute;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.iconClose {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.iconOpen {
+  transform: rotate(90deg);
+}
+
+.iconOpen .iconPhone {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.iconOpen .iconClose {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* ── Pulse ring ── */
+.pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2.5px solid #22c55e;
+  opacity: 0;
+  animation: pulseRing 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.pulse2 {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2.5px solid #22c55e;
+  opacity: 0;
+  animation: pulseRing 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.8s;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.pulseHidden {
+  opacity: 0 !important;
+  animation: none;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .container {
+    bottom: 18px;
+    right: 16px;
+  }
+
+  .trigger {
+    width: 52px;
+    height: 52px;
+  }
+
+  .card {
+    min-width: 200px;
+    padding: 14px 16px 12px;
+  }
+
+  .btnCall,
+  .btnWA {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}

@@ -1,6 +1,6 @@
 import type { Address, AddressPayload } from "../types/address";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export const getAddresses = async (token: string): Promise<Address[]> => {
   const response = await fetch(`${API_BASE_URL}/address`, {
