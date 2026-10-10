@@ -4,7 +4,8 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { getAllMess, getSearchSuggestions, type MessListFilters, type SearchSuggestionResponse } from "../../../services/messApi";
 import type { MessListing, MessMeta } from "../../../types/mess";
 import { // Star, // commented out — new API does not return ratings
-  Search, Filter, X, ArrowRight, Star, Loader2, Sparkles } from "lucide-react";
+  Search, Filter, X, ArrowRight, Loader2, Sparkles
+} from "lucide-react";
 import { MapPin, Utensils, ShieldCheck, BadgeCheck, Store, Users, Salad, FeaturedChecklist } from "../../../components/ui/SvgIcon/SvgIcon";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
