@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { House, Utensils, LucideInfo, BookOpen, Menu, X, ChevronRight, Plus, ArrowRight } from "lucide-react";
+import { LucideInfo, BookOpen, Menu, X, ChevronRight, Plus, ArrowRight } from "lucide-react";
+import { House, Utensils } from "../../ui/SvgIcon/SvgIcon";
 import styles from "./Navbar.module.css";
 import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 // import { useAuth } from "../../../context/AuthContext";
@@ -87,7 +88,7 @@ export default function Navbar() {
 
           {/* LEFT — Logo */}
           <div className={styles["navbar-left"]} onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
-            <img src="/logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
+            <img src="/Messmeals Logo.png" alt="MessMeals Home" className={styles["logo-image"]} />
           </div>
 
           {/* CENTER — Nav links (desktop) */}
@@ -166,7 +167,7 @@ export default function Navbar() {
       >
         {/* Sidebar header */}
         <div className={styles["sidebar-header"]}>
-          <img src="/logo.png" alt="MessMeals" className={styles["sidebar-logo"]} />
+          <img src="/Messmeals Logo.png" alt="MessMeals" className={styles["sidebar-logo"]} />
           <button
             className={styles["sidebar-close"]}
             onClick={closeNavbar}

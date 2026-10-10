@@ -3,22 +3,9 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { getAllMess, getSearchSuggestions, type MessListFilters, type SearchSuggestionResponse } from "../../../services/messApi";
 import type { MessListing, MessMeta } from "../../../types/mess";
-import {
-  MapPin,
-  // Star, // commented out — new API does not return ratings
-  Search,
-  Filter,
-  X,
-  Utensils,
-  ShieldCheck,
-  BadgeCheck,
-  ArrowRight,
-  Star,
-  Loader2,
-  Store,
-  Users,
-  Sparkles,
-} from "lucide-react";
+import { // Star, // commented out — new API does not return ratings
+  Search, Filter, X, ArrowRight, Star, Loader2, Sparkles } from "lucide-react";
+import { MapPin, Utensils, ShieldCheck, BadgeCheck, Store, Users, Salad, FeaturedChecklist } from "../../../components/ui/SvgIcon/SvgIcon";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import styles from "./ViewAllListingsClient.module.css";
@@ -449,7 +436,7 @@ export default function ViewAllListingsClient({
           {/* Plan Type */}
           <div className={styles["filter-group"]}>
             <label>
-              <Star size={15} />
+              <Salad size={15} />
               Plan Type
             </label>
             <select
@@ -481,7 +468,7 @@ export default function ViewAllListingsClient({
           {/* Featured */}
           <div className={styles["filter-group"]}>
             <label>
-              <Star size={15} />
+              <FeaturedChecklist size={15} />
               Featured
             </label>
             <select
@@ -560,6 +547,7 @@ export default function ViewAllListingsClient({
                           <div className={styles["card-name-row"]}>
                             {mess.status.isVerified && (
                               <BadgeCheck
+                                size={16}
                                 className={styles["inline-verified-badge"]}
                                 aria-label="Verified Mess"
                               />

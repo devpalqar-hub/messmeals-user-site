@@ -1,23 +1,8 @@
 import type { Metadata } from "next";
 import styles from "./page.module.css";
 import FaqItem from "./FaqItem";
-import {
-  Store,
-  UtensilsCrossed,
-  Users,
-  Bike,
-  BarChart2,
-  Tag,
-  Download,
-  UserPlus,
-  TrendingUp,
-  Star,
-  ShieldCheck,
-  Smartphone,
-  Settings,
-  ArrowRight,
-  HelpCircle,
-} from "lucide-react";
+import { Bike, BarChart2, Tag, Download, UserPlus, TrendingUp, Star, Smartphone, ArrowRight, HelpCircle } from "lucide-react";
+import { Store, UtensilsCrossed, Users, ShieldCheck, Settings } from "../../../components/ui/SvgIcon/SvgIcon";
 
 export const metadata: Metadata = {
   title: "MessMeals Admin - Manage Your Mess Anytime, Anywhere",

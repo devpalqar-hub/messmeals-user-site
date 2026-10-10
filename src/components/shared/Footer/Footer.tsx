@@ -1,5 +1,6 @@
 import styles from "./Footer.module.css";
-import { Facebook, Instagram, Building2, Linkedin, Compass, ShieldCheck } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { Building2, Compass, ShieldCheck } from "../../ui/SvgIcon/SvgIcon";
 import Link from "next/link";
 
 export default function Footer() {
@@ -10,9 +11,7 @@ export default function Footer() {
           {/* LEFT BRAND */}
           <div className={styles["footer-brand"]}>
             <Link href="/" className={styles.brand}>
-              <span className={styles["logo-text"]}>
-                <span className={styles["logo-m"]}>M</span>essmeals
-              </span>
+              <img src="/Messmeals Logo.png" alt="MessMeals" className={styles["logo-image"]} />
             </Link>
 
             <p>

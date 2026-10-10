@@ -2,7 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Phone, ShieldCheck, ArrowLeft, BadgeCheck, User, Mail } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Phone, ShieldCheck, BadgeCheck, User, Mail } from "../../../components/ui/SvgIcon/SvgIcon";
 import { checkPhone, sendRegOtp, verifyLoginOtp, verifyRegOtp, OTP_LENGTH } from "../../../services/authService";
 import { useAuth } from "../../../context/AuthContext";
 import { useToast } from "../../../context/ToastContext";
@@ -228,7 +229,7 @@ export default function LoginClient() {
       <div className={styles["login-card-wrap"]}>
         <div className={styles["login-card"]}>
           <div className={styles["login-brand"]}>
-            <img src="/logo.png" alt="MessMeals" className={styles["logo-image"]} />
+            <img src="/Messmeals Logo.png" alt="MessMeals" className={styles["logo-image"]} />
           </div>
 
           {step === "phone" && (

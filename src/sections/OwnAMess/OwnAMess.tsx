@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./OwnAMess.module.css";
-import { Store } from "lucide-react";
+import { Store } from "../../components/ui/SvgIcon/SvgIcon";
 
 export default function OwnAMess() {
   return (

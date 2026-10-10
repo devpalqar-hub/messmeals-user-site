@@ -4,28 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { getMessBySlug } from "../../../../services/messApi";
 import type { MessDetails, NewMessPlan } from "../../../../types/mess";
+// Star intentionally omitted — new API does not return ratings
 import {
-  MapPin,
-  // Star, // commented out — new API does not return ratings
-  Phone,
-  Mail,
-  // Clock,
-  Check,
-  Leaf,
-  Salad,
-  Drumstick,
-  MessageCircle,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  Images,
-  CalendarDays,
-  Sun,
-  Utensils,
-  Moon,
-  Coffee,
-  Tag,
+  Tag, Images, MessageCircle, X, ChevronLeft, ChevronRight, CalendarDays, Sun, Moon,
 } from "lucide-react";
+import { Phone, MapPin, Mail, Utensils, Coffee, Salad, Drumstick, Leaf, BadgeCheck } from "../../../../components/ui/SvgIcon/SvgIcon";
 // import { useAuth } from "../../../../context/AuthContext";
 import FloatingContact from "../../../../components/ui/FloatingContact/FloatingContact";
 import ShareButton from "../../../../components/ui/ShareButton/ShareButton";
@@ -341,9 +324,7 @@ export default function ViewMessDetailsClient({
                 <div className={styles["hero-badges"]}>
                   {mess.status.isVerified && (
                     <span className={styles["verified-badge"]}>
-                      <span className={styles["verified-badge-icon"]}>
-                        <Check size={11} />
-                      </span>
+                      <BadgeCheck size={18} color="#fff" />
                       Verified Mess
                     </span>
                   )}

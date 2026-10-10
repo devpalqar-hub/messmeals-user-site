@@ -1,6 +1,7 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, MapPin, ArrowRight, Utensils, Users, BadgeCheck, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from "lucide-react";
+import { MapPin, Utensils, Users, BadgeCheck } from "../../../../components/ui/SvgIcon/SvgIcon";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import type { MessListing } from "../../../../types/mess";
@@ -51,6 +52,7 @@ function MessCard({ mess }: { mess: MessListing }) {
         <div className={styles["mess-card-name-row"]}>
           {mess.status.isVerified && (
             <BadgeCheck
+              size={16}
               className={styles["mess-card-verified"]}
               aria-label="Verified Mess"
             />

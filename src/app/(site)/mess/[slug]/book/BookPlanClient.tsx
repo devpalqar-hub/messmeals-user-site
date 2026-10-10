@@ -2,23 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import {
-  MapPin,
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  CheckCircle2,
-  CreditCard,
-  Home,
-  Loader2,
-  Utensils,
-  Wallet,
-  Sun,
-  Moon,
-  Coffee,
-  Salad,
-} from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, Plus, CheckCircle2, CreditCard, Loader2, Wallet, Sun, Moon, Coffee, Salad } from "lucide-react";
+import { MapPin, Home, Utensils } from "../../../../../components/ui/SvgIcon/SvgIcon";
 import { getPlanById } from "../../../../../services/messApi";
 import { choosePlan, getPlanPrice } from "../../../../../services/bookingService";
 import { getAddresses, createAddress } from "../../../../../services/addressService";

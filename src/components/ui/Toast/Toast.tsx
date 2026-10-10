@@ -1,4 +1,5 @@
-import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { X, AlertCircle, Info } from "lucide-react";
+import { CheckCircle, AlertTriangle } from "../SvgIcon/SvgIcon";
 import type { ToastMessage } from "../../../context/ToastContext";
 import styles from "./Toast.module.css";
 
