@@ -4,7 +4,7 @@
 // Server→Client boundary is not serializable in React Server Components.
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "../../components/ui/SvgIcon/SvgIcon";
 import MessListingRow from "../../components/ui/MessListingRow/MessListingRow";
 
 import type { MessListing } from "../../types/mess";

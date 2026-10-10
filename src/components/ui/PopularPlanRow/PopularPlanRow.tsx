@@ -3,19 +3,8 @@
 import styles from "./PopularPlanRow.module.css";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Flame,
-  MapPin,
-  ArrowRight,
-  Users,
-  Utensils,
-  Sun,
-  Moon,
-  Coffee,
-  Salad,
-  Sparkles,
-  LucideArrowRight,
-} from "lucide-react";
+import { Flame, ArrowRight, Sun, Moon, Coffee, Salad, Sparkles, LucideArrowRight } from "lucide-react";
+import { MapPin, Users, Utensils } from "../SvgIcon/SvgIcon";
 import { getPopularPlans } from "../../../services/popularPlansApi";
 import type { PopularPlan } from "../../../types/popularPlan";
 

@@ -36,9 +36,10 @@
   flex-shrink: 0;
 }
 
-.trending-icon svg {
-  width: 62%;
-  height: 62%;
+.trending-icon svg,
+.trending-icon > span {
+  width: 62% !important;
+  height: 62% !important;
 }
 
 .trending-header p {

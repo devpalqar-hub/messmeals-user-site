@@ -4,18 +4,9 @@ import styles from "./MessListingRow.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  MapPin,
-  // Star, // commented out — new API does not return ratings
-  ArrowRight,
-  Check,
-  Star as StarIcon,
-  ShieldCheck,
-  Users,
-  Sparkles,
-  type LucideIcon,
-  LucideArrowRight,
-} from "lucide-react";
+import { // Star, // commented out — new API does not return ratings
+  ArrowRight, Check, Star as StarIcon, Sparkles, type LucideIcon, LucideArrowRight } from "lucide-react";
+import { MapPin, ShieldCheck, Users } from "../SvgIcon/SvgIcon";
 import { getAllMess, type MessListFilters } from "../../../services/messApi";
 import type { MessListing } from "../../../types/mess";
 
@@ -23,7 +14,7 @@ export type RowBadgeType = "featured" | "verified" | "top-rated" | "affordable" 
 
 type MessListingRowProps = {
   title: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | ((props: { size?: number | string }) => React.ReactElement);
   subtitle: string;
   badgeType?: RowBadgeType;
   limit?: number;

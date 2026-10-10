@@ -10,7 +10,7 @@
   background: #ffffff;
   border: 1px solid #EEF2EE;
   box-shadow: 0 4px 24px rgba(28, 58, 28, 0.05);
-  padding: 40px 44px 20px;
+  padding: 40px clamp(14px, 3.5vw, 28px) 20px;
   box-sizing: border-box;
   animation: footerFadeUp 0.5s ease both;
 }
@@ -38,6 +38,12 @@
   display: inline-flex;
   text-decoration: none;
   margin-bottom: 10px;
+}
+
+.logo-image {
+  height: clamp(20px, 4vw, 26px);
+  width: auto;
+  object-fit: contain;
 }
 
 .logo-text {
@@ -221,7 +227,7 @@
 /* Tablet */
 @media (max-width: 1024px) {
   .footer {
-    padding: 32px 32px 18px;
+    padding: 32px 18px 18px;
   }
 
   .footer-container {
@@ -236,7 +242,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .footer {
-    padding: 26px 22px 16px;
+    padding: 26px 16px 16px;
   }
 
   .footer-container {
@@ -299,7 +305,7 @@
 /* Small Mobile */
 @media (max-width: 480px) {
   .footer {
-    padding: 20px 16px 14px;
+    padding: 20px 12px 14px;
   }
 
   .footer-container {
@@ -350,7 +356,7 @@
 /* Very small phones — only when necessary */
 @media (max-width: 360px) {
   .footer {
-    padding: 16px 12px 12px;
+    padding: 16px 10px 12px;
   }
 
   .logo-text {
@@ -373,5 +379,13 @@
 
   .footer-bottom {
     font-size: 11px;
+  }
+}
+
+/* Extremely narrow screens � matches navbar */
+@media (max-width: 300px) {
+  .footer {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 }

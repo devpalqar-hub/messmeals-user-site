@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CreditCard, Wifi, ShieldAlert } from "lucide-react";
+import { CreditCard, Wifi } from "lucide-react";
+import { ShieldAlert } from "../../../../components/ui/SvgIcon/SvgIcon";
 import styles from "./BookingCancelClient.module.css";
 
 export default function BookingCancelClient() {

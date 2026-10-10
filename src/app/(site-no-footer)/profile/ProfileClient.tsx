@@ -3,25 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import {
-  User,
-  Phone,
-  LogOut,
-  CalendarDays,
-  MapPin,
-  Mail,
-  Wallet,
-  Plus,
-  Loader2,
-  UtensilsCrossed,
-  Clock,
-  ChevronRight,
-  CalendarCheck2,
-  BadgeCheck,
-  Ban,
-  PauseCircle,
-  RotateCcw,
-} from "lucide-react";
+import { CalendarDays, Wallet, Plus, Loader2, Clock, ChevronRight, CalendarCheck2, PauseCircle, RotateCcw } from "lucide-react";
+import { User, Phone, LogOut, MapPin, Mail, UtensilsCrossed, BadgeCheck, Ban } from "../../../components/ui/SvgIcon/SvgIcon";
 import { useAuth } from "../../../context/AuthContext";
 import { getUserProfile } from "../../../services/userService";
 import { getAddresses } from "../../../services/addressService";

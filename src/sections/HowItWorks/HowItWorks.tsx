@@ -1,7 +1,8 @@
 "use client";
 
 import styles from "./HowItWorks.module.css";
-import { MapPin, SlidersHorizontal, UtensilsCrossed, CalendarCheck, ArrowRight, ArrowDown } from "lucide-react";
+import { ArrowRight, ArrowDown } from "lucide-react";
+import { MapPin, SlidersHorizontal, UtensilsCrossed, CalendarCheck } from "../../components/ui/SvgIcon/SvgIcon";
 import { useRouter } from "next/navigation";
 
 const STEPS = [

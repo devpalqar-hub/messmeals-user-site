@@ -34,7 +34,7 @@
 }
 
 .logo-image {
-  height: clamp(32px, 5vw, 40px);
+  height: clamp(20px, 4vw, 26px);
   width: auto;
   object-fit: contain;
 }
@@ -503,10 +503,6 @@
     height: 52px;
   }
 
-  .logo-image {
-    height: 30px;
-  }
-
   .sidebar-logo {
     height: 28px;
   }
@@ -563,10 +559,6 @@
   .navbar {
     padding: 0 8px;
     height: 48px;
-  }
-
-  .logo-image {
-    height: 26px;
   }
 
   .navbar-toggler {

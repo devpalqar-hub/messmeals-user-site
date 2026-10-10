@@ -4,18 +4,8 @@ import styles from "./HeroSection.module.css";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import {
-  Search,
-  Utensils,
-  CalendarDays,
-  ChevronDown,
-  ArrowRight,
-  MapPin,
-  Store,
-  Loader2,
-  Home,
-  LayoutGrid,
-} from "lucide-react";
+import { CalendarDays, ChevronDown, ArrowRight, Loader2, LayoutGrid } from "lucide-react";
+import { Search, Utensils, MapPin, Store, Home } from "../../components/ui/SvgIcon/SvgIcon";
 import { useRef, useState, useEffect } from "react";
 import type { Variants } from "framer-motion";
 import { getSearchSuggestions } from "../../services/messApi";
@@ -213,7 +203,7 @@ export default function HeroSection() {
         alt=""
         fill
         priority
-        sizes="100vw"
+        sizes="(max-width: 768px) 1px, 100vw"
         style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
         className={styles["hero-bg-desktop"]}
         aria-hidden="true"
@@ -224,7 +214,7 @@ export default function HeroSection() {
         alt=""
         fill
         priority
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, 1px"
         style={{ objectFit: "cover", objectPosition: "center", zIndex: -1, pointerEvents: "none" }}
         className={styles["hero-bg-mobile"]}
         aria-hidden="true"
