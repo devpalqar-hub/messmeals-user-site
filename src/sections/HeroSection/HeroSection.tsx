@@ -240,7 +240,7 @@ export default function HeroSection() {
           variants={fadeUp}
         >
           Find a Mess<br />
-          Available <span>Near You</span>
+          <span>Near You</span>
         </motion.h1>
 
         {/* Subtitle */}

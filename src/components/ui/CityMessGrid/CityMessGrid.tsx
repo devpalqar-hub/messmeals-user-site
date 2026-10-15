@@ -1,42 +1,49 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from "lucide-react";
-import { MapPin, Utensils, Users, BadgeCheck } from "../../../../components/ui/SvgIcon/SvgIcon";
+import { MapPin, Utensils, Users, BadgeCheck } from "../SvgIcon/SvgIcon";
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import type { MessListing } from "../../../../types/mess";
-import styles from "./page.module.css";
+import type { MessListing } from "../../../types/mess";
+import { formatSubscribers } from "../../../utils/subscribers";
+import styles from "./CityMessGrid.module.css";
 
 function MessImage({ src, alt }: { src?: string | null; alt: string }) {
-  const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
+  const [imgSrc, setImgSrc] = useState(src || "/MessMealsfallback.png");
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={imgSrc}
       alt={alt}
       loading="lazy"
-      onError={() => setImgSrc("/food-placeholder.png")}
+      onError={() => setImgSrc("/MessMealsfallback.png")}
     />
   );
 }
 
-function MessCard({ mess }: { mess: MessListing }) {
+function MessCard({
+  mess,
+  defaultCity,
+}: {
+  mess: MessListing;
+  defaultCity?: string;
+}) {
   const foodLabel =
     mess.foodTypes && mess.foodTypes.length > 0
       ? mess.foodTypes
-          .map((f) =>
-            f === "VEG" ? "Vegetarian" : f === "NON_VEG" ? "Non-Veg" : "Mixed"
-          )
-          .join(" · ")
+        .map((f) =>
+          f === "VEG" ? "Vegetarian" : f === "NON_VEG" ? "Non-Veg" : "Mixed"
+        )
+        .join(" · ")
       : null;
 
   return (
     <article className={styles["mess-card"]}>
       <div className={styles["mess-card-image"]}>
-        <MessImage src={mess.coverImage} alt={mess.messName} />
+        <MessImage src={mess.logo || mess.coverImage} alt={mess.messName} />
         {mess.totalSubscribers !== undefined &&
           mess.totalSubscribers !== null &&
-          (mess.totalSubscribers === 0 ? (
+          (mess.totalSubscribers < 5 ? (
             <span className={styles["card-new-badge"]}>
               <Sparkles size={11} />
               New
@@ -44,7 +51,7 @@ function MessCard({ mess }: { mess: MessListing }) {
           ) : (
             <span className={styles["card-subs-badge"]}>
               <Users size={12} />
-              {mess.totalSubscribers} Subscribers
+              {formatSubscribers(mess.totalSubscribers)}
             </span>
           ))}
       </div>
@@ -64,7 +71,8 @@ function MessCard({ mess }: { mess: MessListing }) {
           <span>
             {mess.address.address ||
               mess.address.location ||
-              "Thiruvananthapuram"}
+              defaultCity ||
+              "Location not set"}
           </span>
         </div>
         {foodLabel && (
@@ -100,9 +108,18 @@ function MessCard({ mess }: { mess: MessListing }) {
   );
 }
 
-export default function TvmMessGrid({ messes }: { messes: MessListing[] }) {
+export type CityMessGridProps = {
+  messes: MessListing[];
+  defaultCity?: string;
+  itemsPerPage?: number;
+};
+
+export default function CityMessGrid({
+  messes,
+  defaultCity,
+  itemsPerPage = 8,
+}: CityMessGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
   const totalPages = Math.ceil(messes.length / itemsPerPage);
 
@@ -131,7 +148,7 @@ export default function TvmMessGrid({ messes }: { messes: MessListing[] }) {
     <div className={styles["listings-container"]}>
       <div className={styles["listings-grid"]}>
         {currentMesses.map((mess) => (
-          <MessCard key={mess.id} mess={mess} />
+          <MessCard key={mess.id} mess={mess} defaultCity={defaultCity} />
         ))}
       </div>
 

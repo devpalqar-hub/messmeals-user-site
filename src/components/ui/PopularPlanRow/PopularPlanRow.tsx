@@ -7,30 +7,20 @@ import { Flame, ArrowRight, Sun, Moon, Coffee, Salad, Sparkles, LucideArrowRight
 import { MapPin, Users, Utensils } from "../SvgIcon/SvgIcon";
 import { getPopularPlans } from "../../../services/popularPlansApi";
 import type { PopularPlan } from "../../../types/popularPlan";
+import { formatSubscribers } from "../../../utils/subscribers";
 
 /* ---------------- IMAGE COMPONENT ---------------- */
 function PlanImage({ src, alt }: { src?: string | null; alt: string }) {
-  const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
+  const [imgSrc, setImgSrc] = useState(src || "/Planfallback.png");
 
   return (
     <img
       src={imgSrc}
       alt={alt}
       loading="lazy"
-      onError={() => setImgSrc("/food-placeholder.png")}
+      onError={() => setImgSrc("/Planfallback.png")}
     />
   );
-}
-
-/* ---------------- SUBSCRIBER LABEL ---------------- */
-function formatSubscribers(count: number): string | null {
-  if (count <= 0) return null;
-  if (count < 10) return `${count} subscribers`;
-  // Round down to nearest 10/50/100 etc.
-  if (count < 50) return "10+ subscribers";
-  if (count < 100) return "50+ subscribers";
-  if (count < 500) return "100+ subscribers";
-  return "500+ subscribers";
 }
 
 /* ---------------- VARIATION CONFIG (matches mess details page) ---------------- */
@@ -168,12 +158,12 @@ export default function PopularPlanRow({ initialData }: { initialData?: PopularP
                   </span>
 
                   {/* Subscriber count */}
-                  {plan.totalCustomers === 0 ? (
+                  {!subscriberLabel ? (
                     <span className={styles["badge-new"]}>
                       <Sparkles size={11} />
                       New
                     </span>
-                  ) : subscriberLabel && (
+                  ) : (
                     <span className={styles["badge-subscribers"]}>
                       <Users size={11} />
                       {subscriberLabel}
