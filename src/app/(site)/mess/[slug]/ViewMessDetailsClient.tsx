@@ -242,7 +242,7 @@ export default function ViewMessDetailsClient({
     alt: string;
     className?: string;
   }) {
-    const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
+    const [imgSrc, setImgSrc] = useState(src || "/MessMealsfallback.png");
 
     return (
       <img
@@ -250,7 +250,7 @@ export default function ViewMessDetailsClient({
         src={imgSrc}
         alt={alt}
         loading="lazy"
-        onError={() => setImgSrc("/food-placeholder.png")}
+        onError={() => setImgSrc("/MessMealsfallback.png")}
       />
     );
   }
