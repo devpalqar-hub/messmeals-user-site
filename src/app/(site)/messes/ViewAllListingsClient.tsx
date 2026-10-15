@@ -10,6 +10,7 @@ import { MapPin, Utensils, ShieldCheck, BadgeCheck, Store, Users, Salad, Feature
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import styles from "./ViewAllListingsClient.module.css";
+import { formatSubscribers } from "../../../utils/subscribers";
 
 const LIMIT = 6;
 
@@ -31,13 +32,13 @@ function SkeletonCard() {
 }
 
 function MessImage({ src, alt }: { src?: string | null; alt: string }) {
-  const [imgSrc, setImgSrc] = useState(src || "/food-placeholder.png");
+  const [imgSrc, setImgSrc] = useState(src || "/MessMealsfallback.png");
   return (
     <img
       src={imgSrc}
       alt={alt}
       loading="lazy"
-      onError={() => setImgSrc("/food-placeholder.png")}
+      onError={() => setImgSrc("/MessMealsfallback.png")}
     />
   );
 }
@@ -524,12 +525,12 @@ export default function ViewAllListingsClient({
                     <article className={styles["listing-card"]} key={mess.id}>
                       <div className={styles["image-wrap"]}>
                         <MessImage
-                          src={mess.coverImage}
+                          src={mess.logo}
                           alt={mess.messName}
                         />
 
                         {mess.totalSubscribers !== undefined && mess.totalSubscribers !== null && (
-                          mess.totalSubscribers === 0 ? (
+                          mess.totalSubscribers < 5 ? (
                             <span className={styles["new-badge"]}>
                               <Sparkles size={11} />
                               New
@@ -537,7 +538,7 @@ export default function ViewAllListingsClient({
                           ) : (
                             <span className={styles["subscribers-badge"]}>
                               <Users size={12} />
-                              {mess.totalSubscribers} Subscribers
+                              {formatSubscribers(mess.totalSubscribers)}
                             </span>
                           )
                         )}

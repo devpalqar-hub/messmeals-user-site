@@ -57,7 +57,7 @@ export default function Footer() {
                 Company
               </h4>
               <Link href="/about">About Us</Link>
-              <Link href="#">Blog</Link>
+              <Link href="/blog">Blog</Link>
             </div>
 
             <div className={styles["link-group"]}>

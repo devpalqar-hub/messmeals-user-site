@@ -19,16 +19,16 @@ const beVietnamPro = Be_Vietnam_Pro({
 // `window.location.origin` computation.
 export const metadata: Metadata = {
   metadataBase: new URL("https://messmeals.com"),
-  title: "MessMeals – Find the Best Mess & Homely Food Near You",
+  title: "Find a Mess Near You | Meal Plans & Homely Food | MessMeals",
   description:
-    "Discover the best verified messes and homely food near you. Explore daily and monthly meal plans, reviews, and menus on MessMeals.",
+    "Search nearby messes on MessMeals. Compare menus, daily and monthly meal plans, food options and prices to find meals that fit your routine.",
   icons: {
     icon: "/favicon.png",
   },
   openGraph: {
-    title: "MessMeals – Find the Best Mess & Homely Food Near You",
+    title: "Find a Mess Near You | Meal Plans & Homely Food | MessMeals",
     description:
-      "Discover the best verified messes and homely food near you. Explore daily and monthly meal plans, reviews, and menus on MessMeals.",
+      "Search nearby messes on MessMeals. Compare menus, daily and monthly meal plans, food options and prices to find meals that fit your routine.",
     images: ["/seo/og-home.png"],
     url: "/",
     type: "website",

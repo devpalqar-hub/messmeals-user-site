@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
-
 import Script from "next/script";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Briefcase, Coffee, Leaf, CalendarDays, ListChecks, CheckCircle2, ChevronRight, Star, GraduationCap } from "lucide-react";
 import { MapPin, Utensils, Home } from "../../../../components/ui/SvgIcon/SvgIcon";
 import { getAllMess } from "../../../../services/messApi";
 import type { MessListing } from "../../../../types/mess";
+import FaqItem from "../../../../components/ui/FaqItem/FaqItem";
+import CityMessGrid from "../../../../components/ui/CityMessGrid/CityMessGrid";
 import styles from "./page.module.css";
-import ErnMessGrid from "./ErnMessGrid";
-import ErnFaqItem from "./ErnFaqItem";
 
 // ─── Ernakulam (Kochi) centre coordinates ────────────────────────────────────
 const ERN_LAT = "9.9312";
 const ERN_LNG = "76.2673";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
-
 export const metadata: Metadata = {
-  title: "Messes in Ernakulam (Kochi) | Meal Plans & Menus | MessMeals",
+  title: "Messes in Ernakulam & Kochi | Homely Food | MessMeals",
   description:
-    "Find messes and homely food in Ernakulam (Kochi). Explore meal plans, menus and food options on MessMeals and find meals that fit your routine.",
-  alternates: { canonical: "/messes/ernakulam/" },
+    "Find messes in Ernakulam and Kochi. Explore homely food options, menus, and available daily or monthly meal plans on MessMeals.",
+  alternates: {
+    canonical: "/messes/ernakulam/",
+  },
   openGraph: {
-    title: "Messes in Ernakulam (Kochi) | MessMeals",
+    title: "Messes in Ernakulam & Kochi | Homely Food | MessMeals",
     description:
-      "Explore messes, homely food, meal plans and menus across Ernakulam with MessMeals.",
-    url: "/messes/ernakulam/",
+      "Explore messes in Ernakulam and Kochi, browse available menus, and check daily or monthly meal plans on MessMeals.",
+    url: "https://messmeals.com/messes/ernakulam/",
+    type: "website",
   },
 };
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
-
 const AREAS = [
   { name: "Kakkanad" },
   { name: "Edappally" },
@@ -39,7 +39,6 @@ const AREAS = [
   { name: "Kalamassery" },
   { name: "Maradu" },
   { name: "Palarivattom" },
-  { name: "Vytilla" },
   { name: "Vyttila" },
   { name: "Fort Kochi" },
   { name: "Mattancherry" },
@@ -50,22 +49,22 @@ const AUDIENCE_CARDS = [
   {
     icon: GraduationCap,
     label: "For Students",
-    desc: "Find regular meal options while studying, living in a hostel or staying away from home in Kochi.",
+    desc: "Explore nearby messes for everyday meals while studying or living away from home.",
   },
   {
     icon: Briefcase,
     label: "For Working Professionals",
-    desc: "Explore convenient everyday food options that fit around work schedules across Ernakulam.",
+    desc: "Find meal options that work around your office hours and daily schedule.",
   },
   {
     icon: Home,
     label: "For Hostel & PG Residents",
-    desc: "Discover homely food options when cooking every day isn't practical.",
+    desc: "Browse local food providers when cooking every day is not practical.",
   },
   {
     icon: Coffee,
     label: "For Everyday Meals",
-    desc: "Find regular food options without having to cook every meal yourself.",
+    desc: "Explore everyday meal options that can make your routine easier.",
   },
 ];
 
@@ -73,32 +72,32 @@ const STEPS = [
   {
     n: 1,
     title: "Check the location",
-    desc: "Choose a mess that's practical for where you live, study or work.",
+    desc: "Look for a mess near your home, hostel, college, or workplace, and confirm the address.",
   },
   {
     n: 2,
     title: "Check the meals",
-    desc: "Look at the available meal types and menus.",
+    desc: "Review the menu and food categories shown on the listing.",
   },
   {
     n: 3,
     title: "Compare plans",
-    desc: "Compare daily or monthly plans when multiple options are available.",
+    desc: "Compare the plan duration and listed price when those details are available.",
   },
   {
     n: 4,
     title: "Check food preferences",
-    desc: "Make sure the available food matches your preferences.",
+    desc: "Check whether the provider offers vegetarian, non-vegetarian, or mixed food options.",
   },
   {
     n: 5,
     title: "Review the details",
-    desc: "Check the listing, contact information and other details provided by the mess.",
+    desc: "Review the address, contact details, menu, and any available plan information.",
   },
   {
     n: 6,
     title: "Contact the mess when needed",
-    desc: "Ask the provider about anything that isn't clear before choosing a plan.",
+    desc: "Contact the mess to confirm current availability, timings, prices, and plan terms.",
   },
 ];
 
@@ -123,39 +122,40 @@ const PLAN_CARDS = [
 const FAQS = [
   {
     q: "What is a mess?",
-    a: "A mess is a food service that provides regular meals to customers, often through daily or recurring meal plans. The meals, pricing and plan structure can differ between providers.",
+    a: "A mess is a food service that provides meals to customers, often on a daily or recurring plan. Menus, meal timings, pricing, and plan terms vary between providers.",
   },
   {
     q: "Where can I find messes in Ernakulam?",
-    a: "MessMeals lists messes and food providers across different areas of Ernakulam, including areas such as Kakkanad, Edappally, Kalamassery, Aluva, Tripunithura, Vytilla and others.",
+    a: "Browse the listings on this page to explore messes in Ernakulam and Kochi. The area links include Kakkanad, Edappally, Aluva, Tripunithura, Kalamassery, Vyttila, and other localities. Open each listing to check its exact address and current details.",
   },
   {
     q: "Are there vegetarian messes in Kochi?",
-    a: "Yes. MessMeals includes listings that offer vegetarian food as well as providers offering both vegetarian and non-vegetarian options.",
+    a: "Some listings are marked as vegetarian, while others offer non-vegetarian or mixed food options. Check each listing or contact the provider to confirm the current menu.",
   },
   {
     q: "Are there non-vegetarian messes in Ernakulam?",
-    a: "Yes. Some current MessMeals listings include non-vegetarian options. Check each individual listing for the latest food information.",
+    a: "Some messes list non-vegetarian food options. Review the food category on the individual listing and confirm the current menu directly with the provider.",
   },
   {
     q: "Can I find monthly meal plans in Kochi?",
-    a: "Some MessMeals listings provide recurring meal plans. Check each mess page for the current plans, pricing and meals included.",
+    a: "Some providers may offer daily or recurring meal plans. Check each mess listing for available details, and contact the provider to confirm current pricing, meals, and availability.",
   },
   {
     q: "Can I find mess food near Kakkanad and Infopark?",
-    a: "MessMeals includes listings in and around the Kakkanad and Infopark area. Explore available options based on your location and food preference.",
+    a: "Browse the mess listings in Kakkanad and nearby areas. Check each provider's address to see whether it is convenient for Infopark, and confirm current menus, prices, and availability directly with the mess.",
   },
   {
     q: "Can students find regular food options in Ernakulam?",
-    a: "Yes. Students can explore messes on MessMeals and compare available options based on location, food preference and meal plans.",
+    a: "Students can browse available messes and review location, food preferences, menus, and any meal-plan details shown on each listing. Confirm availability and pricing with the provider before choosing.",
   },
 ];
+
+// ─── Page data and structured data ───────────────────────────────────────────
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ErnakulamPage() {
   let initialData: MessListing[] = [];
-
   try {
     const res = await getAllMess(1, 50, {
       latitude: ERN_LAT,
@@ -167,7 +167,6 @@ export default async function ErnakulamPage() {
   }
 
   // ── Structured Data ───────────────────────────────────────────────────────
-
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -196,25 +195,25 @@ export default async function ErnakulamPage() {
   const collectionPageLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Messes in Ernakulam (Kochi) | MessMeals",
+    name: "Messes in Ernakulam (Kochi) | Meal Plans | MessMeals",
     description:
-      "Find messes and homely food in Ernakulam (Kochi). Explore meal plans, menus and food options on MessMeals.",
+      "Browse messes in Ernakulam (Kochi), explore menus and food options, and check available meal plans on MessMeals.",
     url: "https://messmeals.com/messes/ernakulam/",
   };
 
   const itemListLd =
     initialData.length > 0
       ? {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: "Messes in Ernakulam",
-        itemListElement: initialData.map((mess, idx) => ({
-          "@type": "ListItem",
-          position: idx + 1,
-          name: mess.messName,
-          url: `https://messmeals.com/mess/${mess.slug}`,
-        })),
-      }
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Messes in Ernakulam",
+          itemListElement: initialData.map((mess, idx) => ({
+            "@type": "ListItem",
+            position: idx + 1,
+            name: mess.messName,
+            url: `https://messmeals.com/mess/${mess.slug}`,
+          })),
+        }
       : null;
 
   return (
@@ -244,7 +243,7 @@ export default async function ErnakulamPage() {
           <div className={styles["hero-inner"]}>
             <div className={styles["hero-label"]}>
               <MapPin size={13} />
-              <span>MESSMEALS · ERNAKULAM</span>
+              <span>FIND A MESS · ERNAKULAM</span>
             </div>
             <h1 className={styles["hero-title"]}>
               Messes in{" "}
@@ -252,15 +251,10 @@ export default async function ErnakulamPage() {
               <span className={styles["hero-title-alt"]}>(Kochi)</span>
             </h1>
             <p className={styles["hero-desc"]}>
-              Looking for a mess in Ernakulam, commonly known as Kochi or
-              Cochin? Discover messes and homely food options across the city,
-              explore available meal plans and menus, and find everyday meals
-              that fit your routine.
+              Looking for a mess in Ernakulam or Kochi? Browse local messes and homely food providers, explore available menus and meal plans, and find everyday food options that suit your location and routine.
             </p>
             <p className={styles["hero-desc-sub"]}>
-              Whether you&apos;re a student, working professional, hostel resident, or
-              simply looking for regular home-style food, MessMeals helps you
-              explore your options in one place.
+              Whether you're a student, a working professional, or a hostel or PG resident, MessMeals helps you explore local food options across Ernakulam. Open a listing to check its location, food categories, menus, and contact details.
             </p>
             <div className={styles["hero-ctas"]}>
               <a href="#listings" className={styles["hero-cta-primary"]}>
@@ -278,16 +272,13 @@ export default async function ErnakulamPage() {
         <section className={styles["listings-section"]} id="listings">
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Messes &amp; Homely Food Options in Kochi
+              Find a Mess in Ernakulam (Kochi)
             </h2>
             <p className={styles["section-desc"]}>
-              Explore food providers currently listed on MessMeals across
-              Ernakulam. Check each listing for available food options, meal
-              plans, menus, location and contact details.
+              Explore mess listings across Ernakulam and Kochi. Open a listing to review its address, food options, menu, available plan details, and contact information. Details can vary by provider, so confirm current availability directly before choosing.
             </p>
           </div>
-
-          <ErnMessGrid messes={initialData} />
+          <CityMessGrid messes={initialData} defaultCity="Ernakulam" />
         </section>
 
         {/* ── 4. AREAS ── */}
@@ -297,13 +288,10 @@ export default async function ErnakulamPage() {
               <span>EXPLORE BY AREA</span>
             </div>
             <h2 className={styles["section-title"]}>
-              Find Messes Across Ernakulam
+              Explore Messes by Area in Ernakulam and Kochi
             </h2>
             <p className={styles["section-desc"]}>
-              Ernakulam has messes and food providers across different
-              residential, student and working areas. Explore available listings
-              based on the part of the city that works best for your daily
-              routine.
+              Use these locality links to look for food providers near your home, hostel, college, or workplace. Open each listing to confirm the exact address and check whether the location suits your daily routine.
             </p>
           </div>
           <div className={styles["areas-grid"]}>
@@ -328,12 +316,10 @@ export default async function ErnakulamPage() {
         <section className={styles["audience-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Find Everyday Food That Fits Your Routine
+              Find Homely Food in Kochi for Your Daily Routine
             </h2>
             <p className={styles["section-desc"]}>
-              Different people look for different kinds of everyday meals.
-              Explore available messes in Ernakulam and choose options based on
-              your routine, food preferences and meal requirements.
+              From students and hostel residents to working professionals, everyone needs convenient everyday food. Browse messes in Ernakulam and Kochi, then explore options based on your location, food preferences, and meal requirements.
             </p>
           </div>
           <div className={styles["audience-grid"]}>
@@ -360,18 +346,12 @@ export default async function ErnakulamPage() {
                 <span>FOOD OPTIONS</span>
               </div>
               <h2 className={styles["section-title"]}>
-                Vegetarian &amp; Non-Vegetarian Food Options
+                Vegetarian and Non-Vegetarian Messes in Kochi
               </h2>
               <p className={styles["section-desc"]}>
-                Food preferences are different for everyone. MessMeals includes
-                listings with vegetarian, non-vegetarian and mixed food options,
-                depending on what each provider offers. Check the individual mess
-                listing for the latest information before choosing a plan.
+                Prefer vegetarian meals, non-vegetarian dishes, or a provider that serves both? Review the food category on each mess listing before you decide. Options vary by provider, so check the individual listing or contact the mess to confirm what is currently available.
               </p>
-              <p className={styles["section-desc"]}>
-                Available listings in Ernakulam include vegetarian-only options
-                and listings offering both vegetarian and non-vegetarian food.
-              </p>
+
               <Link href="#listings" className={styles["food-pref-cta"]}>
                 Explore Food Options
                 <ArrowRight size={15} />
@@ -385,7 +365,7 @@ export default async function ErnakulamPage() {
                   <Leaf size={22} />
                 </div>
                 <h3>Vegetarian</h3>
-                <p>Messes offering vegetarian-only meal options.</p>
+                <p>Explore listings marked as vegetarian.</p>
               </div>
               <div className={styles["food-pref-card"]}>
                 <div
@@ -394,7 +374,7 @@ export default async function ErnakulamPage() {
                   <Utensils size={22} />
                 </div>
                 <h3>Non-Vegetarian</h3>
-                <p>Messes with non-vegetarian food options available.</p>
+                <p>Find providers that list non-vegetarian food options.</p>
               </div>
               <div className={styles["food-pref-card"]}>
                 <div
@@ -403,7 +383,7 @@ export default async function ErnakulamPage() {
                   <BookOpen size={22} />
                 </div>
                 <h3>Mixed</h3>
-                <p>Providers offering both vegetarian and non-vegetarian.</p>
+                <p>Check messes that offer both vegetarian and non-vegetarian food.</p>
               </div>
             </div>
           </div>
@@ -413,16 +393,13 @@ export default async function ErnakulamPage() {
         <section className={styles["plans-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Daily &amp; Monthly Meal Plans
+              Daily and Monthly Mess Meal Plans in Kochi
             </h2>
             <p className={styles["section-desc"]}>
-              Some people need a meal every day, while others prefer a recurring
-              monthly plan. Depending on the mess, available plans may differ in
-              meal types, pricing and duration.
+              Looking for food for today or a recurring monthly arrangement? Available plans, meal types, pricing, and duration differ by provider. Check each listing for current details and contact the mess if plan information or prices are not shown.
             </p>
             <p className={styles["section-desc"]}>
-              Explore individual listings on MessMeals to check the plans, prices
-              and menus currently provided by each mess.
+              Open a mess listing to review its available menus and plan information. Confirm current prices, timings, and availability directly with the provider before subscribing.
             </p>
           </div>
           <div className={styles["plans-grid"]}>
@@ -445,12 +422,10 @@ export default async function ErnakulamPage() {
         <section className={styles["choose-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              How to Choose a Mess in Kochi
+              How to Choose the Right Mess in Ernakulam and Kochi
             </h2>
             <p className={styles["section-desc"]}>
-              Choosing a mess isn&apos;t only about price. The right option depends on
-              your location, food preferences, meal requirements and daily
-              routine.
+              Choosing a mess is about more than price. Look for a location that suits your routine, food you enjoy, and a plan that matches how often you need meals. Review the listing and contact the provider if any details are unclear.
             </p>
           </div>
           <div className={styles["steps-grid"]}>
@@ -480,13 +455,10 @@ export default async function ErnakulamPage() {
                 <span>WHY MESSMEALS</span>
               </div>
               <h2 className={styles["section-title"]}>
-                A Simpler Way to Find Everyday Meals
+                Find Mess Food in Ernakulam and Kochi with MessMeals
               </h2>
               <p className={styles["section-desc"]}>
-                Finding regular food can be difficult when information about
-                different messes is spread across different places. MessMeals
-                brings mess listings, meal plans, menus and useful information
-                together so you can explore your options in one place.
+                Finding everyday food can take time when locations, menus, and contact details are scattered across different places. MessMeals brings local mess listings together so you can explore available food options, review the information provided, and contact a mess before deciding.
               </p>
               <Link href="#listings" className={styles["why-cta"]}>
                 Explore Messes
@@ -498,17 +470,17 @@ export default async function ErnakulamPage() {
                 {
                   icon: MapPin,
                   label: "Discover",
-                  desc: "Find messes and food providers based on where you need them.",
+                  desc: "Browse local listings and check each provider’s location.",
                 },
                 {
                   icon: ListChecks,
                   label: "Compare",
-                  desc: "Explore available food options, meal plans and menus.",
+                  desc: "Review the menus and plan details that each mess shares.",
                 },
                 {
                   icon: CheckCircle2,
                   label: "Choose",
-                  desc: "Find an option that fits your routine and food preferences.",
+                  desc: "Choose a provider that suits your location and food preferences.",
                 },
               ].map((item) => {
                 const Icon = item.icon;
@@ -530,17 +502,15 @@ export default async function ErnakulamPage() {
         <section className={styles["faq-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Frequently Asked Questions About Messes in Ernakulam
+              Frequently Asked Questions About Messes in Ernakulam and Kochi
             </h2>
           </div>
           <div className={styles["faq-list"]}>
             {FAQS.map((item, idx) => (
-              <ErnFaqItem key={idx} q={item.q} a={item.a} index={idx} />
+              <FaqItem key={idx} q={item.q} a={item.a} index={idx} />
             ))}
           </div>
         </section>
-
-
       </main>
     </>
   );

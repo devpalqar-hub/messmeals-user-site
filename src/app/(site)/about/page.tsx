@@ -3,14 +3,14 @@ import styles from "./page.module.css";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Us | MessMeals",
+  title: "About MessMeals | Our Mission & Platform",
   description:
-    "Learn more about MessMeals, our mission, and how we connect people with trusted local messes for authentic homely food.",
+    "Learn about MessMeals, the platform that helps people discover nearby messes, explore meal plans and connect with local food providers.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Us | MessMeals",
+    title: "About MessMeals | Our Mission & Platform",
     description:
-      "Learn more about MessMeals, our mission, and how we connect people with trusted local messes for authentic homely food.",
+      "Learn about MessMeals, the platform that helps people discover nearby messes, explore meal plans and connect with local food providers.",
     url: "/about",
   },
 };
@@ -27,14 +27,14 @@ export default function About() {
               <span>Good Food Brings People Together</span>
             </div>
             <h1 className={styles.heroTitle}>
-              Good food should feel <br />
-              <span>closer to home.</span>
+              About MessMeals: <br />
+              <span>Connecting People with Nearby Messes &amp; Meal Plans</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Messmeals makes it easier to discover trusted local messes,
-              compare meal plans, and enjoy homely food without the hassle.
-              We connect people looking for everyday meals with mess owners
-              who care about good food and reliable service.
+              Searching for a mess near me? MessMeals helps you discover nearby
+              messes, explore homely food, and compare available menus and daily
+              or monthly meal plans. We also help mess owners manage their
+              businesses with Mess Manager, our mess management app.
             </p>
             <div className={styles.heroActions}>
               <Link href="/" className={styles.btnPrimary}>
@@ -60,7 +60,7 @@ export default function About() {
             </div>
           </div>
           <div className={styles.heroImageWrapper}>
-            <img src="/about/aboutherobg.png" alt="Homely Meals" className={styles.heroImage} />
+            <img src="/about/aboutherobg.png" alt="Homely food and meal options on MessMeals" className={styles.heroImage} />
           </div>
         </div>
       </section>
@@ -77,14 +77,14 @@ export default function About() {
               <span>Our Mission</span>
             </div>
             <h2 className={styles.sectionTitle}>
-              Why we built <span>Messmeals</span>
+              Why we built <span>MessMeals</span>
             </h2>
             <p className={styles.sectionDesc}>
-              We believe everyone deserves access to fresh, healthy and homely
-              meals. Messmeals was built to make everyday meals easier to find,
-              help local messes reach more customers, bring transparency to
-              meal plans and pricing, and simplify the way people discover
-              recurring meals.
+              Finding everyday food should be simpler. MessMeals helps people
+              discover nearby messes, review available menus, and compare meal
+              plans in one place. We also want to help local mess owners reach
+              more customers and organize their daily work with Mess Manager,
+              an app built for mess management.
             </p>
             <div className={styles.missionCards}>
               <div className={styles.missionCard}>
@@ -125,7 +125,7 @@ export default function About() {
               One platform, two simple experiences.
             </h2>
             <p className={styles.sectionDescCentered}>
-              Whether you're looking for homely meals or managing a mess, Messmeals is built for you.
+              Whether you're searching for a mess near you or managing a food business, MessMeals brings both experiences together.
             </p>
           </div>
 
@@ -143,12 +143,12 @@ export default function About() {
               </div>
               <div className={styles.expCardBody}>
                 <ul className={styles.expList}>
-                  <li><CheckIcon /> Discover nearby messes</li>
-                  <li><CheckIcon /> Compare meal plans and menus</li>
-                  <li><CheckIcon /> View verified messes</li>
-                  <li><CheckIcon /> Manage your meal plans</li>
-                  <li><CheckIcon /> Save addresses for easy booking</li>
-                  <li><CheckIcon /> Enjoy fresh and homely meals</li>
+                  <li><CheckIcon /> Find nearby messes by location</li>
+                  <li><CheckIcon /> Compare available meal plans and menus</li>
+                  <li><CheckIcon /> Review mess details and available information</li>
+                  <li><CheckIcon /> Explore daily and monthly meal options</li>
+                  <li><CheckIcon /> Save addresses for easier booking</li>
+                  <li><CheckIcon /> Discover homely food for your routine</li>
                 </ul>
                 <div className={styles.expCardFooter}>
                   <Link href="/" className={styles.btnPrimaryDark}>
@@ -167,17 +167,17 @@ export default function About() {
                 </div>
                 <div>
                   <h3>For Mess Owners</h3>
-                  <p>Grow your mess business, effortlessly.</p>
+                  <p>Manage daily operations with Mess Manager.</p>
                 </div>
               </div>
               <div className={styles.expCardBody}>
                 <ul className={styles.expList}>
-                  <li><CheckIcon /> List and manage multiple messes</li>
-                  <li><CheckIcon /> Add and update menus and plans</li>
-                  <li><CheckIcon /> Manage customers and delivery partners</li>
-                  <li><CheckIcon /> Track revenue and orders</li>
-                  <li><CheckIcon /> Handle customer wallets and discounts</li>
-                  <li><CheckIcon /> View and filter deliveries</li>
+                  <li><CheckIcon /> List and manage mess locations</li>
+                  <li><CheckIcon /> Create menus and meal plans</li>
+                  <li><CheckIcon /> Organize customers and delivery partners</li>
+                  <li><CheckIcon /> Track orders and revenue information</li>
+                  <li><CheckIcon /> Manage customer wallets and discounts</li>
+                  <li><CheckIcon /> Review and filter deliveries</li>
                 </ul>
                 <div className={styles.expCardFooter}>
                   <Link href="/mess-manager" className={styles.btnPrimaryDark}>
@@ -196,10 +196,10 @@ export default function About() {
         <div className={styles.howItWorksContainer}>
           <div className={styles.howItWorksHeader}>
             <h2 className={styles.sectionTitleCentered}>
-              How <span>Messmeals</span> works
+              How <span>MessMeals</span> Works
             </h2>
             <p className={styles.sectionDescCentered}>
-              A simple process for great meals, for everyone.
+              Find nearby messes and meal plans, or manage your mess business with Mess Manager.
             </p>
           </div>
 
@@ -214,29 +214,29 @@ export default function About() {
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>1</div>
                 <div className={styles.hwStepIcon}><SearchIconSmall /></div>
-                <h4>Discover a mess</h4>
-                <p>Search by location, explore verified messes.</p>
+                <h4>Find a nearby mess</h4>
+                <p>Explore messes by city or locality.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>2</div>
                 <div className={styles.hwStepIcon}><CompareIconSmall /></div>
-                <h4>Compare plans & menus</h4>
-                <p>Check meal options, pricing and reviews.</p>
+                <h4>Compare meal plans</h4>
+                <p>Review available menus, prices and plan details.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>3</div>
                 <div className={styles.hwStepIcon}><CalendarIconSmall /></div>
-                <h4>Choose your meal plan</h4>
-                <p>Pick the plan that fits your needs.</p>
+                <h4>Choose a meal plan</h4>
+                <p>Find an available option for your routine.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>4</div>
                 <div className={styles.hwStepIcon}><HeartIconSmall /></div>
-                <h4>Enjoy homely meals</h4>
-                <p>Get your meals and savor the experience.</p>
+                <h4>Enjoy everyday meals</h4>
+                <p>Follow the provider's booking or enquiry process.</p>
               </div>
             </div>
           </div>
@@ -253,28 +253,28 @@ export default function About() {
                 <div className={styles.hwStepNum}>1</div>
                 <div className={styles.hwStepIcon}><PlusIconSmall /></div>
                 <h4>List your mess</h4>
-                <p>Add your mess details and location.</p>
+                <p>Add your business details and location.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>2</div>
                 <div className={styles.hwStepIcon}><MenuIconSmall /></div>
-                <h4>Add menus & plans</h4>
-                <p>Create meal plans and set pricing.</p>
+                <h4>Set menus & meal plans</h4>
+                <p>Add available meals and plan pricing.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>3</div>
                 <div className={styles.hwStepIcon}><UsersIconSmall /></div>
-                <h4>Add customers</h4>
-                <p>Manage your customers with ease.</p>
+                <h4>Organize customers</h4>
+                <p>Keep customer and subscription details organized.</p>
               </div>
               <div className={styles.hwArrow}>&rarr;</div>
               <div className={styles.hwStep}>
                 <div className={styles.hwStepNum}>4</div>
                 <div className={styles.hwStepIcon}><ChartIconSmall /></div>
-                <h4>Manage deliveries</h4>
-                <p>Track orders and grow your business.</p>
+                <h4>Manage daily operations</h4>
+                <p>Review orders and coordinate delivery tasks.</p>
               </div>
             </div>
           </div>
@@ -286,14 +286,14 @@ export default function About() {
           <div className={styles.whyChooseHeader}>
             <div className={styles.sectionBadge}>
               <ShieldIconSmall />
-              <span>Why Choose Messmeals</span>
+              <span>Why Choose MessMeals</span>
             </div>
             <h2 className={styles.sectionTitle}>
               Built around trust, convenience <br />
               and <span>local food.</span>
             </h2>
             <p className={styles.sectionDesc}>
-              We're creating a better way to connect people with homely meals.
+              MessMeals makes it easier to explore nearby messes and available meal plans, while Mess Manager helps owners organize daily operations.
             </p>
           </div>
 
@@ -303,8 +303,8 @@ export default function About() {
                 <ShieldIconSmall />
               </div>
               <div className={styles.whyCardContent}>
-                <h4>Verified Messes</h4>
-                <p>Only trusted and quality messes listed.</p>
+                <h4>Local Mess Listings</h4>
+                <p>Explore mess details and food options in your area.</p>
               </div>
             </div>
             <div className={styles.whyCard}>
@@ -312,8 +312,8 @@ export default function About() {
                 <DocumentIconSmall />
               </div>
               <div className={styles.whyCardContent}>
-                <h4>Clear Meal Plans</h4>
-                <p>Transparent pricing and meal details.</p>
+                <h4>Meal Plans & Menus</h4>
+                <p>Review available prices, menus and plan information.</p>
               </div>
             </div>
             <div className={styles.whyCard}>
@@ -321,8 +321,8 @@ export default function About() {
                 <SearchIconSmall />
               </div>
               <div className={styles.whyCardContent}>
-                <h4>Helpful Search & Filters</h4>
-                <p>Find the right mess quickly in your area.</p>
+                <h4>Search for Nearby Messes</h4>
+                <p>Explore messes based on location and available filters.</p>
               </div>
             </div>
             <div className={styles.whyCard}>
@@ -330,8 +330,8 @@ export default function About() {
                 <HeadphonesIconSmall />
               </div>
               <div className={styles.whyCardContent}>
-                <h4>Customer Support</h4>
-                <p>We're here to help with any queries.</p>
+                <h4>Helpful Information</h4>
+                <p>Review listing details and contact providers when needed.</p>
               </div>
             </div>
             <div className={styles.whyCard}>
@@ -340,7 +340,7 @@ export default function About() {
               </div>
               <div className={styles.whyCardContent}>
                 <h4>Delivery Management</h4>
-                <p>Track deliveries with ease and reliability.</p>
+                <p>Mess Manager helps owners organize delivery-related tasks.</p>
               </div>
             </div>
             <div className={styles.whyCard}>
@@ -348,15 +348,15 @@ export default function About() {
                 <LockIconSmall />
               </div>
               <div className={styles.whyCardContent}>
-                <h4>Secure Account Access</h4>
-                <p>Your data and payments are always safe.</p>
+                <h4>Convenient Account Access</h4>
+                <p>Access the tools and information available through your account.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Admin App Section */}
+      {/* Mess Manager App Section */}
       <section className={styles.adminAppSection}>
         <div className={styles.adminAppContainer}>
           <div className={styles.adminAppContent}>
@@ -366,12 +366,12 @@ export default function About() {
             </div>
             <h2 className={styles.sectionTitle}>
               Manage your mess <br />
-              with <span>less effort.</span>
+              with <span>Mess Manager.</span>
             </h2>
             <p className={styles.sectionDesc}>
-              Messmeals Admin is a powerful and easy-to-use app to manage
-              multiple messes, track revenue, handle customers, delivery partners,
-              menus, plans, wallets, discounts and deliveries &mdash; all in one place.
+              Mess Manager is an app built for mess owners and managers. Organize
+              mess locations, menus, meal plans, customers, delivery partners,
+              orders, wallets, discounts and revenue information in one place.
             </p>
             <div className={styles.appStoreButtons}>
               <a
@@ -402,11 +402,11 @@ export default function About() {
               </a>
             </div>
             <Link href="/mess-manager" className={styles.learnMoreLink}>
-              Learn more about Messmeals Admin &rarr;
+              Learn more about Mess Manager &rarr;
             </Link>
           </div>
           <div className={styles.adminAppImageWrapper}>
-            <img src="/messappmock.png" alt="Messmeals Admin App" className={styles.adminAppImage} />
+            <img src="/messappmock.png" alt="Mess Manager app for mess owners and managers" className={styles.adminAppImage} />
           </div>
         </div>
       </section>
@@ -420,10 +420,10 @@ export default function About() {
               <span>Our Vision</span>
             </div>
             <h2 className={styles.sectionTitle}>
-              What we're building for the future.
+              A better future for nearby food discovery and mess management.
             </h2>
             <p className={styles.sectionDesc}>
-              We're committed to creating a healthier, more connected food community.
+              We're working toward a more connected food community where people can find everyday meals more easily and mess owners have useful tools to manage their businesses.
             </p>
           </div>
 
@@ -433,21 +433,21 @@ export default function About() {
                 <StoreIconSmall />
               </div>
               <h4>More local messes</h4>
-              <p>Bring more verified messes to every city and town.</p>
+              <p>Help more people discover local messes and meal options in their area.</p>
             </div>
             <div className={styles.visionCard}>
               <div className={styles.visionCardIcon}>
                 <SearchIconSmall />
               </div>
               <h4>Smarter discovery</h4>
-              <p>Use technology to help people find the right meals faster.</p>
+              <p>Make it easier to search for nearby messes and compare meal plans.</p>
             </div>
             <div className={styles.visionCard}>
               <div className={styles.visionCardIcon}>
                 <SettingsIconSmall />
               </div>
               <h4>Smoother operations</h4>
-              <p>Better tools for mess owners to manage and grow.</p>
+              <p>Keep improving Mess Manager for everyday business tasks.</p>
             </div>
             <div className={styles.visionCard}>
               <div className={styles.visionCardIcon}>
@@ -468,8 +468,8 @@ export default function About() {
               <StoreIconSmall />
             </div>
             <div className={styles.bottomCtaText}>
-              <h3>A better way to find and manage everyday meals.</h3>
-              <p>For food lovers, and for mess owners. Let's build a stronger, healthier food community together.</p>
+              <h3>Find nearby messes. Compare meal plans. Manage your mess.</h3>
+              <p>MessMeals helps customers explore everyday food options, while Mess Manager gives mess owners tools to organize their business.</p>
             </div>
           </div>
           <div className={styles.bottomCtaActions}>
