@@ -1,0 +1,365 @@
+/* ===================== CITY MESS GRID & CARD ===================== */
+
+.listings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.listings-empty {
+  text-align: center;
+  padding: 48px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #E3EAE1;
+  color: #617061;
+  font-size: 15px;
+}
+
+/* ── MESS CARD ── */
+.mess-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #E3EAE1;
+  box-shadow: 0 4px 14px rgba(28, 58, 28, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mess-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(28, 58, 28, 0.12);
+}
+
+.mess-card-image {
+  position: relative;
+  height: 175px;
+  overflow: hidden;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.mess-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.mess-card:hover .mess-card-image img {
+  transform: scale(1.06);
+}
+
+.card-new-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #55C500 0%, #3da800 100%);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+
+.card-subs-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #101C10;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.card-subs-badge svg {
+  color: #18864B;
+}
+
+.mess-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.mess-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+.mess-card-verified {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: #55C500;
+}
+
+.mess-card-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 0%;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.mess-card-location,
+.mess-card-food-type {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #617061;
+  font-weight: 500;
+  margin-bottom: 3px;
+  min-width: 0;
+}
+
+.mess-card-location svg,
+.mess-card-food-type svg {
+  flex-shrink: 0;
+  color: #849084;
+}
+
+.mess-card-location span,
+.mess-card-food-type span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.mess-card-divider {
+  height: 1px;
+  background: #E3EAE1;
+  margin: 10px 0;
+}
+
+.mess-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.mess-card-price small {
+  display: block;
+  font-size: 9.5px;
+  color: #849084;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+.mess-card-price strong {
+  font-size: 16px;
+  color: #1C3A1C;
+  font-weight: 700;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mess-card-price strong span {
+  font-size: 12px;
+  color: #617061;
+  font-weight: 500;
+}
+
+.mess-card-price-na {
+  font-size: 13px !important;
+  color: #849084 !important;
+  font-weight: 500 !important;
+}
+
+.mess-card-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #1C3A1C;
+  color: #ffffff;
+  border: none;
+  text-decoration: none;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.mess-card-btn:hover {
+  background: #45A800;
+  box-shadow: 0 6px 16px rgba(69, 168, 0, 0.28);
+  color: #ffffff;
+}
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #1C3A1C;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: 1px solid #E3EAE1;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #FAFCF9;
+  border-color: #55C500;
+  color: #101C10;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #FAFCF9;
+}
+
+.pagination-info {
+  font-size: 14px;
+  font-weight: 500;
+  color: #617061;
+}
+
+/* ── RESPONSIVE ── */
+
+@media (max-width: 1024px) {
+  .listings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .mess-card-image {
+    height: 130px;
+  }
+
+  .mess-card-body {
+    padding: 10px 11px 12px;
+  }
+
+  .mess-card-name {
+    font-size: 13px;
+  }
+
+  .mess-card-location,
+  .mess-card-food-type {
+    font-size: 10.5px;
+  }
+
+  .mess-card-price strong {
+    font-size: 14px;
+  }
+
+  .mess-card-btn {
+    font-size: 12.5px;
+    padding: 9px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mess-card-image {
+    height: 100px;
+  }
+
+  .mess-card-body {
+    padding: 8px 9px 10px;
+  }
+
+  .mess-card-name {
+    font-size: 11.5px;
+  }
+
+  .mess-card-location,
+  .mess-card-food-type {
+    font-size: 9.5px;
+  }
+
+  .mess-card-price strong {
+    font-size: 12.5px;
+  }
+
+  .mess-card-price small {
+    font-size: 8.5px;
+  }
+
+  .mess-card-btn {
+    font-size: 11px;
+    padding: 7px 6px;
+    border-radius: 8px;
+    gap: 3px;
+  }
+
+  .mess-card-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .listings-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

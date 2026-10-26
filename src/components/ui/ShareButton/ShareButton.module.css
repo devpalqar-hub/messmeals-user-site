@@ -1,0 +1,185 @@
+/* ─── ShareButton ─────────────────────────────────────────────────────────── */
+/* Matches the MessMeals design system:
+   Primary green: #1C3A1C / #1f3d1f
+   Accent green:  #63e100 / #55C500
+   Border:        #e5e7eb / #E3EAE1
+   Font:          system-ui (inherits from page)
+*/
+
+.share-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* ── Trigger button ── */
+
+.share-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Secondary variant — matches .plan-card-btn.secondary */
+.share-trigger-secondary {
+  flex: 1;
+  padding: 10px 8px;
+  background: transparent;
+  color: #1f3d1f;
+  border: 1.5px solid #63e100;
+}
+
+.share-trigger-secondary:hover {
+  background: #f0fdf0;
+  border-color: #45a800;
+}
+
+/* Icon-only variant — compact circular button for plan modal header */
+.share-trigger-icon {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: transparent;
+  color: #1f3d1f;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50%;
+}
+
+.share-trigger-icon:hover {
+  background: #f0fdf0;
+  border-color: #63e100;
+  color: #3a7a00;
+}
+
+.share-trigger:focus-visible {
+  outline: 2px solid #63e100;
+  outline-offset: 2px;
+}
+
+/* ── Dropdown ── */
+
+.share-dropdown {
+  position: fixed;
+  z-index: 1000;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  animation: share-dropdown-in 0.15s ease;
+}
+
+@keyframes share-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.share-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.share-dropdown-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.share-dropdown-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.share-dropdown-options {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Individual option ── */
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1f3d1f;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-align: left;
+}
+
+.share-option:hover {
+  background: #f0fdf0;
+  color: #155428;
+}
+
+.share-option:focus-visible {
+  outline: 2px solid #63e100;
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+/* WhatsApp — green accent */
+.share-option-whatsapp:hover {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* Telegram — blue accent */
+.share-option-telegram:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* Email — neutral */
+.share-option-email:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+/* Copy Link */
+.share-option-copy:hover {
+  background: #f0fdf0;
+  color: #155428;
+}

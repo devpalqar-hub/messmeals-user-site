@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /login
+Disallow: /profile
+Disallow: /booking/
+Disallow: /mess/*/book
+
+Sitemap: https://messmeals.com/sitemap.xml
