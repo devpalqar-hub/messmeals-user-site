@@ -1,0 +1,241 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Articles & Category Section
+   Tokens: #101C10 · #55C500 · #1C3A1C · #617061 · #EAF7E5 · #FAFCF9
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.section {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 64px 80px;
+}
+
+.sectionHeader {
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-weight: 700;
+  color: #101C10;
+  line-height: 1.25;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtitle {
+  font-size: clamp(14px, 1.1vw, 15.5px);
+  color: #617061;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 800px;
+}
+
+/* ─── Grid ───────────────────────────────────────────────────────────────── */
+.articlesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  width: 100%;
+}
+
+/* ─── Category-Specific Notice for City Guides ───────────────────────────── */
+.cityGuidesNotice {
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #F0F9EA 0%, #FFFFFF 100%);
+  border: 1px solid #C2E6B0;
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.noticeContent {
+  max-width: 800px;
+}
+
+.noticeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2E7D32;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: #EAF7E5;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+
+.noticeTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0 0 8px;
+}
+
+.noticeText {
+  font-size: 14px;
+  color: #617061;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.noticeAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 100px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.noticeAction:hover {
+  background: #45A800;
+  box-shadow: 0 4px 12px rgba(69, 168, 0, 0.25);
+}
+
+/* ─── Graceful Empty State ───────────────────────────────────────────────── */
+.emptyCard {
+  width: 100%;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 1px solid #E3EAE1;
+  border-radius: 18px;
+  padding: 48px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(16, 28, 16, 0.02);
+}
+
+.emptyIconWrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #EAF7E5;
+  color: #2E7D32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.emptyTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0 0 10px;
+}
+
+.emptyText {
+  font-size: 14.5px;
+  color: #617061;
+  max-width: 540px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.emptyActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1C3A1C;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background: #2E7D32;
+}
+
+.emptyLocationLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F0F9EA;
+  color: #2E7D32;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 100px;
+  border: 1px solid #C2E6B0;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.emptyLocationLink:hover {
+  background: #EAF7E5;
+  border-color: #55C500;
+}
+
+/* ─── Responsive Breakpoints ─────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .articlesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: 48px 40px;
+  }
+
+  .cityGuidesNotice {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 36px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .articlesGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .emptyCard {
+    padding: 32px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 30px 16px;
+  }
+}
