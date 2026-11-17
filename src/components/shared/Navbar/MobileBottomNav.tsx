@@ -43,9 +43,9 @@ export default function MobileBottomNav() {
       </Link>
 
       <Link
-        href="/messes"
+        href="/mess"
         className={
-          isLinkActive(pathname, "/messes", false)
+          isLinkActive(pathname, "/mess", false)
             ? `${styles["mbn-item"]} ${styles.active}`
             : styles["mbn-item"]
         }

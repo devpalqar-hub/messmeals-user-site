@@ -26,7 +26,7 @@ export default function WhyMessMeals() {
           <button
             id="why-browse-messes-btn"
             className={styles["why-btn"]}
-            onClick={() => router.push("/messes")}
+            onClick={() => router.push("/mess")}
           >
             Browse the available messes
             <ArrowRight size={16} strokeWidth={2} />

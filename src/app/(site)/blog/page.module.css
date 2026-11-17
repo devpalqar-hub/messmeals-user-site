@@ -1,0 +1,13 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MessMeals Blog Page Shell
+   Full-width container matching MessMeals website layout
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  color: #101C10;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}

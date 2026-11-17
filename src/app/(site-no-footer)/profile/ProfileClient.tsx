@@ -241,7 +241,7 @@ export default function ProfileClient() {
             <div className={styles["profile-empty"]}>
               <UtensilsCrossed size={40} strokeWidth={1.4} color="#b3bab3" />
               <p>You haven&apos;t booked any mess plans yet.</p>
-              <Link href="/messes">Browse Messes</Link>
+              <Link href="/mess">Browse Messes</Link>
             </div>
           ) : (
             <div className={styles["sub-list"]}>

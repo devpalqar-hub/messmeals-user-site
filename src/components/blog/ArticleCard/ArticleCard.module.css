@@ -1,0 +1,116 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Article Card Component
+   Tokens: #101C10 · #55C500 · #1C3A1C · #617061 · #EAF7E5 · #FAFCF9
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 1px solid #E3EAE1;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(16, 28, 16, 0.04);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #C2E6B0;
+  box-shadow: 0 12px 28px rgba(85, 197, 0, 0.12);
+}
+
+.thumbnailWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #F0F9EA;
+  overflow: hidden;
+}
+
+.thumbnail {
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .thumbnail {
+  transform: scale(1.04);
+}
+
+.cardBody {
+  padding: 22px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.categoryTag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2E7D32;
+  background: #EAF7E5;
+  padding: 3px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #101C10;
+  line-height: 1.35;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.excerpt {
+  font-size: 14px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  flex: 1;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: #7A8B7A;
+  margin-bottom: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #F0F4EF;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.readLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #2E7D32;
+  text-decoration: none;
+  transition: color 0.18s ease, gap 0.18s ease;
+}
+
+.readLink:hover {
+  color: #1C3A1C;
+  gap: 9px;
+}
+

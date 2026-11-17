@@ -1,0 +1,259 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Location Guides Section
+   Tokens: #101C10 · #55C500 · #1C3A1C · #617061 · #EAF7E5 · #FAFCF9
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.section {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 64px 80px 80px;
+  background: #FAFCF9;
+  border-top: 1px solid #E3EAE1;
+  border-bottom: 1px solid #E3EAE1;
+}
+
+.container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 44px;
+}
+
+.sectionLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EAF7E5;
+  border: 1px solid #C2E6B0;
+  border-radius: 100px;
+  padding: 5px 14px;
+  margin-bottom: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2E7D32;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  font-size: clamp(26px, 2.8vw, 34px);
+  font-weight: 700;
+  color: #101C10;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.sectionDesc {
+  font-size: clamp(14.5px, 1.1vw, 16px);
+  color: #617061;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ─── Grid ───────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  width: 100%;
+}
+
+/* ─── Location Card ──────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 1px solid #E3EAE1;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(16, 28, 16, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #55C500;
+  box-shadow: 0 14px 32px rgba(85, 197, 0, 0.12);
+}
+
+/* ─── Visual Banner ──────────────────────────────────────────────────────── */
+.cardVisual {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(135deg, #EAF7E5 0%, #D5F0C8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cardVisualImage {
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .cardVisualImage {
+  transform: scale(1.05);
+}
+
+.cardVisualPattern {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(85, 197, 0, 0.25), transparent 70%);
+  pointer-events: none;
+}
+
+.cardVisualIconWrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2E7D32;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.15);
+  border: 2px solid #EAF7E5;
+  z-index: 1;
+}
+
+.cardTag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  color: #1C3A1C;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid #C2E6B0;
+  z-index: 1;
+}
+
+/* ─── Card Body ──────────────────────────────────────────────────────────── */
+.cardBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.cardTitle {
+  font-size: 21px;
+  font-weight: 700;
+  color: #101C10;
+  margin: 0;
+}
+
+.cardAltName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #7A8B7A;
+}
+
+.cardDescription {
+  font-size: 14px;
+  color: #617061;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  flex: 1;
+}
+
+/* ─── Popular Areas ──────────────────────────────────────────────────────── */
+.areasLabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #7A8B7A;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.areasList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.areaPill {
+  font-size: 11.5px;
+  background: #F4F8F3;
+  color: #3A503A;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid #E3EAE1;
+}
+
+/* ─── Button ─────────────────────────────────────────────────────────────── */
+.exploreBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #1C3A1C;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.exploreBtn:hover {
+  background: #45A800;
+  box-shadow: 0 4px 14px rgba(69, 168, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ─── Responsive Breakpoints ─────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: 48px 40px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 36px 20px 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 30px 16px 40px;
+  }
+}

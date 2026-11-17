@@ -1,0 +1,351 @@
+.search-filter-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.search-filter-bar {
+  background: #ffffff;
+  border-radius: 60px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+  z-index: 10;
+}
+
+.search-filter-bar.expanded {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 15;
+}
+
+.filter-section {
+  flex: 1;
+  padding: 14px 24px;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.filter-section:hover {
+  background: #f7f7f7;
+}
+
+.filter-section.active {
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.filter-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-content label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 2px;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.filter-value {
+  font-size: 14px;
+  color: #717171;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.filter-section.active .filter-value {
+  color: #222222;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background: #dddddd;
+}
+
+.clear-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #717171;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.clear-btn:hover {
+  opacity: 1;
+  background: #222222;
+  transform: scale(1.1);
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #2d5f3f 0%, #3a7d52 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(45, 95, 63, 0.3);
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.search-btn:hover {
+  background: linear-gradient(135deg, #234a32 0%, #2d5f3f 100%);
+  box-shadow: 0 4px 12px rgba(45, 95, 63, 0.4);
+}
+
+/* Dropdown Containers */
+.dropdown-container {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+}
+
+.dropdown-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 20px;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Location Dropdown */
+.location-dropdown {
+  min-width: 480px;
+  max-width: 520px;
+}
+
+.location-search-input {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.location-search-input svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #717171;
+}
+
+.location-search-input input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 1.5px solid #dddddd;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.location-search-input input:focus {
+  border-color: #2d5f3f;
+  box-shadow: 0 0 0 3px rgba(45, 95, 63, 0.1);
+}
+
+.location-results {
+  position: relative;
+}
+
+.location-suggestions {
+  max-height: 260px;
+  overflow-y: auto;
+  margin-top: 12px;
+}
+
+.location-suggestion-item {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.location-suggestion-item:hover {
+  background: #f3f7f4;
+}
+
+.place {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.zip {
+  font-size: 12px;
+  color: #777;
+}
+
+.loc-loading {
+  padding: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Food Type Dropdown */
+.foodtype-dropdown {
+  min-width: 420px;
+  max-width: 480px;
+}
+
+.foodtype-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.foodtype-card {
+  padding: 24px;
+  border: 2px solid #ececec;
+  border-radius: 16px;
+  background: #ffffff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 15px;
+  color: #222222;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.foodtype-card:hover {
+  border-color: #2d5f3f;
+  background: #f7fdf9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 95, 63, 0.15);
+}
+
+.foodtype-card.selected {
+  background: linear-gradient(135deg, #2d5f3f 0%, #3a7d52 100%);
+  border-color: #2d5f3f;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(45, 95, 63, 0.3);
+}
+
+.foodtype-card svg {
+  color: #2d5f3f;
+  transition: color 0.2s ease;
+}
+
+.foodtype-card.selected svg {
+  color: #ffffff;
+}
+
+/* Dates Dropdown */
+.dates-dropdown {
+  min-width: 720px;
+  max-width: 800px;
+  padding: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-filter-bar {
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .filter-section {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* MOBILE: Full width bottom sheet dropdowns */
+  .dropdown-container {
+    position: fixed !important;
+    top: auto !important;
+    left: 50% !important;
+    bottom: 0 !important;
+    transform: translateX(-50%) !important;
+    width: 95vw !important;
+    max-width: none !important;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 24px 24px 0 0;
+    padding: 24px;
+    margin: 0;
+  }
+
+  .location-dropdown,
+  .dates-dropdown,
+  .foodtype-dropdown {
+    min-width: auto !important;
+    width: 95vw !important;
+  }
+
+  /* Mobile grid layouts */
+  .foodtype-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .foodtype-card {
+    padding: 20px 16px;
+  }
+
+  .location-suggestions {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-container {
+    width: 98vw !important;
+    padding: 20px;
+  }
+}

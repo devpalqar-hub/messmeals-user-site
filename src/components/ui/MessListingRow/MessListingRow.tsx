@@ -126,7 +126,7 @@ export default function MessListingRow({
 
         <button
           className={styles["view-all"]}
-          onClick={() => router.push("/messes")}
+          onClick={() => router.push("/mess")}
         >
           View all
           <ArrowRight size={18} className={styles["view-all-icon"]} />
