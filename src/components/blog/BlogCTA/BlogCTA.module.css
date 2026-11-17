@@ -1,0 +1,160 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Blog Final CTA Section
+   Tokens: #101C10 · #55C500 · #1C3A1C · #617061 · #EAF7E5 · #FAFCF9
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ctaSection {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 72px 80px 80px;
+  background: #FFFFFF;
+}
+
+.ctaContainer {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  background: linear-gradient(135deg, #1C3A1C 0%, #102410 100%);
+  border-radius: 28px;
+  padding: 60px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(16, 28, 16, 0.16);
+}
+
+/* Ambient glow */
+.ctaContainer::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(85, 197, 0, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.textContent {
+  position: relative;
+  z-index: 1;
+  max-width: 750px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  padding: 5px 14px;
+  margin-bottom: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #A3E635;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heading {
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+}
+
+.description {
+  font-size: clamp(14.5px, 1.1vw, 16px);
+  color: #C8D6C5;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.actionWrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #55C500;
+  color: #101C10;
+  font-size: 15.5px;
+  font-weight: 800;
+  padding: 16px 34px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  box-shadow: 0 6px 20px rgba(85, 197, 0, 0.35);
+  white-space: nowrap;
+}
+
+.ctaButton:hover {
+  background: #45A800;
+  color: #FFFFFF;
+  box-shadow: 0 8px 26px rgba(69, 168, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+/* ─── Responsive Breakpoints ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .ctaSection {
+    padding: 56px 40px 64px;
+  }
+
+  .ctaContainer {
+    padding: 48px 44px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ctaContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 32px;
+    gap: 28px;
+  }
+
+  .actionWrap {
+    width: 100%;
+  }
+
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaSection {
+    padding: 40px 20px 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ctaSection {
+    padding: 32px 16px 40px;
+  }
+
+  .ctaContainer {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .heading {
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+}

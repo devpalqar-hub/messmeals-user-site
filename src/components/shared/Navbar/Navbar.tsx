@@ -11,7 +11,7 @@ import ListMessModal from "../../ui/ListMessModal/ListMessModal";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true, Icon: House },
-  { to: "/messes", label: "Messes", end: false, Icon: Utensils },
+  { to: "/mess", label: "Messes", end: false, Icon: Utensils },
   { to: "/about", label: "About Us", end: false, Icon: LucideInfo },
   { to: "/blog", label: "Blog", end: false, Icon: BookOpen },
 ];

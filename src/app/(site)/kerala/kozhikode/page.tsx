@@ -25,63 +25,63 @@ import FaqItem from "../../../../components/ui/FaqItem/FaqItem";
 import CityMessGrid from "../../../../components/ui/CityMessGrid/CityMessGrid";
 import styles from "./page.module.css";
 
-// ─── Kasaragod (Kasargod) centre coordinates ──────────────────────────────────
-const KSD_LAT = "12.4984";
-const KSD_LNG = "74.9896";
+// ─── Kozhikode (Calicut) centre coordinates ───────────────────────────────────
+const CLT_LAT = "11.2588";
+const CLT_LNG = "75.7804";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Messes in Kasaragod | Homely Food & Meal Plans | MessMeals",
+  title: "Messes in Kozhikode | Homely Food & Meal Plans | MessMeals",
   description:
-    "Find messes in Kasaragod on MessMeals. Explore homely food options, available menus, and daily or monthly meal plans from local providers.",
+    "Find messes in Kozhikode on MessMeals. Explore homely food options, available menus, and daily or monthly meal plans from local providers.",
   alternates: {
-    canonical: "https://messmeals.com/messes/kasaragod/",
+    canonical: "https://messmeals.com/kerala/kozhikode/",
   },
   openGraph: {
-    title: "Messes in Kasaragod | Homely Food & Meal Plans | MessMeals",
+    title: "Messes in Kozhikode | Homely Food & Meal Plans | MessMeals",
     description:
-      "Explore messes in Kasaragod, browse available menus, and check daily or monthly meal plans on MessMeals.",
-    url: "https://messmeals.com/messes/kasaragod/",
+      "Explore messes in Kozhikode (Calicut), browse available menus, and check daily or monthly meal plans on MessMeals.",
+    url: "https://messmeals.com/kerala/kozhikode/",
     type: "website",
   },
 };
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
 const AREAS = [
-  { name: "Kasaragod Town" },
-  { name: "Vidyanagar" },
-  { name: "Thalangara" },
-  { name: "Nellikunnu" },
-  { name: "Chandragiri" },
-  { name: "Chengala" },
-  { name: "Kumbla" },
-  { name: "Mogral Puthur" },
-  { name: "Cherkala" },
-  { name: "Madhur" },
-  { name: "Bovikanam" },
-  { name: "Adkathbail" },
+  { name: "Nadakkavu" },
+  { name: "Mavoor Road" },
+  { name: "Thondayad" },
+  { name: "Kottooli" },
+  { name: "Palayam" },
+  { name: "West Hill" },
+  { name: "East Hill" },
+  { name: "Chevayur" },
+  { name: "Medical College" },
+  { name: "Malaparamba" },
+  { name: "Kallai" },
+  { name: "Beypore" },
 ];
 
 const AUDIENCE_CARDS = [
   {
     icon: GraduationCap,
     label: "For Students",
-    desc: "Living in a hostel or staying away from home for your studies? Explore nearby messes and review the available meal options that fit your college schedule and daily routine.",
+    desc: "Find everyday food options while studying, staying in a hostel or living away from home. Explore nearby messes and check the meal plans available for your routine.",
   },
   {
     icon: Briefcase,
     label: "For Working Professionals",
-    desc: "Busy workdays can make planning meals difficult. Explore messes near your home or workplace and check their menus and meal plans to find convenient everyday food options.",
+    desc: "Make everyday meals easier to plan around a busy work schedule. Explore food providers near your home or workplace and check their menus and meal options.",
   },
   {
     icon: Home,
     label: "For Hostel & PG Residents",
-    desc: "Looking for regular meals without having to cook every day? Discover homely food options in Kasaragod and review the details of each provider before choosing.",
+    desc: "Looking for food without having to cook every day? Discover homely food options in Kozhikode and compare available meal plans before choosing a provider.",
   },
   {
     icon: Coffee,
     label: "For Everyday Meals",
-    desc: "Whether you need lunch, dinner or regular meals throughout the week, explore the listings available on MessMeals and find options that suit your routine.",
+    desc: "Whether you need lunch, dinner or regular meals throughout the week, explore local mess listings and check which options suit your everyday needs.",
   },
 ];
 
@@ -89,32 +89,32 @@ const STEPS = [
   {
     n: 1,
     title: "Check the Location",
-    desc: "Look for a mess that's convenient for where you live, study or work. Check the address and consider how easily you can reach the provider.",
+    desc: "Look for a mess that's convenient for where you live, study or work. Consider your regular travel route and how easily you can access the food provider.",
   },
   {
     n: 2,
     title: "Review the Menu",
-    desc: "Look through the available food options and make sure they match your preferences and meal requirements.",
+    desc: "Check the available meals and food preferences. Make sure the options match what you normally like to eat.",
   },
   {
     n: 3,
     title: "Compare Available Plans",
-    desc: "Check the daily or monthly plans offered by each provider. Compare the price, duration and meals included wherever the information is available.",
+    desc: "Review the daily or monthly plans offered by different providers. Compare the duration, meals included and listed prices.",
   },
   {
     n: 4,
     title: "Consider Your Food Preferences",
-    desc: "Check whether the provider offers vegetarian, non-vegetarian or mixed food options that suit your needs.",
+    desc: "Check whether the mess offers vegetarian, non-vegetarian or mixed food options according to your needs.",
   },
   {
     n: 5,
     title: "Read the Listing Details",
-    desc: "Review the provider's address, contact information, menus and other available details before making a decision.",
+    desc: "Review the address, contact information, menu and other available details. Check the latest information instead of relying on assumptions.",
   },
   {
     n: 6,
     title: "Contact the Provider Before Choosing",
-    desc: "If you have questions about meal timings, plan availability, pricing or food options, contact the provider to clarify the details before committing to a plan.",
+    desc: "If something is unclear, ask about meal timings, plan inclusions, pricing or availability before committing to a plan.",
   },
 ];
 
@@ -122,63 +122,63 @@ const PLAN_CARDS = [
   {
     icon: CalendarDays,
     label: "Daily Plans",
-    desc: "Looking for food for the day? Explore available options and check which providers offer individual meals or daily plans.",
+    desc: "Explore available options when you're looking for individual meals or food for a particular day.",
   },
   {
     icon: Star,
     label: "Monthly Plans",
-    desc: "Prefer a regular meal arrangement? Look for messes offering recurring monthly plans and confirm the pricing, duration and meals included with the provider.",
+    desc: "Check for recurring meal plans that suit your everyday routine and help you plan your regular food requirements.",
   },
   {
     icon: ListChecks,
     label: "Meal Menus",
-    desc: "Check the menus and meal options listed by each mess to understand what's available before choosing a plan.",
+    desc: "Review the menus and meal options listed by each mess so you know what to expect before contacting the provider.",
   },
 ];
 
 const FAQS = [
   {
-    q: "Where can I find messes in Kasaragod?",
-    a: "You can explore the mess listings on MessMeals to discover food providers in Kasaragod. Check each listing for its location, menu, meal plans, pricing and contact details.",
+    q: "Where can I find messes in Kozhikode?",
+    a: "You can explore mess listings on MessMeals to find food providers in Kozhikode (Calicut). Check each listing for its location, available menus, meal plans, pricing and contact details.",
   },
   {
-    q: "Is Kasaragod also called Kasargod?",
-    a: "Yes. Both Kasaragod and Kasargod are used to refer to this part of Kerala. You may encounter either spelling when searching for messes and everyday food options.",
+    q: "Is Kozhikode the same as Calicut?",
+    a: "Yes. Kozhikode is also widely known as Calicut. People may use either name when searching for messes, homely food and everyday meal options in the city.",
   },
   {
-    q: "Can I find vegetarian messes in Kasaragod?",
-    a: "Check the available MessMeals listings for providers offering vegetarian food. Review each provider's current menu to confirm which meals are available.",
+    q: "Can I find vegetarian messes in Kozhikode?",
+    a: "You can review MessMeals listings for vegetarian food options. Check each provider's current menu and listing details to confirm which meals are available.",
   },
   {
-    q: "Can I find non-vegetarian mess food in Kasargod?",
-    a: "Explore the available listings and check which providers offer non-vegetarian meals. Food choices can vary by provider, so review the latest menu details before choosing.",
+    q: "Can I find non-vegetarian mess food in Calicut?",
+    a: "Explore the available mess listings and check which providers offer non-vegetarian meals. Menus and food choices may vary between providers, so review the latest details before choosing.",
   },
   {
-    q: "Are monthly meal plans available in Kasaragod?",
-    a: "Meal plan availability depends on each provider. Explore the current listings on MessMeals and contact the mess to confirm whether monthly plans are offered, along with their prices, duration and inclusions.",
+    q: "Are monthly meal plans available in Kozhikode?",
+    a: "Some mess providers may offer recurring meal plans. Explore the current listings on MessMeals and contact the provider to confirm the available plans, prices, duration and meals included.",
   },
   {
-    q: "How can I find a mess near my location in Kasaragod?",
-    a: "Start by exploring listings in the areas that are convenient for you. Check the address and distance of each provider, and confirm the location before choosing a meal plan.",
+    q: "Can I find mess food near Kozhikode Medical College?",
+    a: "Start by exploring listings and searching for options around the Medical College area. Check the location shown on each listing and confirm its current availability and meal details with the provider.",
   },
   {
-    q: "How do I choose the right mess in Kasaragod?",
-    a: "Consider the location, menu, food preferences, meal timings, pricing and available plans. Review the listing details on MessMeals and contact the provider if you need clarification before making your choice.",
+    q: "How do I choose the right mess in Calicut?",
+    a: "Consider the location, menu, food preferences, meal timings, price and plan duration. Compare the available details on MessMeals and contact the provider if you need clarification before selecting a meal plan.",
   },
 ];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function KasaragodPage() {
+export default async function KozhikodePage() {
   let initialData: MessListing[] = [];
   try {
     const res = await getAllMess(1, 50, {
-      latitude: KSD_LAT,
-      longitude: KSD_LNG,
+      latitude: CLT_LAT,
+      longitude: CLT_LNG,
     });
     initialData = Array.isArray(res) ? res : res?.data ?? [];
   } catch (err) {
-    console.error("Failed to fetch Kasaragod messes", err);
+    console.error("Failed to fetch Kozhikode messes", err);
   }
 
   // ── Structured Data ───────────────────────────────────────────────────────
@@ -196,13 +196,13 @@ export default async function KasaragodPage() {
         "@type": "ListItem",
         position: 2,
         name: "Messes",
-        item: "https://messmeals.com/messes",
+        item: "https://messmeals.com/mess",
       },
       {
         "@type": "ListItem",
         position: 3,
-        name: "Kasaragod",
-        item: "https://messmeals.com/messes/kasaragod/",
+        name: "Kozhikode",
+        item: "https://messmeals.com/kerala/kozhikode/",
       },
     ],
   };
@@ -210,10 +210,10 @@ export default async function KasaragodPage() {
   const collectionPageLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Messes in Kasaragod (Kasargod) | MessMeals",
+    name: "Messes in Kozhikode (Calicut) | MessMeals",
     description:
-      "Explore messes, homely food, available menus and meal plans in Kasaragod with MessMeals.",
-    url: "https://messmeals.com/messes/kasaragod/",
+      "Explore messes, homely food, available menus and meal plans across Kozhikode with MessMeals.",
+    url: "https://messmeals.com/kerala/kozhikode/",
   };
 
   const itemListLd =
@@ -221,7 +221,7 @@ export default async function KasaragodPage() {
       ? {
           "@context": "https://schema.org",
           "@type": "ItemList",
-          name: "Messes in Kasaragod",
+          name: "Messes in Kozhikode",
           itemListElement: initialData.map((mess, idx) => ({
             "@type": "ListItem",
             position: idx + 1,
@@ -235,18 +235,18 @@ export default async function KasaragodPage() {
     <>
       {/* ── Structured Data ── */}
       <Script
-        id="json-ld-breadcrumb-ksd"
+        id="json-ld-breadcrumb-clt"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <Script
-        id="json-ld-collection-ksd"
+        id="json-ld-collection-clt"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageLd) }}
       />
       {itemListLd && (
         <Script
-          id="json-ld-itemlist-ksd"
+          id="json-ld-itemlist-clt"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
         />
@@ -258,18 +258,18 @@ export default async function KasaragodPage() {
           <div className={styles["hero-inner"]}>
             <div className={styles["hero-label"]}>
               <MapPin size={13} />
-              <span>MESSMEALS · KASARAGOD</span>
+              <span>MESSMEALS · KOZHIKODE</span>
             </div>
             <h1 className={styles["hero-title"]}>
               Messes in{" "}
-              <span>Kasaragod</span>{" "}
-              <span className={styles["hero-title-alt"]}>(Kasargod)</span>
+              <span>Kozhikode</span>{" "}
+              <span className={styles["hero-title-alt"]}>(Calicut)</span>
             </h1>
             <p className={styles["hero-desc"]}>
-              Looking for a mess in Kasaragod? Whether you're searching for everyday meals, homely food or a convenient meal plan, MessMeals helps you explore available messes and food providers in and around the area.
+              Looking for a mess in Kozhikode? Whether you call it Kozhikode or Calicut, finding a convenient place for everyday meals shouldn't have to be difficult. MessMeals helps you explore local messes, discover homely food options, check available menus and compare meal plans that fit your daily routine.
             </p>
             <p className={styles["hero-desc-sub"]}>
-              Whether you're a student living away from home, a working professional with a busy schedule, or someone looking for regular home-style meals, you can browse local listings, check available menus and explore meal plans that fit your daily routine.
+              Whether you're a student living away from home, a working professional with a busy schedule, or someone looking for regular home-style meals, explore food options in and around Kozhikode in one place.
             </p>
             <div className={styles["hero-ctas"]}>
               <a href="#listings" className={styles["hero-cta-primary"]}>
@@ -287,16 +287,16 @@ export default async function KasaragodPage() {
         <section className={styles["listings-section"]} id="listings">
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Messes &amp; Homely Food Options in Kasaragod
+              Messes &amp; Homely Food Options in Kozhikode
             </h2>
             <p className={styles["section-desc"]}>
-              Looking for everyday meals in Kasargod? Explore the messes and food providers listed on MessMeals to find options that suit your daily needs.
+              Looking for everyday meals in Calicut? Explore messes and food providers listed on MessMeals. Check individual listings for available menus, vegetarian and non-vegetarian options, meal plans, pricing, locations and contact details.
             </p>
             <p className={styles["section-desc"]}>
-              Check individual listings for available menus, vegetarian and non-vegetarian food options, meal plans, pricing, locations and contact details. Whether you're looking for a convenient lunch or a plan for regular meals, review the available information before choosing a provider.
+              From finding a convenient lunch option to exploring a monthly meal plan, compare the available details and choose a mess that suits your routine.
             </p>
           </div>
-          <CityMessGrid messes={initialData} defaultCity="Kasaragod" />
+          <CityMessGrid messes={initialData} defaultCity="Kozhikode" />
         </section>
 
         {/* ── 3. AREAS ── */}
@@ -306,20 +306,20 @@ export default async function KasaragodPage() {
               <span>EXPLORE BY AREA</span>
             </div>
             <h2 className={styles["section-title"]}>
-              Find Messes Across Kasaragod
+              Find Messes Across Kozhikode
             </h2>
             <p className={styles["section-desc"]}>
-              Finding a mess near your home, college or workplace can make everyday life a little easier. Start with the areas that are convenient for you and explore the mess listings available nearby.
+              Finding a mess close to home, college or work can make your daily routine easier. Explore local areas across Kozhikode and check the available listings to find food options that are convenient for you.
             </p>
             <p className={styles["section-desc"]}>
-              From Kasaragod town and surrounding residential areas to other nearby locations, check the listed addresses and available food options to find a provider that fits your routine.
+              Whether you're around the city centre, a residential neighbourhood or the Medical College area, start with the locations that work best for your everyday travel.
             </p>
           </div>
           <div className={styles["areas-grid"]}>
             {AREAS.map((area) => (
               <Link
                 key={area.name}
-                href={`/messes?latitude=${KSD_LAT}&longitude=${KSD_LNG}&name=${encodeURIComponent(area.name)}`}
+                href={`/mess?latitude=${CLT_LAT}&longitude=${CLT_LNG}&name=${encodeURIComponent(area.name)}`}
                 className={styles["area-card"]}
               >
                 <MapPin size={15} className={styles["area-card-icon"]} />
@@ -340,10 +340,10 @@ export default async function KasaragodPage() {
               Find Everyday Food That Fits Your Routine
             </h2>
             <p className={styles["section-desc"]}>
-              Everyone has different food needs. Students may want convenient meals close to their college or hostel, working professionals may need options that fit around their workday, and people living away from family may prefer the familiarity of home-style food.
+              Everyone has different food needs. Students may need regular meals near their college or hostel, working professionals may prefer convenient lunch and dinner options, and people living away from family may simply want a dependable place for everyday food.
             </p>
             <p className={styles["section-desc"]}>
-              MessMeals helps you explore the food providers listed in Kasaragod and review their available options based on your location, food preferences and meal requirements.
+              Explore messes in Kozhikode based on your location, food preferences and meal requirements.
             </p>
           </div>
           <div className={styles["audience-grid"]}>
@@ -370,13 +370,13 @@ export default async function KasaragodPage() {
                 <span>FOOD OPTIONS</span>
               </div>
               <h2 className={styles["section-title"]}>
-                Explore Vegetarian &amp; Non-Vegetarian Mess Food in Kasaragod
+                Explore Vegetarian &amp; Non-Vegetarian Mess Food in Calicut
               </h2>
               <p className={styles["section-desc"]}>
-                Everyone has their own food preferences. Some people prefer vegetarian meals, while others look for non-vegetarian dishes or a mix of both.
+                Food preferences matter when choosing a regular mess. Some people prefer vegetarian meals, while others look for non-vegetarian dishes or a mix of both.
               </p>
               <p className={styles["section-desc"]}>
-                When exploring messes in Kasaragod, check the food options and menus listed by each provider. Since meal choices can differ from one mess to another, review the latest listing details or contact the provider if you need more information.
+                MessMeals helps you explore food providers and review the options described in their listings. Check each mess's current menu and food details before deciding on a meal plan.
               </p>
 
               <Link href="#listings" className={styles["food-pref-cta"]}>
@@ -393,7 +393,7 @@ export default async function KasaragodPage() {
                 </div>
                 <h3>Vegetarian</h3>
                 <p>
-                  Explore listings that offer vegetarian meals and check the available menu before selecting a mess.
+                  Explore messes that list vegetarian meal options and check the available menus before choosing.
                 </p>
               </div>
               <div className={styles["food-pref-card"]}>
@@ -404,7 +404,7 @@ export default async function KasaragodPage() {
                 </div>
                 <h3>Non-Vegetarian</h3>
                 <p>
-                  Looking for non-vegetarian food? Review the available listings to find providers that offer suitable meal options.
+                  Look for food providers offering non-vegetarian meals and review their current food options and plans.
                 </p>
               </div>
               <div className={styles["food-pref-card"]}>
@@ -415,7 +415,7 @@ export default async function KasaragodPage() {
                 </div>
                 <h3>Mixed Food Options</h3>
                 <p>
-                  Prefer both vegetarian and non-vegetarian meals? Check each provider's menu to understand the food choices available.
+                  Prefer a mix of vegetarian and non-vegetarian food? Review individual listings to understand which meal choices each provider offers.
                 </p>
               </div>
             </div>
@@ -426,13 +426,13 @@ export default async function KasaragodPage() {
         <section className={styles["plans-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Find Daily &amp; Monthly Meal Plans in Kasaragod
+              Find Daily &amp; Monthly Meal Plans in Kozhikode
             </h2>
             <p className={styles["section-desc"]}>
-              Your meal requirements depend on your schedule, budget and everyday routine. You may need individual meals on certain days, or you may prefer a recurring plan that covers your regular food requirements.
+              Your food routine may change depending on your schedule, budget and meal requirements. Some people need individual meals, while others prefer a recurring plan for regular lunch, dinner or multiple meals throughout the day.
             </p>
             <p className={styles["section-desc"]}>
-              Explore the mess listings on MessMeals to check the meal plans currently offered by each provider. Compare the available pricing, plan duration, menus and meals included before making a decision.
+              Explore available mess listings on MessMeals and check the plan duration, pricing, menus and meals included. Since every provider may offer different options, review the details of each plan before making a decision.
             </p>
           </div>
           <div className={styles["plans-grid"]}>
@@ -455,13 +455,13 @@ export default async function KasaragodPage() {
         <section className={styles["choose-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              How to Choose the Right Mess in Kasaragod
+              How to Choose the Right Mess in Kozhikode
             </h2>
             <p className={styles["section-desc"]}>
-              Choosing a mess involves more than finding a place nearby. You'll also want to consider the type of food, meal timings, pricing and whether the available plans suit your everyday routine.
+              Choosing a mess isn't only about finding the nearest place. You'll also want to consider the menu, meal timings, pricing and whether the available plans fit your routine.
             </p>
             <p className={styles["section-desc"]}>
-              Here are a few things to check when choosing a mess in Kasargod.
+              Here are a few things to check before choosing a mess in Calicut.
             </p>
           </div>
           <div className={styles["steps-grid"]}>
@@ -491,16 +491,16 @@ export default async function KasaragodPage() {
                 <span>WHY MESSMEALS</span>
               </div>
               <h2 className={styles["section-title"]}>
-                A Simpler Way to Find Everyday Meals in Kasaragod
+                A Simpler Way to Find Everyday Meals in Kozhikode
               </h2>
               <p className={styles["section-desc"]}>
-                Finding regular food can take time when details about different messes are scattered across multiple sources. You may need to compare locations, look through menus and contact providers before finding the right option.
+                Finding regular food can take time when details about different messes are scattered across multiple sources. You may need to compare locations, check menus, understand meal plans and contact providers before deciding.
               </p>
               <p className={styles["section-desc"]}>
-                MessMeals brings mess listings and useful food-related information together, helping you explore available options in Kasaragod in one place.
+                MessMeals brings mess listings and useful food-related information together, helping you explore available options across Kozhikode in one place.
               </p>
               <Link href="#listings" className={styles["why-cta"]}>
-                Explore Messes in Kasaragod
+                Explore Messes in Kozhikode
                 <ArrowRight size={16} />
               </Link>
             </div>
@@ -509,17 +509,17 @@ export default async function KasaragodPage() {
                 {
                   icon: MapPin,
                   label: "Discover",
-                  desc: "Explore listed messes and food providers in areas that are convenient for your daily routine.",
+                  desc: "Explore mess listings and food providers based on the areas that are convenient for you.",
                 },
                 {
                   icon: ListChecks,
                   label: "Compare",
-                  desc: "Review the available menus, meal plans, food preferences and pricing details to understand your options.",
+                  desc: "Review available menus, meal plans, food preferences and pricing details to understand your options.",
                 },
                 {
                   icon: CheckCircle2,
                   label: "Choose",
-                  desc: "Find a provider that suits your location, food preferences and everyday meal requirements.",
+                  desc: "Shortlist a mess that fits your location, food preferences and everyday meal requirements.",
                 },
               ].map((item) => {
                 const Icon = item.icon;
@@ -541,7 +541,7 @@ export default async function KasaragodPage() {
         <section className={styles["faq-section"]}>
           <div className={styles["section-container"]}>
             <h2 className={styles["section-title"]}>
-              Frequently Asked Questions About Messes in Kasaragod
+              Frequently Asked Questions About Messes in Kozhikode
             </h2>
           </div>
           <div className={styles["faq-list"]}>
@@ -555,10 +555,10 @@ export default async function KasaragodPage() {
         <section className={styles["final-cta-section"]}>
           <div className={styles["final-cta-inner"]}>
             <h2 className={styles["section-title"]}>
-              Find Your Everyday Meals in Kasaragod
+              Find Your Everyday Meals in Kozhikode
             </h2>
             <p className={styles["section-desc"]}>
-              Finding regular food should fit naturally into your day. Whether you're studying, working or living away from home, MessMeals helps you explore messes and homely food options in Kasaragod.
+              Finding regular food should fit naturally into your day. Whether you're studying, working or living away from home, MessMeals helps you explore messes and homely food options in Kozhikode.
             </p>
             <p className={styles["section-desc"]}>
               Browse the available listings, review menus and meal plans, and find a food provider that suits your location and routine.
@@ -568,7 +568,7 @@ export default async function KasaragodPage() {
               className={styles["why-cta"]}
               style={{ marginTop: 14 }}
             >
-              Explore Messes in Kasaragod
+              Explore Messes in Kozhikode
               <ArrowRight size={16} />
             </Link>
             <span className={styles["final-cta-tagline"]}>

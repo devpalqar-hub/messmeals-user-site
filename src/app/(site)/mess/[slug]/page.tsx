@@ -91,7 +91,7 @@ export default async function MessDetailsPage({ params }: Params) {
           "@type": "ListItem",
           "position": 2,
           "name": "Messes",
-          "item": "https://messmeals.com/messes"
+          "item": "https://messmeals.com/mess"
         },
         {
           "@type": "ListItem",
