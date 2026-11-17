@@ -593,6 +593,14 @@ export default function ViewAllListingsClient({
                             View Details
                             <ArrowRight size={16} />
                           </Link>
+
+                          <Link
+                            className={styles["landing-btn"]}
+                            href={`/mess-menu-and-meal-plans/${mess.slug}`}
+                          >
+                            <Sparkles size={14} />
+                            View Landing Page
+                          </Link>
                         </div>
                       </div>
                     </article>
