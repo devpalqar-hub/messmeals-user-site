@@ -6,8 +6,9 @@ import { getMessBySlug } from "../../../../services/messApi";
 import type { MessDetails, NewMessPlan } from "../../../../types/mess";
 // Star intentionally omitted — new API does not return ratings
 import {
-  Tag, Images, MessageCircle, X, ChevronLeft, ChevronRight, CalendarDays, Sun, Moon,
+  Tag, Images, MessageCircle, X, ChevronLeft, ChevronRight, CalendarDays, Sun, Moon, Sparkles, ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 import { Phone, MapPin, Mail, Utensils, Coffee, Salad, Drumstick, Leaf, BadgeCheck } from "../../../../components/ui/SvgIcon/SvgIcon";
 // import { useAuth } from "../../../../context/AuthContext";
 import FloatingContact from "../../../../components/ui/FloatingContact/FloatingContact";
@@ -338,6 +339,15 @@ export default function ViewMessDetailsClient({
                     <span>{mess.address.location}</span>
                   </div>
                 )}
+
+                <Link
+                  href={`/mess-menu-and-meal-plans/${mess.slug}`}
+                  className={styles["landing-link"]}
+                >
+                  <Sparkles size={15} />
+                  View Landing Page
+                  <ArrowRight size={15} />
+                </Link>
               </div>
             </div>
 
