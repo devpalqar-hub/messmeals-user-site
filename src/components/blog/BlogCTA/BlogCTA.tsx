@@ -21,7 +21,7 @@ export default function BlogCTA() {
         </div>
 
         <div className={styles.actionWrap}>
-          <Link href="/messes" className={styles.ctaButton}>
+          <Link href="/mess" className={styles.ctaButton}>
             Explore Messes
             <ArrowRight size={18} aria-hidden="true" />
           </Link>

@@ -44,7 +44,7 @@ export default function Footer() {
                 </span>
                 Explore
               </h4>
-              <Link href="/messes">Messes</Link>
+              <Link href="/mess">Messes</Link>
               <Link href="/#popular-plans">Popular Plans</Link>
               <Link href="/mess-manager">List Your Mess</Link>
             </div>

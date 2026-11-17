@@ -161,7 +161,7 @@ export default function HeroSection() {
     if (foodType) params.append("foodType", foodType);
     if (planType) params.append("planType", planType);
 
-    router.push(`/messes?${params.toString()}`);
+    router.push(`/mess?${params.toString()}`);
   };
 
   const focusLocation = () => {
@@ -436,7 +436,7 @@ export default function HeroSection() {
           <button
             type="button"
             className={styles["hero-browse-btn"]}
-            onClick={() => router.push("/messes")}
+            onClick={() => router.push("/mess")}
           >
             <LayoutGrid size={16} className={styles["hero-browse-icon"]} />
             Browse All Messes
@@ -460,7 +460,7 @@ export default function HeroSection() {
             <button
               key={city}
               type="button"
-              onClick={() => router.push("/messes")}
+              onClick={() => router.push("/mess")}
             >
               {city}
             </button>

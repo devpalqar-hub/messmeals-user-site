@@ -113,7 +113,7 @@ export default function HowItWorks() {
           <button
             id="hiw-search-messes-btn"
             className={styles["hiw-cta-btn"]}
-            onClick={() => router.push("/messes")}
+            onClick={() => router.push("/mess")}
           >
             Search Available Messes
             <ArrowRight size={17} strokeWidth={2} />

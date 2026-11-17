@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   title: "Top Messes & Meal Plans | MessMeals",
   description:
     "Browse top-rated messes and homely food providers. Compare meal plans, menus, and prices to find the right meals on MessMeals.",
-  alternates: { canonical: "/messes" },
+  alternates: { canonical: "/mess" },
   openGraph: {
     title: "Top Messes & Meal Plans | MessMeals",
     description:
       "Browse top-rated messes and homely food providers. Compare meal plans, menus, and prices to find the right meals on MessMeals.",
     images: ["/seo/og-listings.png"],
-    url: "/messes",
+    url: "/mess",
   },
 };
 
@@ -36,7 +36,7 @@ export default async function ViewAllListingsPage({ searchParams }: { searchPara
     initialData = Array.isArray(res) ? res : res?.data ?? [];
     initialMeta = Array.isArray(res) ? null : res?.meta ?? null;
   } catch (err) {
-    console.error("Failed to fetch /messes initial data", err);
+    console.error("Failed to fetch /mess initial data", err);
   }
 
   return (

@@ -19,13 +19,13 @@ export const metadata: Metadata = {
   description:
     "Find messes in Trivandrum (Thiruvananthapuram) on MessMeals. Explore homely food options, available menus, and daily or monthly meal plans.",
   alternates: {
-    canonical: "https://messmeals.com/messes/thiruvananthapuram/",
+    canonical: "https://messmeals.com/kerala/thiruvananthapuram/",
   },
   openGraph: {
     title: "Messes in Trivandrum | Homely Food & Meal Plans | MessMeals",
     description:
       "Explore messes in Thiruvananthapuram, browse available menus, and check daily or monthly meal plans on MessMeals.",
-    url: "https://messmeals.com/messes/thiruvananthapuram/",
+    url: "https://messmeals.com/kerala/thiruvananthapuram/",
     type: "website",
   },
 };
@@ -182,13 +182,13 @@ export default async function ThiruvananthapuramPage() {
         "@type": "ListItem",
         position: 2,
         name: "Messes",
-        item: "https://messmeals.com/messes",
+        item: "https://messmeals.com/mess",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: "Thiruvananthapuram",
-        item: "https://messmeals.com/messes/thiruvananthapuram/",
+        item: "https://messmeals.com/kerala/thiruvananthapuram/",
       },
     ],
   };
@@ -199,7 +199,7 @@ export default async function ThiruvananthapuramPage() {
     name: "Messes in Thiruvananthapuram (Trivandrum) | MessMeals",
     description:
       "Browse messes in Thiruvananthapuram (Trivandrum), explore menus and food options, and check available meal plans on MessMeals.",
-    url: "https://messmeals.com/messes/thiruvananthapuram/",
+    url: "https://messmeals.com/kerala/thiruvananthapuram/",
   };
 
   const itemListLd =
@@ -299,7 +299,7 @@ export default async function ThiruvananthapuramPage() {
             {AREAS.map((area) => (
               <Link
                 key={area.name}
-                href={`/messes?latitude=${TVM_LAT}&longitude=${TVM_LNG}&name=${encodeURIComponent(area.name)}`}
+                href={`/mess?latitude=${TVM_LAT}&longitude=${TVM_LNG}&name=${encodeURIComponent(area.name)}`}
                 className={styles["area-card"]}
               >
                 <MapPin size={15} className={styles["area-card-icon"]} />

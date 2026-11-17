@@ -19,13 +19,13 @@ export const metadata: Metadata = {
   description:
     "Find messes in Ernakulam and Kochi. Explore homely food options, menus, and available daily or monthly meal plans on MessMeals.",
   alternates: {
-    canonical: "/messes/ernakulam/",
+    canonical: "/kerala/ernakulam/",
   },
   openGraph: {
     title: "Messes in Ernakulam & Kochi | Homely Food | MessMeals",
     description:
       "Explore messes in Ernakulam and Kochi, browse available menus, and check daily or monthly meal plans on MessMeals.",
-    url: "https://messmeals.com/messes/ernakulam/",
+    url: "https://messmeals.com/kerala/ernakulam/",
     type: "website",
   },
 };
@@ -181,13 +181,13 @@ export default async function ErnakulamPage() {
         "@type": "ListItem",
         position: 2,
         name: "Messes",
-        item: "https://messmeals.com/messes",
+        item: "https://messmeals.com/mess",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: "Ernakulam",
-        item: "https://messmeals.com/messes/ernakulam/",
+        item: "https://messmeals.com/kerala/ernakulam/",
       },
     ],
   };
@@ -198,7 +198,7 @@ export default async function ErnakulamPage() {
     name: "Messes in Ernakulam (Kochi) | Meal Plans | MessMeals",
     description:
       "Browse messes in Ernakulam (Kochi), explore menus and food options, and check available meal plans on MessMeals.",
-    url: "https://messmeals.com/messes/ernakulam/",
+    url: "https://messmeals.com/kerala/ernakulam/",
   };
 
   const itemListLd =
@@ -298,7 +298,7 @@ export default async function ErnakulamPage() {
             {AREAS.map((area) => (
               <Link
                 key={area.name}
-                href={`/messes?latitude=${ERN_LAT}&longitude=${ERN_LNG}&name=${encodeURIComponent(area.name)}`}
+                href={`/mess?latitude=${ERN_LAT}&longitude=${ERN_LNG}&name=${encodeURIComponent(area.name)}`}
                 className={styles["area-card"]}
               >
                 <MapPin size={15} className={styles["area-card-icon"]} />
