@@ -9,13 +9,7 @@ import {
 } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
-import {
-  Barlow_Condensed,
-  Be_Vietnam_Pro,
-  Nothing_You_Could_Do,
-} from "next/font/google";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
+import { Be_Vietnam_Pro } from "next/font/google";
 import {
   AnimatePresence,
   MotionConfig,
@@ -24,24 +18,23 @@ import {
   useInView,
   useMotionValue,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
 import {
-  ArrowDown,
-  ArrowUpRight,
+  ArrowRight,
   BadgeCheck,
+  Check,
   ChevronDown,
   ClipboardList,
   Clock,
-  MessageCircle,
-  Utensils,
   Crown,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   Star,
+  Utensils,
 } from "lucide-react";
 import type {
   MessDetails,
@@ -52,24 +45,10 @@ import { FOOD, type FoodImage } from "./foodImages";
 import MealIcon, { pickMealKind } from "./MealIcon";
 import styles from "./MessLanding.module.css";
 
-const heading = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-heading",
-  display: "swap",
-});
-
 const body = Be_Vietnam_Pro({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",
-  display: "swap",
-});
-
-const note = Nothing_You_Could_Do({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-note",
   display: "swap",
 });
 
@@ -126,9 +105,37 @@ function inr(value: string | number): string {
   return `₹${Number(value).toLocaleString("en-IN")}`;
 }
 
+function joinList(xs: string[]): string {
+  return xs.length <= 1
+    ? xs.join("")
+    : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`;
+}
+
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* ─── Images ───────────────────────────────────────────────────────────────── */
+/** Supporting copy for the tags the API can return. */
+const HIGHLIGHT_COPY: Record<string, string> = {
+  MONTHLY_PLANS:
+    "Subscribe once and your meals are sorted for the whole month. No daily ordering.",
+  DAILY_FRESH_MEALS:
+    "Every meal is cooked the same day it reaches you. Nothing reheated.",
+  HYGIENIC_KITCHEN:
+    "A clean kitchen, clean hands and clean utensils, every single day.",
+  AFFORDABLE_PRICING:
+    "Proper, filling meals at a price that makes sense for everyday eating.",
+  VEG_AND_NON_VEG: "Vegetarian or non-vegetarian, there is a plate for you.",
+  QUALITY_INGREDIENTS: "Fresh produce and quality staples go into every dish.",
+  CONSISTENT_TASTE:
+    "The meal you liked last week tastes just as good this week.",
+  STUDENT_FRIENDLY:
+    "Filling meals, sensible prices and timings that fit around classes.",
+  FAMILY_MESS: "Homely food the whole family can sit down to.",
+  NO_HIDDEN_CHARGES: "The price you see is the price you pay. No surprise fees.",
+  TRUSTED_MESS: "A kitchen people come back to, meal after meal.",
+};
+const HIGHLIGHT_FALLBACK = "One more reason regulars keep coming back.";
+
+/* ─── Shared pieces ────────────────────────────────────────────────────────── */
 
 type PicSrc = StaticImageData | string;
 
@@ -142,9 +149,8 @@ function canOptimize(url: string): boolean {
 }
 
 /**
- * Fills its (positioned, sized) parent. Goes through next/image — AVIF/WebP,
- * responsive srcset, lazy loading — and falls back to a plain <img> for
- * remote hosts the optimiser isn't configured for.
+ * Fills its (positioned, sized) parent. Uses next/image (AVIF/WebP, srcset,
+ * lazy loading) and falls back to <img> for hosts the optimiser can't fetch.
  */
 function Pic({
   src,
@@ -181,48 +187,46 @@ function Pic({
   );
 }
 
-/* ─── Shared pieces ────────────────────────────────────────────────────────── */
-
-/** Headline whose words rise out of a clipped line, one after another. */
-function RiseText({
-  text,
-  className,
-  as: Tag = "h2",
+/** Gentle fade-up the first time the block scrolls into view. */
+function Reveal({
+  children,
   delay = 0,
-  immediate = false,
+  className,
 }: {
-  text: string;
-  className?: string;
-  as?: "h1" | "h2" | "h3" | "p";
+  children: React.ReactNode;
   delay?: number;
-  immediate?: boolean;
+  className?: string;
 }) {
-  // Observe the heading itself: the words start clipped out of view, so an
-  // observer on them would never fire.
-  const Comp = Tag as "h2";
-  const ref = useRef<HTMLHeadingElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.35 });
-  const show = immediate || inView;
-  const words = text.split(/\s+/).filter(Boolean);
   return (
-    <Comp ref={ref} className={className} aria-label={text}>
-      {words.map((word, i) => (
-        <span key={`${word}-${i}`} className={styles.wordClip} aria-hidden>
-          <motion.span
-            className={styles.word}
-            initial={{ y: "115%" }}
-            animate={{ y: show ? "0%" : "115%" }}
-            transition={{
-              duration: 0.75,
-              ease: EASE,
-              delay: show ? delay + i * 0.07 : 0,
-            }}
-          >
-            {word}
-          </motion.span>
-        </span>
-      ))}
-    </Comp>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.55, ease: EASE, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function SectionHead({
+  eyebrow,
+  title,
+  lead,
+  center = false,
+}: {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  center?: boolean;
+}) {
+  return (
+    <Reveal className={`${styles.head} ${center ? styles.headCenter : ""}`}>
+      <p className={styles.eyebrow}>{eyebrow}</p>
+      <h2 className={styles.h2}>{title}</h2>
+      {lead && <p className={styles.lead}>{lead}</p>}
+    </Reveal>
   );
 }
 
@@ -238,220 +242,180 @@ function CountUp({ value, prefix = "" }: { value: number; prefix?: string }) {
 
   useEffect(() => {
     if (!inView) return;
-    const controls = animate(mv, value, { duration: 1.4, ease: "easeOut" });
+    const controls = animate(mv, value, { duration: 1.1, ease: "easeOut" });
     return () => controls.stop();
   }, [inView, mv, value]);
 
   return <motion.span ref={ref}>{label}</motion.span>;
 }
 
-/** Giant outlined text that slides sideways as the page scrolls. */
-function ScrollBand({
-  text,
-  reverse = false,
-}: {
-  text: string;
-  reverse?: boolean;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    reverse ? ["-32%", "0%"] : ["0%", "-32%"],
-  );
-  return (
-    <div ref={ref} className={styles.scrollBand} aria-hidden>
-      <motion.div className={styles.scrollBandTrack} style={{ x }}>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <span key={i}>{text} ✦</span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
 type Stat = { label: string; value?: number; prefix?: string; text?: string };
 
-function Stickers({ status }: { status: MessDetails["status"] }) {
-  const list = [
-    status.isFeatured && { label: "Featured", icon: <Star size={13} /> },
-    status.isVerified && { label: "Verified", icon: <BadgeCheck size={13} /> },
-    status.isPremium && { label: "Premium", icon: <Crown size={13} /> },
-  ].filter(Boolean) as { label: string; icon: React.ReactNode }[];
+/* ─── Navigation ───────────────────────────────────────────────────────────── */
 
-  if (list.length === 0) return null;
+function Nav({ mess, hasPlan }: { mess: MessDetails; hasPlan: boolean }) {
   return (
-    <div className={styles.stickers}>
-      {list.map((s, i) => (
-        <motion.span
-          key={s.label}
-          className={styles.sticker}
-          initial={{ scale: 0, rotate: -20 }}
-          animate={{
-            scale: 1,
-            rotate: i % 2 === 0 ? -6 : 5,
-            transition: {
-              type: "spring",
-              stiffness: 320,
-              damping: 14,
-              delay: 1.7 + i * 0.12,
-            },
-          }}
+    <nav className={styles.nav} aria-label="Page">
+      <div className={styles.navInner}>
+        <Link href="/" className={styles.brand}>
+          MessMeals
+        </Link>
+        <div className={styles.navLinks}>
+          <a href="#about">About</a>
+          {hasPlan && <a href="#menu">Menu</a>}
+          {hasPlan && <a href="#plan">Plan</a>}
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <a
+          href={waLink(mess.phone, mess.messName)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
         >
-          {s.icon}
-          {s.label}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
-
-/* ─── Intro sheet + masthead ───────────────────────────────────────────────── */
-
-function Preloader({ mess }: { mess: MessDetails }) {
-  // Pure CSS: holds briefly, then lifts away. Hidden under reduced motion.
-  return (
-    <div className={styles.preloader} aria-hidden>
-      <p className={styles.preloaderNote}>now serving</p>
-      <p className={styles.preloaderName}>{mess.messName}</p>
-    </div>
-  );
-}
-
-function Masthead({ mess }: { mess: MessDetails }) {
-  return (
-    <div className={styles.masthead}>
-      <Link href="/" className={styles.mastBrand}>
-        MessMeals
-      </Link>
-      <a
-        href={waLink(mess.phone, mess.messName)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={styles.mastCta}
-      >
-        Subscribe <ArrowUpRight size={15} />
-      </a>
-    </div>
+          Subscribe
+        </a>
+      </div>
+    </nav>
   );
 }
 
 /* ─── Hero ─────────────────────────────────────────────────────────────────── */
 
-function Hero({ mess, stats }: { mess: MessDetails; stats: Stat[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const photoRotate = useTransform(scrollYProgress, [0, 1], [-5, 4]);
-  const photoY = useTransform(scrollYProgress, [0, 1], ["0%", "-14%"]);
-  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+function Hero({
+  mess,
+  lead,
+  stats,
+  hasPlan,
+}: {
+  mess: MessDetails;
+  lead: string;
+  stats: Stat[];
+  hasPlan: boolean;
+}) {
+  const badges = [
+    mess.status.isVerified && {
+      label: "Verified",
+      icon: <BadgeCheck size={14} />,
+    },
+    mess.status.isFeatured && { label: "Featured", icon: <Star size={14} /> },
+    mess.status.isPremium && { label: "Premium", icon: <Crown size={14} /> },
+  ].filter(Boolean) as { label: string; icon: React.ReactNode }[];
 
   return (
-    <header ref={ref} className={styles.hero}>
-      <motion.div style={reduceMotion ? undefined : { y: titleY }}>
-        <RiseText
-          as="h1"
-          text={mess.messName}
-          className={styles.heroTitle}
-          delay={1.15}
-          immediate
-        />
-      </motion.div>
-
-      <div className={styles.heroRow}>
-        <motion.figure
-          className={styles.photoCard}
-          style={reduceMotion ? undefined : { rotate: photoRotate, y: photoY }}
-          initial={{ opacity: 0, scale: 0.86 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            transition: { duration: 0.9, ease: EASE, delay: 1.45 },
-          }}
+    <header className={styles.hero}>
+      <div className={`${styles.container} ${styles.heroGrid}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE }}
         >
-          <i className={`${styles.tape} ${styles.tapeTopLeft}`} />
-          <i className={`${styles.tape} ${styles.tapeBottomRight}`} />
-          {mess.coverImage ? (
-            <div className={styles.photoFrame}>
+          {badges.length > 0 && (
+            <div className={styles.badges}>
+              {badges.map((b) => (
+                <span key={b.label} className={styles.badge}>
+                  {b.icon}
+                  {b.label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <h1 className={styles.h1}>{mess.messName}</h1>
+
+          {mess.address?.location && (
+            <p className={styles.heroLoc}>
+              <MapPin size={16} /> {mess.address.location}
+            </p>
+          )}
+
+          <p className={styles.heroLead}>{lead}</p>
+
+          <div className={styles.heroCtas}>
+            <a
+              href={waLink(mess.phone, mess.messName)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+            >
+              Subscribe on WhatsApp <ArrowRight size={18} />
+            </a>
+            {hasPlan && (
+              <a href="#menu" className={`${styles.btn} ${styles.btnGhost}`}>
+                View weekly menu
+              </a>
+            )}
+          </div>
+        </motion.div>
+
+        <motion.div
+          className={styles.heroMedia}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+        >
+          <div className={styles.heroFrame}>
+            {mess.coverImage ? (
               <Pic
                 src={mess.coverImage}
                 alt={`Food from ${mess.messName}${
                   mess.address?.location ? ` in ${mess.address.location}` : ""
                 }`}
-                sizes="(max-width: 820px) 92vw, 660px"
+                sizes="(max-width: 900px) 100vw, 600px"
                 priority
               />
-            </div>
-          ) : (
-            <div className={styles.photoFallback} />
-          )}
+            ) : (
+              <div className={styles.heroFallback} />
+            )}
+          </div>
           {mess.logo && (
-            <div className={styles.photoLogo}>
-              <Pic
-                src={mess.logo}
-                alt={`${mess.messName} logo`}
-                sizes="100px"
-              />
+            <div className={styles.heroLogoCard}>
+              <div className={styles.heroLogo}>
+                <Pic
+                  src={mess.logo}
+                  alt={`${mess.messName} logo`}
+                  sizes="48px"
+                />
+              </div>
+              <div>
+                <strong>{mess.messName}</strong>
+                <span>on MessMeals</span>
+              </div>
             </div>
           )}
-        </motion.figure>
-
-        <div className={styles.heroSide}>
-          <Stickers status={mess.status} />
-          <p className={styles.heroNote}>
-            fresh, homely meals
-            <br />
-            cooked every day!
-          </p>
-          {mess.address?.location && (
-            <p className={styles.heroLoc}>
-              <MapPin size={15} /> {mess.address.location}
-            </p>
-          )}
-          <a href="#menu" className={styles.btnDark}>
-            See this week&rsquo;s menu <ArrowDown size={17} />
-          </a>
-        </div>
+        </motion.div>
       </div>
 
       {stats.length > 0 && (
-        <motion.dl
-          className={styles.stats}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8, ease: EASE, delay: 1.9 },
-          }}
-        >
-          {stats.map((stat) => (
-            <div key={stat.label} className={styles.stat}>
-              <dd className={styles.statValue}>
-                {stat.value != null ? (
-                  <CountUp value={stat.value} prefix={stat.prefix} />
-                ) : (
-                  stat.text
-                )}
-              </dd>
-              <dt className={styles.statLabel}>{stat.label}</dt>
-            </div>
-          ))}
-        </motion.dl>
+        <div className={styles.container}>
+          <motion.dl
+            className={styles.stats}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+          >
+            {stats.map((stat) => (
+              <div key={stat.label} className={styles.stat}>
+                <dd>
+                  {stat.value != null ? (
+                    <CountUp value={stat.value} prefix={stat.prefix} />
+                  ) : (
+                    stat.text
+                  )}
+                </dd>
+                <dt>{stat.label}</dt>
+              </div>
+            ))}
+          </motion.dl>
+        </div>
       )}
     </header>
   );
 }
 
-/* ─── Tag strip + statement + marquee ──────────────────────────────────────── */
+/* ─── About ────────────────────────────────────────────────────────────────── */
 
-function Statement({
+function About({
   mess,
   extraTags,
 }: {
@@ -459,141 +423,94 @@ function Statement({
   extraTags: string[];
 }) {
   return (
-    <section className={`${styles.sheet} ${styles.forest}`}>
-      <div className={styles.inner}>
-        {extraTags.length > 0 && (
-          <motion.p
-            className={styles.tagLine}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: EASE }}
-          >
-            {extraTags.map(formatTag).join(", ")}.
-          </motion.p>
-        )}
+    <section id="about" className={styles.section}>
+      <div className={`${styles.container} ${styles.aboutGrid}`}>
+        <div>
+          <SectionHead
+            eyebrow="About the kitchen"
+            title={`Meet ${mess.messName}`}
+          />
+          <Reveal delay={0.05}>
+            <p className={styles.prose}>
+              {mess.description ||
+                `${mess.messName} serves fresh, homely meals every day.`}
+            </p>
+          </Reveal>
 
-        <div className={styles.statementGrid}>
-          <div>
-            <p className={styles.noteLabel}>who&rsquo;s cooking?</p>
-            {mess.description ? (
-              <motion.p
-                className={styles.statement}
-                initial={{ opacity: 0, y: 36 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.8, ease: EASE }}
-              >
-                {mess.description}
-              </motion.p>
-            ) : (
-              <p className={styles.statement}>
-                {mess.messName} serves fresh, homely meals every day.
-              </p>
-            )}
-          </div>
-
-          <div className={styles.statementSide}>
           {mess.foodTypes.length > 0 && (
-            <motion.aside
-              className={styles.stickyNote}
-              initial={{ opacity: 0, rotate: 12, y: 40 }}
-              whileInView={{ opacity: 1, rotate: 4, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ type: "spring", stiffness: 160, damping: 14 }}
-            >
-              <i className={`${styles.tape} ${styles.tapeTopCenter}`} />
-              <p className={styles.stickyNoteTitle}>on the menu</p>
-              <ul>
-                {mess.foodTypes.map((ft) => (
-                  <li key={ft}>
-                    <i
-                      className={`${styles.foodDot} ${
-                        ft === "VEG" ? styles.vegDot : styles.nonVegDot
-                      }`}
-                    />
-                    {ft === "VEG"
-                      ? "Veg"
-                      : ft === "NON_VEG"
-                        ? "Non-Veg"
-                        : formatTag(ft)}
-                  </li>
-                ))}
-              </ul>
-            </motion.aside>
+            <Reveal delay={0.1} className={styles.foodTypes}>
+              {mess.foodTypes.map((ft) => (
+                <span key={ft} className={styles.foodType}>
+                  <i
+                    className={`${styles.foodDot} ${
+                      ft === "VEG" ? styles.vegDot : styles.nonVegDot
+                    }`}
+                  />
+                  {ft === "VEG"
+                    ? "Vegetarian"
+                    : ft === "NON_VEG"
+                      ? "Non-vegetarian"
+                      : formatTag(ft)}
+                </span>
+              ))}
+            </Reveal>
           )}
-            <motion.figure
-              className={styles.statementPhoto}
-              initial={{ opacity: 0, rotate: -14, y: 50 }}
-              whileInView={{ opacity: 1, rotate: -5, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ type: "spring", stiffness: 140, damping: 15 }}
-            >
-              <i className={`${styles.tape} ${styles.tapeTopLeft}`} />
-              <div className={styles.statementPhotoFrame}>
-                <Pic
-                  src={FOOD.vegBowl.src}
-                  alt={FOOD.vegBowl.alt}
-                  sizes="(max-width: 820px) 80vw, 420px"
-                />
-              </div>
-            </motion.figure>
-          </div>
-        </div>
-      </div>
 
-      <div className={styles.waveBand} aria-hidden>
-        <div className={styles.waveTrack}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i}>
-              When hunger hits, {mess.messName} has you covered <b>✦</b>
-            </span>
-          ))}
+          {extraTags.length > 0 && (
+            <Reveal delay={0.15} className={styles.chips}>
+              {extraTags.map((tag) => (
+                <span key={tag} className={styles.chip}>
+                  <Check size={14} /> {formatTag(tag)}
+                </span>
+              ))}
+            </Reveal>
+          )}
         </div>
+
+        <Reveal className={styles.aboutMedia}>
+          <div className={styles.aboutFrame}>
+            <Pic
+              src={FOOD.vegBowl.src}
+              alt={FOOD.vegBowl.alt}
+              sizes="(max-width: 900px) 100vw, 520px"
+            />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-/* ─── Full-bleed photo break ───────────────────────────────────────────────── */
+/* ─── Full-width photo band ────────────────────────────────────────────────── */
 
 function PhotoBreak({
   image,
   alt,
   line,
-  note,
+  eyebrow,
 }: {
   image: PicSrc;
   alt: string;
   line: string;
-  note: string;
+  eyebrow: string;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
-
   return (
-    <section ref={ref} className={`${styles.sheet} ${styles.photoBreak}`}>
-      <motion.div
-        className={styles.breakMedia}
-        style={reduceMotion ? undefined : { y }}
-      >
+    <section className={styles.photoBreak}>
+      <div className={styles.breakMedia}>
         <Pic src={image} alt={alt} sizes="100vw" />
-      </motion.div>
+      </div>
       <div className={styles.breakShade} />
-      <div className={`${styles.inner} ${styles.breakCopy}`}>
-        <p className={styles.noteLabel}>{note}</p>
-        <RiseText text={line} className={styles.displayXL} />
+      <div className={`${styles.container} ${styles.breakCopy}`}>
+        <Reveal>
+          <p className={styles.breakEyebrow}>{eyebrow}</p>
+          <h2 className={styles.breakTitle}>{line}</h2>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-/* ─── Menu: pick a day ─────────────────────────────────────────────────────── */
+/* ─── Weekly menu ──────────────────────────────────────────────────────────── */
 
 const subscribeNever = () => () => {};
 
@@ -628,110 +545,84 @@ function MenuSection({ plan }: { plan: NewMessPlan }) {
   });
 
   return (
-    <section id="menu" className={`${styles.sheet} ${styles.paper}`}>
-      <div className={styles.inner}>
-        <p className={styles.noteLabelDark}>pick a day!</p>
-        <RiseText text="What's cooking this week" className={styles.display} />
+    <section id="menu" className={`${styles.section} ${styles.sectionSoft}`}>
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="Weekly menu"
+          title="What's cooking this week"
+          lead="Pick a day to see what's on the plate."
+        />
 
-        <div className={styles.dayDiscs} role="tablist" aria-label="Day">
-          {DAYS.map((day) => {
-            const active = activeDay === day;
-            return (
-              <button
-                key={day}
-                role="tab"
-                aria-selected={active}
-                className={`${styles.disc} ${active ? styles.discActive : ""}`}
-                onClick={() => setActiveDay(day)}
-              >
-                {active && (
-                  <motion.span
-                    layoutId="discFill"
-                    className={styles.discFill}
-                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                  />
-                )}
-                <span className={styles.discLabel}>{DAY_SHORT[day]}</span>
-              </button>
-            );
-          })}
-        </div>
+        <Reveal className={styles.tabs}>
+          <div role="tablist" aria-label="Day" className={styles.tabList}>
+            {DAYS.map((day) => {
+              const active = activeDay === day;
+              return (
+                <button
+                  key={day}
+                  role="tab"
+                  aria-selected={active}
+                  className={`${styles.tab} ${active ? styles.tabActive : ""}`}
+                  onClick={() => setActiveDay(day)}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="dayPill"
+                      className={styles.tabPill}
+                      transition={{ duration: 0.25, ease: EASE }}
+                    />
+                  )}
+                  <span className={styles.tabLabel}>{DAY_SHORT[day]}</span>
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
 
         <div className={styles.menuGrid}>
-        <div className={styles.cardStage}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeDay}
-              className={styles.indexCard}
-              initial={{ opacity: 0, y: 46, rotate: -3 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                rotate: 0,
-                transition: { type: "spring", stiffness: 220, damping: 20 },
-              }}
-              exit={{
-                opacity: 0,
-                y: -24,
-                rotate: 2,
-                transition: { duration: 0.16 },
-              }}
-            >
-              <i className={`${styles.tape} ${styles.tapeTopCenter}`} />
-              <div className={styles.indexTab}>{formatTag(activeDay)}</div>
+          <div className={styles.dayStage}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDay}
+                className={styles.dayCard}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.3, ease: EASE },
+                }}
+                exit={{ opacity: 0, transition: { duration: 0.12 } }}
+              >
+                <h3 className={styles.dayTitle}>{formatTag(activeDay)}</h3>
 
-              {entries.length === 0 ? (
-                <div className={styles.restDay}>
-                  <p className={styles.restTitle}>Kitchen rest day</p>
-                  <p className={styles.restNote}>
-                    we&rsquo;re off today &mdash; back tomorrow with a fresh
-                    menu!
-                  </p>
-                </div>
-              ) : (
-                <ul className={styles.mealRows}>
-                  {rows.map(({ entry, meal, kind }, i) => (
-                    <motion.li
-                      key={`${entry.variationId}-${i}`}
-                      className={styles.mealRow}
-                      initial={{ opacity: 0, x: -24 }}
-                      animate={{
-                        opacity: 1,
-                        x: 0,
-                        transition: {
-                          delay: 0.14 + i * 0.1,
-                          duration: 0.45,
-                          ease: EASE,
-                        },
-                      }}
-                    >
-                      <div
-                        className={`${styles.mealPhoto} ${
-                          i % 2 === 0 ? styles.mealTileLime : ""
-                        }`}
-                        style={{ rotate: i % 2 === 0 ? "-3deg" : "3deg" }}
-                      >
-                        <MealIcon kind={kind} />
-                      </div>
-                      <div className={styles.mealText}>
-                        <span className={styles.mealLabel}>{meal}</span>
-                        <span className={styles.mealItems}>{entry.items}</span>
-                      </div>
-                    </motion.li>
-                  ))}
-                </ul>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+                {entries.length === 0 ? (
+                  <div className={styles.restDay}>
+                    <p className={styles.restTitle}>Kitchen rest day</p>
+                    <p className={styles.restNote}>
+                      No service on {formatTag(activeDay)}. A fresh menu is
+                      back tomorrow.
+                    </p>
+                  </div>
+                ) : (
+                  <ul className={styles.mealRows}>
+                    {rows.map(({ entry, meal, kind }, i) => (
+                      <li key={`${entry.variationId}-${i}`} className={styles.mealRow}>
+                        <div className={styles.mealTile}>
+                          <MealIcon kind={kind} />
+                        </div>
+                        <div className={styles.mealText}>
+                          <span className={styles.mealLabel}>{meal}</span>
+                          <span className={styles.mealItems}>{entry.items}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-          <motion.aside
-            className={styles.glance}
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: EASE }}
-          >
+          <Reveal className={styles.glance}>
             <p className={styles.glanceTitle}>The week at a glance</p>
             <ul className={styles.glanceList}>
               {DAYS.map((day) => {
@@ -756,7 +647,7 @@ function MenuSection({ plan }: { plan: NewMessPlan }) {
                 );
               })}
             </ul>
-          </motion.aside>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -768,186 +659,46 @@ function MenuSection({ plan }: { plan: NewMessPlan }) {
 function HowItWorks({ mess }: { mess: MessDetails }) {
   const steps = [
     {
-      icon: <ClipboardList size={30} />,
-      title: "Pick your plan",
+      icon: <ClipboardList size={24} />,
+      title: "Choose your plan",
       text: "Check this week's menu and the plan price right here on this page.",
     },
     {
-      icon: <MessageCircle size={30} />,
+      icon: <MessageCircle size={24} />,
       title: "Message the kitchen",
       text: `Tap Subscribe to chat with ${mess.messName} on WhatsApp and agree your start date.`,
     },
     {
-      icon: <Utensils size={30} />,
-      title: "Eat well, every day",
+      icon: <Utensils size={24} />,
+      title: "Enjoy your meals",
       text: "Your meals are cooked fresh. No shopping, no cooking and no dishes.",
     },
   ];
 
   return (
-    <section className={`${styles.sheet} ${styles.tintSheet}`}>
-      <ScrollBand text="Easy as one two three" />
-      <div className={styles.inner}>
-        <p className={styles.noteLabelDark}>how it works</p>
-        <RiseText text="Three steps to dinner" className={styles.display} />
-
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <SectionHead
+          center
+          eyebrow="How it works"
+          title="Getting started takes three steps"
+        />
         <div className={styles.steps}>
           {steps.map((step, i) => (
-            <motion.article
-              key={step.title}
-              className={styles.step}
-              initial={{ opacity: 0, y: 60, rotate: i % 2 === 0 ? -6 : 6 }}
-              whileInView={{ opacity: 1, y: 0, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{
-                type: "spring",
-                stiffness: 150,
-                damping: 15,
-                delay: i * 0.12,
-              }}
-            >
-              <span className={styles.stepNum}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
+            <Reveal key={step.title} delay={i * 0.08} className={styles.step}>
               <span className={styles.stepIcon}>{step.icon}</span>
-              <h3 className={styles.stepTitle}>{step.title}</h3>
-              <p className={styles.stepText}>{step.text}</p>
-            </motion.article>
+              <span className={styles.stepNum}>Step {i + 1}</span>
+              <h3 className={styles.h3}>{step.title}</h3>
+              <p className={styles.cardText}>{step.text}</p>
+            </Reveal>
           ))}
         </div>
-
-        <a
-          href={waLink(mess.phone, mess.messName)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.btnDark}
-        >
-          Start on WhatsApp <ArrowUpRight size={18} />
-        </a>
       </div>
     </section>
   );
 }
 
-/* ─── FAQ ──────────────────────────────────────────────────────────────────── */
-
-function Faq({ items }: { items: { q: string; a: string }[] }) {
-  const [open, setOpen] = useState<number | null>(0);
-  if (items.length === 0) return null;
-
-  return (
-    <section className={`${styles.sheet} ${styles.forest}`}>
-      <ScrollBand text="Good questions" reverse />
-      <div className={`${styles.inner} ${styles.faqGrid}`}>
-        <div>
-          <p className={styles.noteLabel}>before you ask</p>
-          <RiseText text="Quick answers" className={styles.display} />
-          <div className={styles.faqArt}>
-            <MealIcon kind="plate" />
-          </div>
-        </div>
-
-        <ul className={styles.faqList}>
-          {items.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <motion.li
-                key={item.q}
-                className={styles.faqItem}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.5, ease: EASE, delay: i * 0.06 }}
-              >
-                <button
-                  className={styles.faqQ}
-                  aria-expanded={isOpen}
-                  onClick={() => setOpen(isOpen ? null : i)}
-                >
-                  <span>{item.q}</span>
-                  <motion.span
-                    className={styles.faqChevron}
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                  >
-                    <ChevronDown size={22} />
-                  </motion.span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      className={styles.faqAWrap}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: EASE }}
-                    >
-                      <p className={styles.faqA}>{item.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.li>
-            );
-          })}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Reasons: sheets that stack as you scroll ─────────────────────────────── */
-
-/** Supporting copy for the tags the API can return. */
-const REASON_COPY: Record<string, { text: string; note: string }> = {
-  MONTHLY_PLANS: {
-    text: "Subscribe once and your meals are sorted for the whole month. No daily ordering, no last-minute scramble.",
-    note: "set it & forget it",
-  },
-  DAILY_FRESH_MEALS: {
-    text: "Every meal is cooked the same day it reaches you. Nothing reheated, nothing left over from yesterday.",
-    note: "cooked today, eaten today",
-  },
-  HYGIENIC_KITCHEN: {
-    text: "A clean kitchen, clean hands and clean utensils, every single day. Food you can eat without a second thought.",
-    note: "spotless, always",
-  },
-  AFFORDABLE_PRICING: {
-    text: "Proper, filling meals at a price that makes sense for everyday eating, not just an occasional treat.",
-    note: "easy on the wallet",
-  },
-  VEG_AND_NON_VEG: {
-    text: "Vegetarian or non-vegetarian, there is a plate for you. Pick what suits you and enjoy it.",
-    note: "something for everyone",
-  },
-  QUALITY_INGREDIENTS: {
-    text: "Good food starts with good ingredients. Fresh produce and quality staples go into every dish.",
-    note: "you can taste it",
-  },
-  CONSISTENT_TASTE: {
-    text: "The meal you loved last week tastes just as good this week. Same care and same flavour, every day.",
-    note: "no bad days",
-  },
-  STUDENT_FRIENDLY: {
-    text: "Built for student life: filling meals, sensible prices and timings that fit around classes.",
-    note: "like home, away from home",
-  },
-  FAMILY_MESS: {
-    text: "Homely food the whole family can sit down to, from the youngest to the eldest.",
-    note: "everyone's welcome",
-  },
-  NO_HIDDEN_CHARGES: {
-    text: "The price you see is the price you pay. No surprise fees and no fine print.",
-    note: "what you see is what you pay",
-  },
-  TRUSTED_MESS: {
-    text: "A kitchen people come back to, meal after meal, because it keeps its promises.",
-    note: "tried & trusted",
-  },
-};
-
-const REASON_FALLBACK = {
-  text: "One more reason regulars keep coming back for their daily meals.",
-  note: "see for yourself",
-};
+/* ─── Why choose us ────────────────────────────────────────────────────────── */
 
 function Reasons({
   reasons,
@@ -957,82 +708,53 @@ function Reasons({
   messName: string;
 }) {
   if (reasons.length === 0) return null;
-  const tones = [styles.reasonLime, styles.reasonTint, styles.reasonForest];
-  const plates = [FOOD.vegBowl, FOOD.salad, FOOD.grilled];
+  const photos = [FOOD.vegBowl, FOOD.salad, FOOD.grilled];
 
   return (
-    <section className={styles.reasons}>
-      <div className={styles.reasonsHead}>
-        <p className={styles.noteLabelDark}>why people stick around</p>
-        <RiseText text="Here's the deal." className={styles.display} />
-        <p className={styles.reasonsIntro}>
-          {reasons.length === 1
-            ? `One simple promise from ${messName}, served with every meal.`
-            : `${reasons.length} simple promises from ${messName}, served with every meal.`}
-        </p>
+    <section className={`${styles.section} ${styles.sectionTint}`}>
+      <div className={styles.container}>
+        <SectionHead
+          center
+          eyebrow="Why choose us"
+          title="What you can count on"
+          lead={`${
+            reasons.length === 1
+              ? "One simple promise"
+              : `${reasons.length} simple promises`
+          } from ${messName}, served with every meal.`}
+        />
+        <div className={styles.cardGrid}>
+          {reasons.map((reason, i) => {
+            const photo = photos[i % photos.length];
+            return (
+              <Reveal key={reason} delay={i * 0.08} className={styles.card}>
+                <div className={styles.cardMedia}>
+                  <Pic
+                    src={photo.src}
+                    alt={photo.alt}
+                    sizes="(max-width: 900px) 100vw, 360px"
+                  />
+                </div>
+                <div className={styles.cardBody}>
+                  <h3 className={styles.h3}>{formatTag(reason)}</h3>
+                  <p className={styles.cardText}>
+                    {HIGHLIGHT_COPY[reason] ?? HIGHLIGHT_FALLBACK}
+                  </p>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
-
-      {reasons.map((reason, i) => {
-        const copy = REASON_COPY[reason] ?? REASON_FALLBACK;
-        return (
-          <div
-            key={reason}
-            className={`${styles.reason} ${tones[i % tones.length]}`}
-            style={{ top: `${64 + i * 26}px` }}
-          >
-            <div className={styles.plateWrap}>
-              <motion.div
-                className={styles.plate}
-                initial={{ scale: 0.6, rotate: -30, opacity: 0 }}
-                whileInView={{ scale: 1, rotate: 0, opacity: 1 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ type: "spring", stiffness: 150, damping: 15 }}
-              >
-                <Pic
-                  src={plates[i % plates.length].src}
-                  alt={plates[i % plates.length].alt}
-                  sizes="(max-width: 820px) 170px, 280px"
-                />
-              </motion.div>
-              <motion.span
-                className={styles.reasonIndex}
-                initial={{ scale: 0, rotate: -30 }}
-                whileInView={{ scale: 1, rotate: -8 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{ type: "spring", stiffness: 300, damping: 14 }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </motion.span>
-            </div>
-            <RiseText
-              as="h3"
-              text={formatTag(reason)}
-              className={styles.reasonTitle}
-            />
-            <motion.p
-              className={styles.reasonText}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.8 }}
-              transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
-            >
-              {copy.text}
-            </motion.p>
-            <p className={styles.reasonNote}>{copy.note}</p>
-          </div>
-        );
-      })}
     </section>
   );
 }
 
-/* ─── Plan / CTA ───────────────────────────────────────────────────────────── */
+/* ─── Plan ─────────────────────────────────────────────────────────────────── */
 
 function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
   const showMin =
-    plan.minPrice &&
-    Number(plan.minPrice) > 0 &&
-    Number(plan.minPrice) < Number(plan.price);
+    Number(plan.minPrice) > 0 && Number(plan.minPrice) < Number(plan.price);
 
   const variations = [...plan.variations].sort(
     (a, b) => mealRank(a.title) - mealRank(b.title),
@@ -1047,72 +769,37 @@ function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
     : FOOD.proteinBowl;
 
   return (
-    <section id="plan" className={`${styles.sheet} ${styles.lime}`}>
-      <div className={styles.inner}>
-        <p className={styles.noteLabelDark}>ready when you are</p>
-        <RiseText text="Let's get you fed!" className={styles.displayXL} />
+    <section id="plan" className={styles.section}>
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="Subscription plan"
+          title="Simple, clear pricing"
+          lead="One plan covers your regular meals. You pay the kitchen directly."
+        />
 
         <div className={styles.planGrid}>
-          <motion.div
-            className={styles.planCard}
-            initial={{ opacity: 0, y: 70, rotate: -6 }}
-            whileInView={{ opacity: 1, y: 0, rotate: -1.5 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ type: "spring", stiffness: 140, damping: 16 }}
-          >
-            <i className={`${styles.tape} ${styles.tapeTopLeft}`} />
-            <i className={`${styles.tape} ${styles.tapeTopRight}`} />
-
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.spinDisc}
-              aria-label="Subscribe now on WhatsApp"
-            >
-              <svg
-                viewBox="0 0 120 120"
-                className={styles.spinText}
-                aria-hidden
-              >
-                <defs>
-                  <path
-                    id="discCircle"
-                    d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"
-                  />
-                </defs>
-                <text>
-                  <textPath href="#discCircle">
-                    SUBSCRIBE NOW ✦ SUBSCRIBE NOW ✦
-                  </textPath>
-                </text>
-              </svg>
-              <ArrowUpRight size={30} />
-            </a>
-
-            <div className={styles.planBadges}>
+          <Reveal className={styles.planCard}>
+            <div className={styles.priceBadges}>
               {plan.isDailyPlan && <span>Daily plan</span>}
               {plan.isMonthlyPlan && <span>Monthly plan</span>}
             </div>
-            <h3 className={styles.planName}>{plan.planName}</h3>
+            <h3 className={styles.priceName}>{plan.planName}</h3>
             {plan.description && (
-              <p className={styles.planDesc}>{plan.description}</p>
+              <p className={styles.cardText}>{plan.description}</p>
             )}
 
-            <div className={styles.priceRow}>
-              <span className={styles.price}>{inr(plan.price)}</span>
-              {showMin && (
-                <span className={styles.fromNote}>
-                  starting from {inr(plan.minPrice)}!
-                </span>
-              )}
-            </div>
+            <p className={styles.price}>{inr(plan.price)}</p>
+            {showMin && (
+              <p className={styles.priceFrom}>
+                Starting from <strong>{inr(plan.minPrice)}</strong>
+              </p>
+            )}
 
             {variations.length > 0 && (
               <ul className={styles.includes}>
                 {variations.map((v) => (
                   <li key={v.id}>
-                    <BadgeCheck size={18} />
+                    <Check size={18} />
                     {v.title} included
                   </li>
                 ))}
@@ -1124,37 +811,26 @@ function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.btnDark}
+                className={`${styles.btn} ${styles.btnPrimary}`}
               >
-                Subscribe Now <ArrowUpRight size={18} />
+                Subscribe now <ArrowRight size={18} />
               </a>
-              <a href={`tel:${mess.phone}`} className={styles.btnOutline}>
+              <a
+                href={`tel:${mess.phone}`}
+                className={`${styles.btn} ${styles.btnGhost}`}
+              >
                 <Phone size={16} /> Call the kitchen
               </a>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.figure
-            className={styles.planPhoto}
-            initial={{ opacity: 0, y: 60, rotate: 12 }}
-            whileInView={{ opacity: 1, y: 0, rotate: 4 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              type: "spring",
-              stiffness: 130,
-              damping: 16,
-              delay: 0.12,
-            }}
-          >
-            <i className={`${styles.tape} ${styles.tapeTopCenter}`} />
-            <div className={styles.planPhotoFrame}>
-              <Pic
-                src={planPhoto.src}
-                alt={planPhoto.alt}
-                sizes="(max-width: 820px) 88vw, 480px"
-              />
-            </div>
-          </motion.figure>
+          <Reveal delay={0.1} className={styles.planPhoto}>
+            <Pic
+              src={planPhoto.src}
+              alt={planPhoto.alt}
+              sizes="(max-width: 900px) 100vw, 520px"
+            />
+          </Reveal>
         </div>
       </div>
     </section>
@@ -1163,48 +839,83 @@ function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
 
 /* ─── Gallery (conditional) ────────────────────────────────────────────────── */
 
-function GalleryStrip({ mess }: { mess: MessDetails }) {
+function Gallery({ mess }: { mess: MessDetails }) {
   if (mess.gallery.length === 0) return null;
-  return <GalleryStripInner mess={mess} />;
-}
-
-function GalleryStripInner({ mess }: { mess: MessDetails }) {
-  const ref = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const x = useTransform(scrollYProgress, [0, 1], ["6%", "-28%"]);
-
   const sorted = [...mess.gallery].sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
-    <section
-      ref={ref}
-      className={`${styles.sheet} ${styles.forest} ${styles.gallery}`}
-    >
-      <motion.div
-        className={styles.galleryTrack}
-        style={reduceMotion ? undefined : { x }}
-      >
-        {sorted.map((img, i) => (
-          <figure
-            key={img.id}
-            className={styles.galleryItem}
-            style={{ rotate: `${i % 2 === 0 ? -3 : 2.5}deg` }}
-          >
-            <i className={`${styles.tape} ${styles.tapeTopCenter}`} />
-            <div className={styles.galleryFrame}>
+    <section className={`${styles.section} ${styles.sectionSoft}`}>
+      <div className={styles.container}>
+        <SectionHead center eyebrow="Gallery" title="A look at the food" />
+        <div className={styles.galleryGrid}>
+          {sorted.map((img, i) => (
+            <Reveal
+              key={img.id}
+              delay={(i % 3) * 0.06}
+              className={styles.galleryItem}
+            >
               <Pic
                 src={img.url}
                 alt={img.altText ?? `Food at ${mess.messName}`}
-                sizes="(max-width: 820px) 60vw, 380px"
+                sizes="(max-width: 900px) 50vw, 380px"
               />
-            </div>
-          </figure>
-        ))}
-      </motion.div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── FAQ ──────────────────────────────────────────────────────────────────── */
+
+function Faq({ items }: { items: { q: string; a: string }[] }) {
+  const [open, setOpen] = useState<number | null>(0);
+  if (items.length === 0) return null;
+
+  return (
+    <section id="faq" className={`${styles.section} ${styles.sectionSoft}`}>
+      <div className={`${styles.container} ${styles.narrow}`}>
+        <SectionHead center eyebrow="FAQ" title="Frequently asked questions" />
+        <Reveal>
+          <ul className={styles.faqList}>
+            {items.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <li key={item.q} className={styles.faqItem}>
+                  <button
+                    className={styles.faqQ}
+                    aria-expanded={isOpen}
+                    onClick={() => setOpen(isOpen ? null : i)}
+                  >
+                    <span>{item.q}</span>
+                    <motion.span
+                      className={styles.faqChevron}
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown size={20} />
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        className={styles.faqAWrap}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: EASE }}
+                      >
+                        <p className={styles.faqA}>{item.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </li>
+              );
+            })}
+          </ul>
+        </Reveal>
+      </div>
     </section>
   );
 }
@@ -1220,24 +931,23 @@ function ContactSection({ mess }: { mess: MessDetails }) {
   )}`;
 
   return (
-    <section className={`${styles.sheet} ${styles.paper}`}>
-      <div className={styles.inner}>
-        <p className={styles.noteLabelDark}>come say hi</p>
-        <RiseText text="Find the kitchen" className={styles.display} />
+    <section id="contact" className={styles.section}>
+      <div className={styles.container}>
+        <SectionHead
+          center
+          eyebrow="Contact"
+          title="Visit or get in touch"
+          lead="Questions about the menu or the plan? The kitchen is happy to help."
+        />
 
-        <motion.div
-          className={styles.contactGrid}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: EASE }}
-        >
-          <div className={styles.contactCell}>
-            <p className={styles.cellLabel}>
-              <MapPin size={14} /> Address
-            </p>
-            <p className={styles.cellBig}>{mess.address.address}</p>
-            <p className={styles.cellSub}>
+        <div className={styles.contactGrid}>
+          <Reveal className={styles.contactCard}>
+            <span className={styles.cardIcon}>
+              <MapPin size={20} />
+            </span>
+            <h3 className={styles.h3}>Address</h3>
+            <p className={styles.cardText}>{mess.address.address}</p>
+            <p className={styles.cardMuted}>
               {mess.address.location}
               {mess.address.zipcode ? ` · ${mess.address.zipcode}` : ""}
             </p>
@@ -1245,56 +955,61 @@ function ContactSection({ mess }: { mess: MessDetails }) {
               href={mapsHref}
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.btnOutline}
+              className={styles.textLink}
             >
-              Open in Maps <ArrowUpRight size={16} />
+              Open in Maps <ArrowRight size={15} />
             </a>
-          </div>
+          </Reveal>
 
-          <div className={styles.contactCell}>
-            {mess.phone && (
-              <div>
-                <p className={styles.cellLabel}>
-                  <Phone size={14} /> Phone
-                </p>
-                <a href={`tel:${mess.phone}`} className={styles.cellLink}>
-                  {mess.phone}
-                </a>
-              </div>
-            )}
-            {mess.email && (
-              <div>
-                <p className={styles.cellLabel}>
-                  <Mail size={14} /> Email
-                </p>
-                <a href={`mailto:${mess.email}`} className={styles.cellLink}>
-                  {mess.email}
-                </a>
-              </div>
-            )}
-            {hours.length > 0 && (
-              <div>
-                <p className={styles.cellLabel}>
-                  <Clock size={14} /> Hours
-                </p>
-                <ul className={styles.hours}>
-                  {hours.map(([day, h]) => (
-                    <li key={day}>
-                      <span>{formatTag(day)}</span>
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </motion.div>
+          {mess.phone && (
+            <Reveal delay={0.06} className={styles.contactCard}>
+              <span className={styles.cardIcon}>
+                <Phone size={20} />
+              </span>
+              <h3 className={styles.h3}>Phone</h3>
+              <p className={styles.cardText}>Call or message on WhatsApp.</p>
+              <a href={`tel:${mess.phone}`} className={styles.textLink}>
+                {mess.phone}
+              </a>
+            </Reveal>
+          )}
+
+          {mess.email && (
+            <Reveal delay={0.12} className={styles.contactCard}>
+              <span className={styles.cardIcon}>
+                <Mail size={20} />
+              </span>
+              <h3 className={styles.h3}>Email</h3>
+              <p className={styles.cardText}>Write to the kitchen any time.</p>
+              <a href={`mailto:${mess.email}`} className={styles.textLink}>
+                {mess.email}
+              </a>
+            </Reveal>
+          )}
+
+          {hours.length > 0 && (
+            <Reveal delay={0.18} className={styles.contactCard}>
+              <span className={styles.cardIcon}>
+                <Clock size={20} />
+              </span>
+              <h3 className={styles.h3}>Opening hours</h3>
+              <ul className={styles.hours}>
+                {hours.map(([day, h]) => (
+                  <li key={day}>
+                    <span>{formatTag(day)}</span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          )}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ─── Sticky subscribe bar ─────────────────────────────────────────────────── */
+/* ─── Sticky subscribe bar (phones) ────────────────────────────────────────── */
 
 function StickyBar({
   mess,
@@ -1307,7 +1022,7 @@ function StickyBar({
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (v) => {
-    setShow(v > window.innerHeight * 0.9);
+    setShow(v > window.innerHeight * 0.8);
   });
 
   return (
@@ -1315,24 +1030,22 @@ function StickyBar({
       {show && (
         <motion.div
           className={styles.stickyBar}
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 26 }}
+          exit={{ y: 80, opacity: 0 }}
+          transition={{ duration: 0.25, ease: EASE }}
         >
           <div className={styles.stickyInfo}>
-            <span className={styles.stickyName}>{mess.messName}</span>
-            {plan && (
-              <span className={styles.stickyPrice}>{inr(plan.price)}</span>
-            )}
+            <span>{mess.messName}</span>
+            {plan && <strong>{inr(plan.price)}</strong>}
           </div>
           <a
             href={waLink(mess.phone, mess.messName)}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.stickyCta}
+            className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSmall}`}
           >
-            Subscribe <ArrowUpRight size={16} />
+            Subscribe
           </a>
         </motion.div>
       )}
@@ -1343,6 +1056,7 @@ function StickyBar({
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
 export default function MessLandingClient({ mess }: { mess: MessDetails }) {
+  // Paint the body behind the mobile bottom padding to match the footer.
   useEffect(() => {
     const prev = document.body.style.backgroundColor;
     document.body.style.backgroundColor = "#101c10";
@@ -1350,14 +1064,6 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
       document.body.style.backgroundColor = prev;
     };
   }, []);
-
-  // Inertia ("lerped") scrolling, like the reference site.
-  const reduceMotion = useReducedMotion();
-  useEffect(() => {
-    if (reduceMotion) return;
-    const lenis = new Lenis({ autoRaf: true, lerp: 0.085, anchors: true });
-    return () => lenis.destroy();
-  }, [reduceMotion]);
 
   const plan = mess.plans[0] ?? null;
   const schedule = plan?.menus[0]?.schedule ?? {};
@@ -1368,33 +1074,48 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
         .sort((a, b) => mealRank(a.title) - mealRank(b.title))
         .map((v) => v.title)
     : [];
-  const foodLabel = mess.foodTypes
-    .map((ft) =>
-      ft === "VEG" ? "Veg" : ft === "NON_VEG" ? "Non-veg" : formatTag(ft),
-    )
-    .join(" + ");
+  const foodWords = mess.foodTypes.map((ft) =>
+    ft === "VEG"
+      ? "vegetarian"
+      : ft === "NON_VEG"
+        ? "non-vegetarian"
+        : formatTag(ft).toLowerCase(),
+  );
+
+  const lead = `Fresh${foodWords.length > 0 ? ` ${joinList(foodWords)}` : ""} meals${
+    meals.length > 0
+      ? `, with ${joinList(meals.map((m) => m.toLowerCase()))} on a simple subscription.`
+      : " on a simple subscription."
+  }`;
 
   const stats: Stat[] = [];
   if (plan) {
-    stats.push({ label: "plan price", value: Number(plan.price), prefix: "₹" });
+    stats.push({ label: "Plan price", value: Number(plan.price), prefix: "₹" });
     if (meals.length > 0)
-      stats.push({ label: "meals a day", value: meals.length });
+      stats.push({ label: "Meals a day", value: meals.length });
     if (servedDays.length > 0)
-      stats.push({ label: "days a week", value: servedDays.length });
+      stats.push({ label: "Days a week", value: servedDays.length });
   }
-  if (foodLabel) stats.push({ label: "on the menu", text: foodLabel });
+  if (mess.foodTypes.length > 0) {
+    stats.push({
+      label: "On the menu",
+      text: mess.foodTypes
+        .map((ft) =>
+          ft === "VEG" ? "Veg" : ft === "NON_VEG" ? "Non-veg" : formatTag(ft),
+        )
+        .join(" & "),
+    });
+  }
 
-  const list = (xs: string[]) =>
-    xs.length <= 1
-      ? xs.join("")
-      : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`;
   const faqs: { q: string; a: string }[] = [];
-  if (foodLabel || meals.length > 0) {
+  if (foodWords.length > 0 || meals.length > 0) {
     faqs.push({
       q: `What does ${mess.messName} serve?`,
       a: [
-        foodLabel && `${mess.messName} serves ${foodLabel.toLowerCase().replace(" + ", " and ")} meals.`,
-        meals.length > 0 && `The plan includes ${list(meals.map((m) => m.toLowerCase()))}.`,
+        foodWords.length > 0 &&
+          `${mess.messName} serves ${joinList(foodWords)} meals.`,
+        meals.length > 0 &&
+          `The plan includes ${joinList(meals.map((m) => m.toLowerCase()))}.`,
       ]
         .filter(Boolean)
         .join(" "),
@@ -1412,9 +1133,9 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
     if (servedDays.length > 0) {
       faqs.push({
         q: "Which days are meals served?",
-        a: `Meals are served on ${list(servedDays.map(formatTag))}.${
+        a: `Meals are served on ${joinList(servedDays.map(formatTag))}.${
           restDays.length > 0
-            ? ` The kitchen rests on ${list(restDays.map(formatTag))}.`
+            ? ` The kitchen rests on ${joinList(restDays.map(formatTag))}.`
             : ""
         }`,
       });
@@ -1435,11 +1156,11 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
     });
   }
 
-  // First three tags become the stacked "reasons"; the rest feed the tag line.
+  // First three tags become the highlight cards; the rest show as chips.
   const reasons = mess.tags.slice(0, 3);
   const extraTags = mess.tags.slice(3);
 
-  // Full-bleed scenes use the mess's own gallery when it has one.
+  // Photo bands use the mess's own gallery when it has one.
   const gallery = [...mess.gallery].sort((a, b) => a.sortOrder - b.sortOrder);
   const scene = (
     i: number,
@@ -1456,19 +1177,15 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main
-        className={`${styles.page} ${heading.variable} ${body.variable} ${note.variable}`}
-      >
-        <Preloader mess={mess} />
-        <Masthead mess={mess} />
-
-        <Hero mess={mess} stats={stats} />
-        <Statement mess={mess} extraTags={extraTags} />
+      <main className={`${styles.page} ${body.variable}`}>
+        <Nav mess={mess} hasPlan={!!plan} />
+        <Hero mess={mess} lead={lead} stats={stats} hasPlan={!!plan} />
+        <About mess={mess} extraTags={extraTags} />
         <PhotoBreak
           image={sceneA.src}
           alt={sceneA.alt}
-          note="straight from the kitchen"
-          line="Made fresh. Every single day."
+          eyebrow="From the kitchen"
+          line="Made fresh, every single day."
         />
         {plan && <MenuSection plan={plan} />}
         <HowItWorks mess={mess} />
@@ -1477,22 +1194,26 @@ export default function MessLandingClient({ mess }: { mess: MessDetails }) {
         <PhotoBreak
           image={sceneB.src}
           alt={sceneB.alt}
-          note="no cooking, no dishes"
-          line="Good food. Zero effort."
+          eyebrow="Meals without the effort"
+          line="Good food, zero effort."
         />
-        <GalleryStrip mess={mess} />
+        <Gallery mess={mess} />
         <Faq items={faqs} />
         <ContactSection mess={mess} />
 
-        <footer className={`${styles.sheet} ${styles.footer}`}>
-          <p className={styles.footerNote}>thanks for stopping by</p>
-          <p className={styles.footerMark}>{mess.messName}</p>
-          <p className={styles.footerLine}>
-            Served fresh on{" "}
-            <Link href="/" className={styles.footerLink}>
-              MessMeals
-            </Link>
-          </p>
+        <footer className={styles.footer}>
+          <div className={`${styles.container} ${styles.footerInner}`}>
+            <p>
+              <strong>{mess.messName}</strong>
+              {mess.address?.location ? ` · ${mess.address.location}` : ""}
+            </p>
+            <p>
+              Listed on{" "}
+              <Link href="/" className={styles.footerLink}>
+                MessMeals
+              </Link>
+            </p>
+          </div>
         </footer>
 
         <StickyBar mess={mess} plan={plan} />
