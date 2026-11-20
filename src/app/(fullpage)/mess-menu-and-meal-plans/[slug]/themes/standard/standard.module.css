@@ -699,57 +699,6 @@
   line-height: 1.45;
 }
 
-/* Meal illustrations (static, brand colours) */
-
-.mealIcon {
-  position: absolute;
-  inset: 10%;
-  width: 80%;
-  height: 80%;
-  overflow: visible;
-}
-
-.iInk {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.iLime { fill: var(--lime); }
-.iDeep { fill: var(--lime-deep); }
-.iPaper { fill: var(--white); }
-.iTint { fill: #c2e6b0; }
-.iRed { fill: var(--red); }
-.iInkFill { fill: var(--ink); }
-
-.iBone {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 14;
-  stroke-linecap: round;
-}
-
-.iBoneCore {
-  fill: none;
-  stroke: var(--white);
-  stroke-width: 6;
-  stroke-linecap: round;
-}
-
-.iSteam,
-.iWobble,
-.iBob,
-.iPulse,
-.iRise,
-.iBlink {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.iSteam { opacity: 0.55; }
-
 /* ─── Cards (steps, highlights, contact) ───────────────────────────────────── */
 
 .steps,
