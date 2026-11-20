@@ -8,6 +8,7 @@ import PartnerSection from "../../sections/PartnerSection/PartnerSection";
 import OwnAMess from "../../sections/OwnAMess/OwnAMess";
 import WhyMessMeals from "../../sections/WhyMessMeals/WhyMessMeals";
 import HowItWorks from "../../sections/HowItWorks/HowItWorks";
+import LocationHubs from "../../sections/LocationHubs/LocationHubs";
 import FAQSection from "../../sections/FAQSection/FAQSection";
 
 export const dynamic = "force-dynamic";
@@ -56,6 +57,7 @@ export default async function Home() {
       <VerifiedMesses initialData={verifiedMesses} />
       <HowItWorks />
       <WhyMessMeals />
+      <LocationHubs />
       {/* <Testimonials /> */}
       <FAQSection />
       <PartnerSection />

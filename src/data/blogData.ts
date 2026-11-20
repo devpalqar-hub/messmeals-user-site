@@ -36,7 +36,7 @@ export const locationGuides: LocationGuide[] = [
     name: "Thiruvananthapuram",
     altName: "Trivandrum",
     slug: "thiruvananthapuram",
-    href: "/kerala/thiruvananthapuram/",
+    href: "/kerala/thiruvananthapuram",
     tag: "Capital & Tech Hub",
     description:
       "Explore messes and homely food providers across Trivandrum, from Kazhakkoottam and Technopark to Palayam and Nalanchira. Compare daily menus and monthly meal plans.",
@@ -46,7 +46,7 @@ export const locationGuides: LocationGuide[] = [
     name: "Ernakulam",
     altName: "Kochi",
     slug: "ernakulam",
-    href: "/kerala/ernakulam/",
+    href: "/kerala/ernakulam",
     tag: "Commercial & IT Hub",
     description:
       "Discover messes and food providers across Kochi and Ernakulam, including Kakkanad, Edappally, Aluva, and Vyttila. Ideal for working professionals and students.",
@@ -56,7 +56,7 @@ export const locationGuides: LocationGuide[] = [
     name: "Kozhikode",
     altName: "Calicut",
     slug: "kozhikode",
-    href: "/kerala/kozhikode/",
+    href: "/kerala/kozhikode",
     tag: "Culinary Capital",
     description:
       "Browse authentic Malabar messes and regular dining services in Calicut. Find homely vegetarian and non-vegetarian food options near colleges and offices.",
@@ -66,7 +66,7 @@ export const locationGuides: LocationGuide[] = [
     name: "Kasaragod",
     altName: "Kasargod",
     slug: "kasaragod",
-    href: "/kerala/kasaragod/",
+    href: "/kerala/kasaragod",
     tag: "Campus & Coastal Hub",
     description:
       "Explore dependable local messes and everyday food arrangements in Kasaragod. Find budget-friendly daily and monthly meal plans for students and residents.",
@@ -76,7 +76,7 @@ export const locationGuides: LocationGuide[] = [
     name: "Thrissur",
     altName: "Trichur",
     slug: "thrissur",
-    href: "/kerala/thrissur/",
+    href: "/kerala/thrissur",
     tag: "Cultural Capital",
     description:
       "Find homely mess services and catering providers across Thrissur town and educational institutions. Check meal timings, food categories, and monthly options.",
