@@ -14,6 +14,8 @@ import {
   Utensils,
 } from "lucide-react";
 import FaqItem from "../ui/FaqItem/FaqItem";
+import CityMessGrid from "../ui/CityMessGrid/CityMessGrid";
+import { getLocationListings } from "../../data/locations";
 import { buildLocationJsonLd } from "../../lib/locationSeo";
 import type { LocationPageData, LocationPersona } from "../../types/location";
 import styles from "./LocationGuideTemplate.module.css";
@@ -40,9 +42,10 @@ function PersonaIcon({ name }: { name: LocationPersona["icon"] }) {
   }
 }
 
-export default function LocationGuideTemplate({ data }: { data: LocationPageData }) {
+export default async function LocationGuideTemplate({ data }: { data: LocationPageData }) {
   const { breadcrumbLd, pageLd, faqLd } = buildLocationJsonLd(data);
   const hasChildLinks = Boolean(data.childLinks && data.childLinks.length > 0);
+  const { messes: initialData, defaultCity } = await getLocationListings(data.path);
 
   return (
     <>
@@ -123,9 +126,26 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 3. CHILD DESTINATIONS (FOR HUBS & PARENT CITIES) ── */}
+        {/* ── 3. AVAILABLE MESS LISTINGS ── */}
+        <section id="listings" className={styles.section}>
+          <div className={styles["section-header"]}>
+            <span className={styles["section-badge"]}>Mess Listings</span>
+            <h2 className={styles["section-title"]}>
+              {defaultCity ? `Messes in ${defaultCity}` : "Available Messes"}
+            </h2>
+            <p className={styles["section-desc"]}>
+              {defaultCity
+                ? `Explore available messes and homely food providers near ${defaultCity}. Open a listing to review its address, food options, meal plans, and contact details.`
+                : "Explore available messes and homely food providers. Open a listing to review its address, food options, meal plans, and contact details."}
+            </p>
+          </div>
+
+          <CityMessGrid messes={initialData} defaultCity={defaultCity} />
+        </section>
+
+        {/* ── 4. CHILD DESTINATIONS (FOR HUBS & PARENT CITIES) ── */}
         {hasChildLinks && data.childLinks && (
-          <section id="explore-areas" className={styles.section}>
+          <section id="explore-areas" className={styles["section-alt"]}>
             <div className={styles["section-header"]}>
               <span className={styles["section-badge"]}>
                 {data.kind === "hub" ? "Cities & Corridors" : "Dedicated Locality Guides"}
@@ -154,10 +174,10 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </section>
         )}
 
-        {/* ── 4. NEIGHBORHOOD POCKETS & LANDMARKS ── */}
+        {/* ── 5. NEIGHBORHOOD POCKETS & LANDMARKS ── */}
         <section
           id="area-pockets"
-          className={hasChildLinks ? styles["section-alt"] : styles.section}
+          className={hasChildLinks ? styles.section : styles["section-alt"]}
         >
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Neighborhood Breakdown</span>
@@ -181,8 +201,8 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 5. AUDIENCE & DAILY ROUTINES ── */}
-        <section className={hasChildLinks ? styles.section : styles["section-alt"]}>
+        {/* ── 6. AUDIENCE & DAILY ROUTINES ── */}
+        <section className={hasChildLinks ? styles["section-alt"] : styles.section}>
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Daily Routines</span>
             <h2 className={styles["section-title"]}>{data.audienceHeading}</h2>
@@ -202,8 +222,8 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 6. FOOD CULTURE & SCHEDULE PATTERNS ── */}
-        <section className={hasChildLinks ? styles["section-alt"] : styles.section}>
+        {/* ── 7. FOOD CULTURE & SCHEDULE PATTERNS ── */}
+        <section className={hasChildLinks ? styles.section : styles["section-alt"]}>
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Food & Schedule Fit</span>
             <h2 className={styles["section-title"]}>{data.mealSectionHeading}</h2>
@@ -229,10 +249,10 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 7. LOCAL VERIFICATION CHECKLIST ── */}
+        {/* ── 8. LOCAL VERIFICATION CHECKLIST ── */}
         <section
           id="planning-checklist"
-          className={hasChildLinks ? styles.section : styles["section-alt"]}
+          className={hasChildLinks ? styles["section-alt"] : styles.section}
         >
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Practical Checklist</span>
@@ -253,8 +273,8 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 8. RELATED GUIDES ── */}
-        <section className={hasChildLinks ? styles["section-alt"] : styles.section}>
+        {/* ── 9. RELATED GUIDES ── */}
+        <section className={hasChildLinks ? styles.section : styles["section-alt"]}>
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Nearby & Regional Links</span>
             <h2 className={styles["section-title"]}>{data.relatedHeading}</h2>
@@ -278,8 +298,8 @@ export default function LocationGuideTemplate({ data }: { data: LocationPageData
           </div>
         </section>
 
-        {/* ── 9. FAQS ── */}
-        <section className={hasChildLinks ? styles.section : styles["section-alt"]}>
+        {/* ── 10. FAQS ── */}
+        <section className={hasChildLinks ? styles["section-alt"] : styles.section}>
           <div className={styles["section-header"]}>
             <span className={styles["section-badge"]}>Questions & Answers</span>
             <h2 className={styles["section-title"]}>{data.faqHeading}</h2>

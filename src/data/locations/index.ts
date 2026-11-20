@@ -58,6 +58,14 @@ export function getIndexableLocationPages(): LocationPageData[] {
 }
 
 export {
+  LOCATION_COORDINATES,
+  getLocationCoordinates,
+  getLocationListings,
+  type LocationCoordinate,
+  type LocationCoordinateConfig,
+} from "./coordinates";
+
+export {
   KERALA_HUB_DATA,
   KERALA_CITY_PAGES,
   KERALA_LOCALITY_PAGES,
