@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { getAllMess, getSearchSuggestions, type MessListFilters, type SearchSuggestionResponse } from "../../../services/messApi";
 import type { MessListing, MessMeta } from "../../../types/mess";
 import { // Star, // commented out — new API does not return ratings
-  Search, Filter, X, ArrowRight, Loader2, Sparkles
+  Search, Filter, X, ArrowRight, Loader2, Sparkles, ExternalLink
 } from "lucide-react";
 import { MapPin, Utensils, ShieldCheck, BadgeCheck, Store, Users, Salad, FeaturedChecklist } from "../../../components/ui/SvgIcon/SvgIcon";
 import Link from "next/link";
@@ -586,13 +586,24 @@ export default function ViewAllListingsClient({
                             </strong>
                           </div>
 
-                          <Link
-                            className={styles["view-btn"]}
-                            href={`/mess/${mess.slug}`}
-                          >
-                            View Details
-                            <ArrowRight size={16} />
-                          </Link>
+                          <div className={styles["card-actions"]}>
+                            <Link
+                              className={styles["view-btn"]}
+                              href={`/mess/${mess.slug}`}
+                            >
+                              View Details
+                              <ArrowRight size={16} />
+                            </Link>
+
+                            <Link
+                              className={styles["landing-btn"]}
+                              href={`/mess-menu-and-meal-plans/${mess.slug}`}
+                              aria-label={`Open landing page for ${mess.messName}`}
+                              title="Open landing page"
+                            >
+                              <ExternalLink size={18} />
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </article>

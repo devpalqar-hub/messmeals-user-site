@@ -670,6 +670,39 @@
   box-shadow: 0 6px 16px rgba(69, 168, 0, 0.28);
 }
 
+.card-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+.card-actions .view-btn {
+  flex: 1;
+  width: auto;
+}
+
+.landing-btn {
+  flex: 0 0 44px;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EAF7E5;
+  color: #1C3A1C;
+  border: 1px solid #C2E6B0;
+  text-decoration: none;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.landing-btn:hover {
+  background: #55C500;
+  border-color: #55C500;
+  color: #101C10;
+}
+
 .view-btn:active {
   transform: translateY(0);
 }
