@@ -1,6 +1,6 @@
 import styles from "./Footer.module.css";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
-import { Building2, Compass, ShieldCheck } from "../../ui/SvgIcon/SvgIcon";
+import { Building2, Compass, MapPin, ShieldCheck } from "../../ui/SvgIcon/SvgIcon";
 import Link from "next/link";
 
 export default function Footer() {
@@ -47,6 +47,19 @@ export default function Footer() {
               <Link href="/mess">Messes</Link>
               <Link href="/#popular-plans">Popular Plans</Link>
               <Link href="/mess-manager">List Your Mess</Link>
+            </div>
+
+            <div className={styles["link-group"]}>
+              <h4>
+                <span className={styles["link-icon"]}>
+                  <MapPin size={16} />
+                </span>
+                Locations
+              </h4>
+              <Link href="/kerala">Kerala Guides</Link>
+              <Link href="/uae">UAE Guides</Link>
+              <Link href="/bangalore">Bangalore Guides</Link>
+              <Link href="/qatar">Qatar Guides</Link>
             </div>
 
             <div className={styles["link-group"]}>
