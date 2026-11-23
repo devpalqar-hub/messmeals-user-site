@@ -40,10 +40,10 @@ import type {
   MessDetails,
   NewMessPlan,
   PlanMenuEntry,
-} from "../../../../types/mess";
-import { FOOD, type FoodImage } from "./foodImages";
-import MealIcon, { pickMealKind } from "./MealIcon";
-import styles from "./MessLanding.module.css";
+} from "../../../../../../types/mess";
+import { FOOD, type FoodImage } from "../../foodImages";
+import MealIcon, { pickMealKind } from "../../MealIcon";
+import styles from "./standard.module.css";
 
 const body = Be_Vietnam_Pro({
   subsets: ["latin"],
@@ -1055,7 +1055,7 @@ function StickyBar({
 
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
-export default function MessLandingClient({ mess }: { mess: MessDetails }) {
+export default function StandardTheme({ mess }: { mess: MessDetails }) {
   // Paint the body behind the mobile bottom padding to match the footer.
   useEffect(() => {
     const prev = document.body.style.backgroundColor;

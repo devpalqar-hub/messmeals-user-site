@@ -1,4 +1,4 @@
-import styles from "./MessLanding.module.css";
+import styles from "./MealIcon.module.css";
 
 /**
  * Animated, generic food illustrations for menu rows. They show the *kind*
@@ -243,11 +243,18 @@ const LABEL: Record<MealKind, string> = {
   plate: "Meal",
 };
 
-export default function MealIcon({ kind }: { kind: MealKind }) {
+export default function MealIcon({
+  kind,
+  animated = false,
+}: {
+  kind: MealKind;
+  animated?: boolean;
+}) {
   return (
     <svg
       viewBox="0 0 120 120"
       className={styles.mealIcon}
+      data-animated={animated}
       role="img"
       aria-label={`${LABEL[kind]} illustration`}
     >

@@ -1,0 +1,105 @@
+/*
+ * Theme-independent styles for the meal illustrations. A theme re-colours them
+ * by setting the --mi-* custom properties on a parent; every value has a
+ * fallback so the icons also render with no theme around them.
+ */
+
+.mealIcon {
+  position: absolute;
+  inset: var(--mi-inset, 9%);
+  width: calc(100% - 2 * var(--mi-inset, 9%));
+  height: calc(100% - 2 * var(--mi-inset, 9%));
+  overflow: visible;
+}
+
+.iInk {
+  fill: none;
+  stroke: var(--mi-ink, #101c10);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.iLime { fill: var(--mi-lime, #55c500); }
+.iDeep { fill: var(--mi-deep, #45a800); }
+.iPaper { fill: var(--mi-paper, #ffffff); }
+.iTint { fill: var(--mi-tint, #c2e6b0); }
+.iRed { fill: var(--mi-red, #d93a2b); }
+.iInkFill { fill: var(--mi-ink, #101c10); }
+
+.iBone {
+  fill: none;
+  stroke: var(--mi-ink, #101c10);
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.iBoneCore {
+  fill: none;
+  stroke: var(--mi-paper, #ffffff);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.iSteam,
+.iWobble,
+.iBob,
+.iPulse,
+.iRise,
+.iBlink {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Still by default; themes opt in to the animated version. */
+.iSteam { opacity: 0.55; }
+
+.mealIcon[data-animated="true"] .iSteam { animation: iSteam 2.2s ease-in-out infinite; }
+.mealIcon[data-animated="true"] .iWobble { animation: iWobble 2.6s ease-in-out infinite; }
+.mealIcon[data-animated="true"] .iBob { animation: iBob 2.2s ease-in-out infinite; }
+.mealIcon[data-animated="true"] .iPulse { animation: iPulse 1.5s ease-in-out infinite; }
+.mealIcon[data-animated="true"] .iRise { animation: iRise 2s ease-in infinite; }
+.mealIcon[data-animated="true"] .iBlink { animation: iBlink 1.2s ease-in-out infinite; }
+
+@keyframes iSteam {
+  0% { opacity: 0; transform: translateY(7px) scaleY(0.7); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-9px) scaleY(1.1); }
+}
+
+@keyframes iWobble {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes iBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes iPulse {
+  0%, 100% { transform: scale(0.5); opacity: 0.4; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes iRise {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-26px); opacity: 0; }
+}
+
+@keyframes iBlink {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mealIcon[data-animated="true"] .iSteam,
+  .mealIcon[data-animated="true"] .iWobble,
+  .mealIcon[data-animated="true"] .iBob,
+  .mealIcon[data-animated="true"] .iPulse,
+  .mealIcon[data-animated="true"] .iRise,
+  .mealIcon[data-animated="true"] .iBlink {
+    animation: none;
+  }
+}
