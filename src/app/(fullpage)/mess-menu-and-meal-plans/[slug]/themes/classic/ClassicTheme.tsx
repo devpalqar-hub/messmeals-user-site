@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Be_Vietnam_Pro, Fraunces } from "next/font/google";
@@ -19,6 +19,8 @@ import type {
 } from "../../../../../../types/mess";
 import { FOOD, type FoodImage } from "../../foodImages";
 import styles from "./classic.module.css";
+import PlanTabs from "../../PlanTabs";
+import PlanScroller from "../../PlanScroller";
 
 const display = Fraunces({
   subsets: ["latin"],
@@ -439,8 +441,11 @@ function Photograph({
 
 /* ─── Printed menu ─────────────────────────────────────────────────────────── */
 
-function MenuSection({ plan }: { plan: NewMessPlan }) {
-  const menu = plan.menus[0];
+function MenuSection({ plans }: { plans: NewMessPlan[] }) {
+  const menuPlans = plans.filter((p) => p.menus[0]);
+  const [planId, setPlanId] = useState<string | null>(null);
+  const plan = menuPlans.find((p) => p.id === planId) ?? menuPlans[0];
+  const menu = plan?.menus[0];
   // Server renders Monday; the client swaps to today's day after hydration.
   const today = useSyncExternalStore<string>(
     subscribeNever,
@@ -450,11 +455,9 @@ function MenuSection({ plan }: { plan: NewMessPlan }) {
   const [pickedDay, setPickedDay] = useState<string | null>(null);
   const activeDay = pickedDay ?? today;
 
-  const variationTitle = useMemo(() => {
-    const map = new Map<string, string>();
-    plan.variations.forEach((v) => map.set(v.id, v.title));
-    return map;
-  }, [plan.variations]);
+  const variationTitle = new Map<string, string>(
+    (plan?.variations ?? []).map((v) => [v.id, v.title]),
+  );
 
   if (!menu) return null;
 
@@ -472,6 +475,10 @@ function MenuSection({ plan }: { plan: NewMessPlan }) {
           title="What is on the table"
           lead="Choose a day to see what the kitchen is preparing."
         />
+
+      {menuPlans.length > 1 && (
+          <PlanTabs plans={menuPlans} activeId={plan?.id} onSelect={setPlanId} />
+        )}
 
         <Reveal className={styles.menuWrap}>
           <div className={styles.menuCard}>
@@ -617,7 +624,7 @@ function HowItWorks({ mess }: { mess: MessDetails }) {
 
 /* ─── Subscription ─────────────────────────────────────────────────────────── */
 
-function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
+function PlanBlock({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
   const showMin =
     Number(plan.minPrice) > 0 && Number(plan.minPrice) < Number(plan.price);
   const variations = [...plan.variations].sort(
@@ -626,14 +633,7 @@ function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
   const ownPhoto = plan.images[0];
 
   return (
-    <section id="plan" className={styles.section}>
-      <div className={styles.container}>
-        <SectionHead
-          eyebrow="The subscription"
-          title="Simple, honest pricing"
-          lead="One plan covers your regular meals. You pay the kitchen directly."
-        />
-
+    <>
         <Reveal className={styles.planWrap}>
           <div className={styles.planCard}>
             <div className={styles.planInner}>
@@ -695,6 +695,25 @@ function PlanSection({ mess, plan }: { mess: MessDetails; plan: NewMessPlan }) {
             </div>
           </Reveal>
         )}
+    </>
+  );
+}
+
+function PlanSection({ mess, plans }: { mess: MessDetails; plans: NewMessPlan[] }) {
+  return (
+    <section id="plan" className={styles.section}>
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="The subscription"
+          title="Simple, honest pricing"
+          lead={plans.length > 1 ? "Pick the plan that suits you. You pay the kitchen directly." : "One plan covers your regular meals. You pay the kitchen directly."}
+        />
+
+        <PlanScroller plans={plans} mess={mess}>
+          {plans.map((plan) => (
+            <PlanBlock key={plan.id} mess={mess} plan={plan} />
+          ))}
+        </PlanScroller>
       </div>
     </section>
   );
@@ -866,9 +885,11 @@ function Contact({ mess }: { mess: MessDetails }) {
 function StickyBar({
   mess,
   plan,
+  multi = false,
 }: {
   mess: MessDetails;
   plan: NewMessPlan | null;
+  multi?: boolean;
 }) {
   const [show, setShow] = useState(false);
   const { scrollY } = useScroll();
@@ -889,7 +910,7 @@ function StickyBar({
         >
           <div className={styles.stickyInfo}>
             <span>{mess.messName}</span>
-            {plan && <strong>{inr(plan.price)}</strong>}
+            {plan && <strong>{multi ? "from " : ""}{inr(plan.price)}</strong>}
           </div>
           <a
             href={waLink(mess.phone, mess.messName)}
@@ -917,15 +938,21 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
     };
   }, []);
 
-  const plan = mess.plans[0] ?? null;
-  const schedule = plan?.menus[0]?.schedule ?? {};
-  const servedDays = DAYS.filter((d) => (schedule[d] ?? []).length > 0);
-  const restDays = DAYS.filter((d) => (schedule[d] ?? []).length === 0);
-  const meals = plan
-    ? [...plan.variations]
-        .sort((a, b) => mealRank(a.title) - mealRank(b.title))
-        .map((v) => v.title)
-    : [];
+  const plans = mess.plans;
+  const plan = plans[0] ?? null;
+  const cheapest = plans.reduce<NewMessPlan | null>(
+    (best, p) => (!best || Number(p.price) < Number(best.price) ? p : best),
+    null,
+  );
+  const servedDays = DAYS.filter((d) =>
+    plans.some((p) => (p.menus[0]?.schedule?.[d] ?? []).length > 0),
+  );
+  const restDays = DAYS.filter((d) => !servedDays.includes(d));
+  const meals = [
+    ...new Map(
+      plans.flatMap((p) => p.variations).map((v) => [v.title.toLowerCase(), v.title]),
+    ).values(),
+  ].sort((a, b) => mealRank(a) - mealRank(b));
   const foodWords = mess.foodTypes.map((ft) =>
     ft === "VEG"
       ? "vegetarian"
@@ -942,7 +969,10 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
 
   const stats: Stat[] = [];
   if (plan) {
-    stats.push({ label: "Plan price", value: inr(plan.price) });
+    stats.push({
+      label: plans.length > 1 ? "Plans from" : "Plan price",
+      value: inr((cheapest ?? plan).price),
+    });
     if (meals.length > 0)
       stats.push({ label: "Meals a day", value: String(meals.length) });
     if (servedDays.length > 0)
@@ -967,7 +997,7 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
         foodWords.length > 0 &&
           `${mess.messName} serves ${joinList(foodWords)} meals.`,
         meals.length > 0 &&
-          `The plan includes ${joinList(meals.map((m) => m.toLowerCase()))}.`,
+          `${plans.length > 1 ? "The plans include" : "The plan includes"} ${joinList(meals.map((m) => m.toLowerCase()))}.`,
       ]
         .filter(Boolean)
         .join(" "),
@@ -978,7 +1008,7 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
       Number(plan.minPrice) > 0 && Number(plan.minPrice) < Number(plan.price);
     faqs.push({
       q: "How much does the meal plan cost?",
-      a: `The ${plan.planName} is ${inr(plan.price)}${
+      a: plans.length > 1 ? `We offer ${plans.length} plans: ${plans.map((p) => `${p.planName} at ${inr(p.price)}`).join("; ")}.` : `The ${plan.planName} is ${inr(plan.price)}${
         hasMin ? `, with prices starting from ${inr(plan.minPrice)}` : ""
       }.`,
     });
@@ -1029,10 +1059,10 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
           alt={photo.alt}
           caption="Cooked fresh in the kitchen, every day."
         />
-        {plan && <MenuSection plan={plan} />}
+        {plan && <MenuSection plans={plans} />}
         <Promises reasons={reasons} messName={mess.messName} />
         <HowItWorks mess={mess} />
-        {plan && <PlanSection mess={mess} plan={plan} />}
+        {plan && <PlanSection mess={mess} plans={plans} />}
         <Gallery mess={mess} />
         <Faq items={faqs} />
         <Contact mess={mess} />
@@ -1052,7 +1082,7 @@ export default function ClassicTheme({ mess }: { mess: MessDetails }) {
           </div>
         </footer>
 
-        <StickyBar mess={mess} plan={plan} />
+        <StickyBar mess={mess} plan={cheapest} multi={plans.length > 1} />
       </main>
     </MotionConfig>
   );

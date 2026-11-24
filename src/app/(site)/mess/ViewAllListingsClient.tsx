@@ -603,6 +603,15 @@ export default function ViewAllListingsClient({
                             >
                               <ExternalLink size={18} />
                             </Link>
+
+                            {/* <Link
+                              className={styles["landing-btn"]}
+                              href={`/mess-menu-and-meal-plans/preview?mess=${mess.slug}`}
+                              aria-label={`Choose a landing page theme for ${mess.messName}`}
+                              title="Choose landing page theme"
+                            > */}
+                              {/* <Palette size={18} /> */}
+                            {/* </Link> */}
                           </div>
                         </div>
                       </div>

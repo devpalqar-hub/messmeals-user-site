@@ -2,7 +2,7 @@ import type { MessDetails } from "../../../../types/mess";
 
 /**
  * Default mock payload (exact shape of GET /open/mess/{slug}).
- * Rendered at /m/preview for instant local preview without the API.
+ * Rendered at /mess-menu-and-meal-plans/preview/custom-theme/<theme> for instant local preview without the API.
  */
 export const MOCK_MESS: MessDetails = {
   id: "a88fed18-2bfa-4be9-ae79-974c5f093ccd",
@@ -134,6 +134,36 @@ export const MOCK_MESS: MessDetails = {
                 variationId: "7a8d4f40-9637-465d-af61-a2dab695300f",
               },
             ],
+          },
+        },
+      ],
+    },
+    {
+      id: "a1b2c3d4-0000-4000-8000-lunchonlyplan",
+      planName: "Lunch-only plan",
+      description: "A lighter plan with just the midday bowl.",
+      price: "1799",
+      minPrice: "1699",
+      isMonthlyPlan: true,
+      isDailyPlan: false,
+      images: [],
+      variations: [
+        {
+          id: "b26c8959-2a8a-47fc-9f2a-144da69e207a",
+          title: "Lunch",
+          description: null,
+        },
+      ],
+      menus: [
+        {
+          id: "c9e1f2a3-0000-4000-8000-lunchmenu0001",
+          name: "Lunch only",
+          schedule: {
+            MONDAY: [{ items: "Protein rice bowl", variationId: "b26c8959-2a8a-47fc-9f2a-144da69e207a" }],
+            TUESDAY: [{ items: "Grilled chicken salad", variationId: "b26c8959-2a8a-47fc-9f2a-144da69e207a" }],
+            WEDNESDAY: [{ items: "Veg rice bowl", variationId: "b26c8959-2a8a-47fc-9f2a-144da69e207a" }],
+            THURSDAY: [{ items: "Protein rice bowl", variationId: "b26c8959-2a8a-47fc-9f2a-144da69e207a" }],
+            FRIDAY: [{ items: "Rainbow salad bowl", variationId: "b26c8959-2a8a-47fc-9f2a-144da69e207a" }],
           },
         },
       ],

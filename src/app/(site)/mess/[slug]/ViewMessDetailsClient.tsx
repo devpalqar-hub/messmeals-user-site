@@ -6,7 +6,7 @@ import { getMessBySlug } from "../../../../services/messApi";
 import type { MessDetails, NewMessPlan } from "../../../../types/mess";
 // Star intentionally omitted — new API does not return ratings
 import {
-  Tag, Images, MessageCircle, X, ChevronLeft, ChevronRight, CalendarDays, Sun, Moon, ExternalLink,
+  Tag, Images, MessageCircle, X, ChevronLeft, ChevronRight, CalendarDays, Sun, Moon, ExternalLink, Palette,
 } from "lucide-react";
 import Link from "next/link";
 import { Phone, MapPin, Mail, Utensils, Coffee, Salad, Drumstick, Leaf, BadgeCheck } from "../../../../components/ui/SvgIcon/SvgIcon";
@@ -347,6 +347,15 @@ export default function ViewMessDetailsClient({
                   title="Open landing page"
                 >
                   <ExternalLink size={18} />
+                </Link>
+
+                <Link
+                  href={`/mess-menu-and-meal-plans/preview?mess=${mess.slug}`}
+                  className={styles["landing-link"]}
+                  aria-label={`Choose a landing page theme for ${mess.messName}`}
+                  title="Choose landing page theme"
+                >
+                  <Palette size={18} />
                 </Link>
               </div>
             </div>

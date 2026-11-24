@@ -40,13 +40,11 @@ export type ThemeId = keyof typeof THEME_META;
 
 export const THEME_IDS = Object.keys(THEME_META) as ThemeId[];
 
-export const DEFAULT_THEME: ThemeId = "standard";
+/** Theme every mess landing page uses unless the URL names another. */
+export const DEFAULT_THEME: ThemeId = "warm";
 
 /** Slug that renders the theme chooser and sample-data previews. */
 export const PREVIEW_SLUG = "preview";
-
-/** Browser cookie remembering the theme picked in the chooser. */
-export const THEME_COOKIE = "mm_landing_theme";
 
 export function isThemeId(value: unknown): value is ThemeId {
   return typeof value === "string" && value in THEME_META;

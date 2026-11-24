@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { clearTheme, selectTheme } from "./actions";
-import ThemePicker from "./ThemePicker";
 import {
+  DEFAULT_THEME,
   PREVIEW_SLUG,
   THEME_IDS,
   THEME_META,
@@ -9,6 +8,7 @@ import {
 } from "./themes/registry";
 import styles from "./ThemePreview.module.css";
 
+const BASE = "/mess-menu-and-meal-plans";
 const PREVIEW_PATH = `/mess-menu-and-meal-plans/${PREVIEW_SLUG}`;
 
 /* ─── Wireframe toolkit ────────────────────────────────────────────────────── */
@@ -480,7 +480,9 @@ function Wireframe({ id }: { id: ThemeId }) {
 
 /* ─── Chooser page ─────────────────────────────────────────────────────────── */
 
-export function ThemeChooser({ selected }: { selected: ThemeId | null }) {
+export function ThemeChooser({ mess }: { mess?: string }) {
+  // Only ever interpolated into a path, so accept slug-shaped values only.
+  const messSlug = mess && /^[a-z0-9][a-z0-9-]{0,120}$/i.test(mess) ? mess : null;
   return (
     <main className={styles.chooser}>
       <div className={styles.chooserInner}>
@@ -495,18 +497,18 @@ export function ThemeChooser({ selected }: { selected: ThemeId | null }) {
         <div className={styles.grid}>
           {THEME_IDS.map((id) => {
             const meta = THEME_META[id];
-            const isSelected = selected === id;
+            const isDefault = id === DEFAULT_THEME;
             return (
               <article
                 key={id}
-                className={`${styles.themeCard} ${isSelected ? styles.themeCardOn : ""}`}
+                className={`${styles.themeCard} ${isDefault ? styles.themeCardOn : ""}`}
               >
                 <Wireframe id={id} />
                 <div className={styles.themeBody}>
                   <div className={styles.nameRow}>
                     <h2 className={styles.themeName}>{meta.name}</h2>
-                    {isSelected && (
-                      <span className={styles.selectedBadge}>Selected</span>
+                    {isDefault && (
+                      <span className={styles.selectedBadge}>Default</span>
                     )}
                   </div>
                   <p className={styles.themeTag}>{meta.tagline}</p>
@@ -517,17 +519,16 @@ export function ThemeChooser({ selected }: { selected: ThemeId | null }) {
                     ))}
                   </ul>
                   <div className={styles.actions}>
-                    <form action={selectTheme.bind(null, id)}>
-                      <button
-                        type="submit"
+                    {messSlug && (
+                      <Link
+                        href={`${BASE}/${messSlug}/custom-theme/${id}`}
                         className={styles.cta}
-                        disabled={isSelected}
                       >
-                        {isSelected ? "Selected" : `Select ${meta.name}`}
-                      </button>
-                    </form>
+                        {`Use ${meta.name} for ${messSlug}`}
+                      </Link>
+                    )}
                     <Link
-                      href={`${PREVIEW_PATH}?theme=${id}`}
+                      href={`${PREVIEW_PATH}/custom-theme/${id}`}
                       className={styles.ctaGhost}
                     >
                       Preview with sample data
@@ -540,34 +541,21 @@ export function ThemeChooser({ selected }: { selected: ThemeId | null }) {
         </div>
 
         <p className={styles.fineprint}>
-          Your selection is remembered on this browser only. Mess pages you
-          open here will use it; a link that names a theme (
-          <code>?theme=modern</code>) overrides it.
+          {messSlug ? (
+            <>
+              Every page opens in the {THEME_META[DEFAULT_THEME].name} theme by
+              default. To use another theme for {messSlug}, share its link:{" "}
+              <code>{`${BASE}/${messSlug}/custom-theme/<theme>`}</code>
+            </>
+          ) : (
+            <>
+              Every mess page opens in the {THEME_META[DEFAULT_THEME].name} theme
+              by default. Add <code>/custom-theme/&lt;theme&gt;</code> to a
+              mess page address to see it in another theme.
+            </>
+          )}
         </p>
-        {selected && (
-          <form action={clearTheme}>
-            <button type="submit" className={styles.linkBtn}>
-              Clear my selection (use the default theme)
-            </button>
-          </form>
-        )}
       </div>
     </main>
   );
-}
-
-/* ─── Floating theme picker shown over a themed page ───────────────────────── */
-
-export function PreviewBar({
-  theme,
-  note,
-  slug,
-  canReset = false,
-}: {
-  theme: ThemeId;
-  note: string;
-  slug: string;
-  canReset?: boolean;
-}) {
-  return <ThemePicker current={theme} slug={slug} note={note} canReset={canReset} />;
 }
